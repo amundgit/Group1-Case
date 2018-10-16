@@ -1,3 +1,4 @@
-/home/noroff-experis-6/Desktop/Noroff/Week6-10 - Case Work/Group1-Case-API/src/main/java/hello/Application.java
-/home/noroff-experis-6/Desktop/Noroff/Week6-10 - Case Work/Group1-Case-API/src/main/java/hello/GreetingController.java
-/home/noroff-experis-6/Desktop/Noroff/Week6-10 - Case Work/Group1-Case-API/src/main/java/hello/SwaggerConfig.java
+/home/vavvar/week5/springmysql/gs-accessing-data-mysql/initial/src/main/java/hello/MainController.java
+/home/vavvar/week5/springmysql/gs-accessing-data-mysql/initial/src/main/java/hello/User.java
+/home/vavvar/week5/springmysql/gs-accessing-data-mysql/initial/src/main/java/hello/Application.java
+/home/vavvar/week5/springmysql/gs-accessing-data-mysql/initial/src/main/java/hello/UserRepository.java
