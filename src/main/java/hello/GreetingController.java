@@ -14,23 +14,23 @@ import java.util.Arrays;
 @Controller
 public class GreetingController {
 
-    @GetMapping("/")
-    public String greeting(HttpServletResponse response, HttpServletRequest request) {
-    	boolean cookieExist =false;
-    	Cookie[] cookies = request.getCookies();
-    	if (cookies != null) {
-    		for(Cookie c : cookies){
-    			if((c.getName().equals("username"))&&(!c.getValue().equals("default"))){
-    				cookieExist = true;
-    			}
-    		}
-        }
-        if(cookieExist){
-    		return "greeting";
-    	}else{
-    		response.addCookie(new Cookie("username", "default"));
-        	return "login";
-    	}
-    }
+	@GetMapping("/")
+	public String greeting(HttpServletResponse response, HttpServletRequest request) {
+		boolean cookieExist = false;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if ((c.getName().equals("username")) && (!c.getValue().equals("default"))) {
+					cookieExist = true;
+				}
+			}
+		}
+		if (cookieExist) {
+			return "greeting";
+		} else {
+			response.addCookie(new Cookie("username", "default"));
+			return "login";
+		}
+	}
 
 }

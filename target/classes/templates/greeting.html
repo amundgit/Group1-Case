@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Simple cookie login: Logged in!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h2 id='text' th:text="'Hello!'" />
+    <button type="button" onclick='deleteCookie()'>Delete Cookie</button>
+</body>
+<script type="text/javascript">
+	let cname = 'username';
+	let name = getCookie(cname);
+	document.getElementById('text').innerText = 'Hello, ' + name;
+
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var decodedCookie = decodeURIComponent(document.cookie);
+	    var ca = decodedCookie.split(';');
+	    for(var i = 0; i <ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	            return c.substring(name.length, c.length);
+	        }
+	    }
+	    return "";
+	}
+
+	function deleteCookie(){
+		document.cookie="username=;expires=Wed 01 Jan 1970";
+		location.reload();
+	}
+	
+</script>
+</html>
