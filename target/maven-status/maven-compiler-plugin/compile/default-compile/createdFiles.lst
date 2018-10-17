@@ -2,5 +2,6 @@ hello/PersonRepository.class
 hello/User.class
 hello/MainController.class
 hello/Application.class
+hello/SwaggerConfig.class
 hello/Person.class
 hello/UserRepository.class
