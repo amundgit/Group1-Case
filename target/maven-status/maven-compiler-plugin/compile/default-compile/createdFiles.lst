@@ -1,4 +1,6 @@
+hello/PersonRepository.class
 hello/User.class
-hello/Application.class
 hello/MainController.class
+hello/Application.class
+hello/Person.class
 hello/UserRepository.class
