@@ -45,7 +45,7 @@ public class MainController {
 		n.setName(body.get("name"));
 		n.setPassword(body.get("pw"));
 		userRepository.save(n);
-		return "Success"
+		return "Success";
 	}
 
 	@GetMapping(path="/all")
