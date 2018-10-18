@@ -39,7 +39,7 @@ public class MainController {
 		return "Saved";
 	}
 
-	@PostMapping(path="/padd", consumes = "text/plain") // Map ONLY POST Requests
+	/*@PostMapping(path="/padd", consumes = "text/plain") // Map ONLY POST Requests
 	public @ResponseBody String paddNewUser (@RequestBody String jsonStr) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
@@ -50,7 +50,7 @@ public class MainController {
 		n.setPassword(jObject[0].pw);
 		userRepository.save(n);
 		return "Saved";
-	}
+	}*/
 
 	@GetMapping(path="/all")
 	public @ResponseBody Iterable<User> getAllUsers() {
