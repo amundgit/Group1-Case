@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hello.User;
@@ -25,7 +26,7 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
-	@GetMapping(path="/add") // Map ONLY GET Requests
+	@GetMapping(path="/add" ) // Map ONLY GET Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
 			, @RequestParam String pw) {
 		// @ResponseBody means the returned String is the response, not a view name
@@ -34,6 +35,19 @@ public class MainController {
 		User n = new User();
 		n.setName(name);
 		n.setPassword(pw);
+		userRepository.save(n);
+		return "Saved";
+	}
+
+	@PostMapping(path="/padd", consumes = "text/plain") // Map ONLY POST Requests
+	public @ResponseBody String paddNewUser (@RequestBody String jsonStr) {
+		// @ResponseBody means the returned String is the response, not a view name
+		// @RequestParam means it is a parameter from the GET or POST request
+		//Syntax:/demo/add?name=testname&pw=somepassword
+		JSONObject jObject = new JSONObject(jsonStr);
+		User n = new User();
+		n.setName();
+		n.setPassword(jObject[0].pw);
 		userRepository.save(n);
 		return "Saved";
 	}
