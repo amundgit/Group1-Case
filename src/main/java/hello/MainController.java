@@ -36,13 +36,14 @@ public class MainController {
 	}
 
 	@PostMapping(path="/padd", consumes = "text/plain") // Map ONLY POST Requests
-	public @ResponseBody String paddNewUser (@RequestBody User user) {
+	public @ResponseBody String paddNewUser (@RequestBody String jsonStr) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 		//Syntax:/demo/add?name=testname&pw=somepassword
-		User n = user;
-		n.setName(name);
-		n.setPassword(pw);
+		JSONObject jObject = new JSONObject(jsonStr);
+		User n = new User();
+		n.setName(jObject[0].name);
+		n.setPassword(jObject[0].pw);
 		userRepository.save(n);
 		return "Saved";
 	}
