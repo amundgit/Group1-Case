@@ -34,7 +34,7 @@ public class MainController {
 		return "Saved";
 	}
 
-	@PostMapping(path="/padd" ) // Map ONLY POST Requests
+	@PostMapping(path="/padd" consumes = "application/json", produces = "application/json") // Map ONLY POST Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
 			, @RequestParam String pw) {
 		// @ResponseBody means the returned String is the response, not a view name
