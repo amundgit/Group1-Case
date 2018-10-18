@@ -42,7 +42,7 @@ public class MainController {
 		//Syntax:/demo/add?name=testname&pw=somepassword
 		JSONObject jObject = new JSONObject(jsonStr);
 		User n = new User();
-		n.setName(jObject[0].namess);
+		n.setName(jObject.name);
 		n.setPassword(jObject[0].pw);
 		userRepository.save(n);
 		return "Saved";
