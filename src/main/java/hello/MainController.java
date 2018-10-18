@@ -36,8 +36,8 @@ public class MainController {
 	}
 
 	@PostMapping(path="/padd") // Map ONLY POST Requests
-	public @ResponseBody String paddNewUser (@RequestParam String name
-			, @RequestParam String pw) {
+	public @ResponseBody String paddNewUser (@RequestBody String name
+			, @RequestBody String pw) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 		//Syntax:/demo/add?name=testname&pw=somepassword
