@@ -15,6 +15,8 @@ public class User {
 
     private String password;
 
+    private String status = "active";
+
 	public Integer getId() {
 		return id;
 	}
@@ -39,5 +41,12 @@ public class User {
 		this.password = password;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

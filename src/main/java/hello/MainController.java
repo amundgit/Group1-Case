@@ -69,7 +69,7 @@ public class MainController {
 	}
 
 	@GetMapping(path="/updateusername")
-	public @ResponseBody String updateAUser(@RequestParam String oldName,@RequestParam String newName) {
+	public @ResponseBody String updateAUserName(@RequestParam String oldName,@RequestParam String newName) {
 		User u = (userRepository.findByName(oldName));
 		u.setName(newName);
 		userRepository.save(u);
@@ -77,9 +77,17 @@ public class MainController {
 	}
 
 	@GetMapping(path="/updatepw")
-	public @ResponseBody String updateAUser(@RequestParam String name,@RequestParam String oldPw,@RequestParam String newPw) {
+	public @ResponseBody String updateAUserPW(@RequestParam String name,@RequestParam String oldPw,@RequestParam String newPw) {
 		User u = (userRepository.verifyUser(name,oldPw));
 		u.setPassword(newPw);
+		userRepository.save(u);
+		return "Updated";
+	}
+
+	@GetMapping(path="/deleteuser")
+	public @ResponseBody String deleteAUser(@RequestParam String name) {
+		User u = (userRepository.findByName(name));
+		u.setStatus("inactive");
 		userRepository.save(u);
 		return "Updated";
 	}
