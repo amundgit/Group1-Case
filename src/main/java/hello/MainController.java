@@ -39,15 +39,13 @@ public class MainController {
 		return "Saved";
 	}*/
 
-
-	@PostMapping(path="/signup") // Map ONLY POST Requests
+	@PostMapping(path="/signup")
 	public @ResponseBody String addNewUser (@RequestParam Map<String, String> body) {
-		// @RequestParam means it is a parameter from the GET or POST request
 		User n = new User();
 		n.setName(body.get("name"));
 		n.setPassword(body.get("pw"));
 		userRepository.save(n);
-		return "Saved";
+		return "Success"
 	}
 
 	@GetMapping(path="/all")
