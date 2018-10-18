@@ -2,6 +2,9 @@ package hello;
 
 import org.springframework.data.repository.CrudRepository;
 
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
+
 import hello.User;
 
 import java.util.List;
@@ -10,5 +13,9 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface UserRepository extends CrudRepository<User, Integer> {
-	List<User> findByName(String name);
+	
+	User findByName(String name); //test
+
+	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
+	User verifyUser(@Param("name")String name, @Param("password")String password);
 }
