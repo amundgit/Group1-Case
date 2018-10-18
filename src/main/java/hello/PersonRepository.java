@@ -1,6 +1,8 @@
 package hello;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import hello.Person;
 
@@ -10,5 +12,13 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface PersonRepository extends CrudRepository<Person, Integer> {
-	//List<Person> findBy_First_name(String first_name);
+	
+	@Query("SELECT p FROM Person p WHERE LOWER(p.first_name) = LOWER(:first_name)")
+	List<Person> findByFirstName(@Param("first_name")String first_name);
+
+	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name)")
+	List<Person> findByLastName(@Param("last_name")String last_name);
+
+	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name)")
+	List<Person> findByFirstAndLast(@Param("first_name")String first_name, @Param("last_name")String last_name);
 }
