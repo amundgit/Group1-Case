@@ -21,7 +21,7 @@ public class MainController {
 	private UserRepository userRepository;
 	private PersonRepository personRepository;
 
-	@PostMapping(path="/add") // Map ONLY GET Requests
+	@PostMapping(path="/add", consumes = "application/json", produces = "application/json") // Map ONLY GET Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
 			, @RequestParam String pw) {
 		// @ResponseBody means the returned String is the response, not a view name
