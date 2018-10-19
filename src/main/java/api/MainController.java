@@ -1,4 +1,4 @@
-package hello;
+package api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,15 +8,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hello.User;
-import hello.UserRepository;
+//Old imports
+/*import api.User;
+import api.UserRepository;
+import api.Person;
+import api.PersonRepository;*/
+//New imports
+import api.Repositories.*;
+import api.Models.*;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-import hello.Person;
-import hello.PersonRepository;
+
 
 @Controller    // This means that this class is a Controller
 public class MainController {
