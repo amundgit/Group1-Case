@@ -27,29 +27,30 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
-	/*@GetMapping(path="/add" ) // Map ONLY GET Requests
-	public @ResponseBody String addNewUser (@RequestParam String name
-			, @RequestParam String pw) {
-		// @ResponseBody means the returned String is the response, not a view name
-		// @RequestParam means it is a parameter from the GET or POST request
-		//Syntax:/demo/add?name=testname&pw=somepassword
-		User n = new User();
-		n.setName(name);
-		n.setPassword(pw);
-		userRepository.save(n);
-		return "Saved";
-	}*/
-
-	@PostMapping(path="/signup")
+	//base
+	/*@PostMapping(path="/signup")
 	public @ResponseBody String addNewUser (@RequestParam Map<String, String> body) {
 		User n = new User();
 		n.setName(body.get("name"));
 		n.setPassword(body.get("pw"));
 		userRepository.save(n);
 		return "Success";
+	}*/
+	//test - works
+	@PostMapping(path="/signup")
+	public @ResponseBody String addNewUser (@RequestBody User newUser) {
+		if(userRepository.findByName(newUser.getName()) != null){
+			return "Failure: Name taken";
+		}else{
+			User n = new User();
+			n.setName(newUser.getName());
+			n.setPassword(newUser.getPassword());
+			userRepository.save(n);
+			return "Success";
+		}
 	}
 
-	@GetMapping(path="/all")
+	@GetMapping(path="/getallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
 		return userRepository.findAll();
