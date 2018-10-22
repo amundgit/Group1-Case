@@ -102,6 +102,24 @@ public class MainController {
 		return userRepository.findByName(name);
 	}
 
+	@PostMapping(path="/searchuser")
+	public @ResponseBody String searchUser (@RequestBody User myUser) {
+		boolean check = false;
+		User user = userRepository.verifyUser(myUser.getName(),myUser.getPassword()); 
+		if (user != null) {
+			check = user.getStatus().equals("active");
+		}
+
+		if(check){
+			return "Success"
+		}
+		else{
+			return "Failure";
+		}
+	}
+
+
+
 	@GetMapping(path="/updateusername")
 	public @ResponseBody String updateAUserName(@RequestParam String oldName,@RequestParam String newName) {
 		User u = (userRepository.findByName(oldName));
