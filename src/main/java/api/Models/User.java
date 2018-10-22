@@ -15,17 +15,17 @@ public class User {
 
     private String password;
 
-    private Integer roleId = 0;
+    private Integer role = 0;
 
 
     private String status = "active";
 
     public Integer getRole() {
-		return roleId;
+		return role;
 	}
 
 	public void setRole(Integer id) {
-		roleId = id;
+		role = id;
 	}
 
 	public Integer getId() {
