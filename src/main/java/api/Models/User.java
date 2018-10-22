@@ -21,7 +21,7 @@ public class User {
     private String status = "active";
 
     public Integer getRole() {
-		return id;
+		return roleId;
 	}
 
 	public void setRole(Integer id) {
