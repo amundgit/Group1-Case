@@ -50,9 +50,9 @@ public class MainController {
 		boolean check = userRepository.verifyUser(myUser.getName(),myUser.getPassword()).getStatus().equals("active");
 
 		if(check){
-			return "Success"
+			return "Success";
 		}else{
-			return "Failure, user does not exist.";
+			return "Failure";
 		}
 	}
 
