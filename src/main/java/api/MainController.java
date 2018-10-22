@@ -47,7 +47,7 @@ public class MainController {
 
 	//test flexible
 	@PostMapping(path="/adduser")
-	public @ResponseBody String addNewUser (@RequestBody Map<"name",String> test) {
+	public @ResponseBody String addNewUser (@RequestBody Map<String,String> test) {
 		String name = test.get("name");
 		//String password = test.get("password");
 		String password = "derp;"
