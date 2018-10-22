@@ -15,7 +15,7 @@ public class User {
 
     private String password;
 
-    private Integer role = 1;
+    private Integer role = 0;
 
 
     private String status = "active";
