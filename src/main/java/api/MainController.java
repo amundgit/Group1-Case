@@ -47,7 +47,10 @@ public class MainController {
 
 	@PostMapping(path="/finduser")
 	public @ResponseBody String findUser (@RequestBody User myUser) {
-		boolean check = userRepository.verifyUser(myUser.getName(),myUser.getPassword()).getStatus().equals("active");
+		boolean check = false;
+		if (userRepository.verifyUser(myUser.getName(),myUser.getPassword()) != null) {
+			check = userRepository.verifyUser(myUser.getName(),myUser.getPassword()).getStatus().equals("active");
+		}
 
 		if(check){
 			return "Success";
