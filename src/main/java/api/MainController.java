@@ -105,7 +105,7 @@ public class MainController {
 	@PostMapping(path="/searchuser")
 	public @ResponseBody String searchUser (@RequestBody User myUser) {
 		boolean check = false;
-		User user = userRepository.verifyUser(myUser.getName()); 
+		User user = userRepository.findByName(myUser.getName()); 
 		if (user != null) {
 			check = user.getStatus().equals("active");
 		}
