@@ -45,6 +45,17 @@ public class MainController {
 		}
 	}
 
+	@PostMapping(path="/finduser")
+	public @ResponseBody String findUser (@RequestBody User myUser) {
+		boolean check = userRepository.verifyUser(myUser.getName(),myUser.getPassword()).getStatus().equals("active");
+
+		if(check){
+			return "Success"
+		}else{
+			return "Failure, user does not exist.";
+		}
+	}
+
 	@GetMapping(path="/getallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
