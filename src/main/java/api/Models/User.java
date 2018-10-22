@@ -24,7 +24,7 @@ public class User {
 		return id;
 	}
 
-	public Integer setRole(Integer id) {
+	public void setRole(Integer id) {
 		roleId = id;
 	}
 
