@@ -47,9 +47,10 @@ public class MainController {
 
 	//test flexible
 	@PostMapping(path="/adduser")
-	public @ResponseBody String addNewUser (@RequestBody Map<["name","password"],[String,String]> test) {
+	public @ResponseBody String addNewUser (@RequestBody Map<"name",String> test) {
 		String name = test.get("name");
-		String password = test.get("password");
+		//String password = test.get("password");
+		String password = "derp;"
 		if(userRepository.findByName(name) != null){
 			return "Failure: Name taken";
 		}else{
