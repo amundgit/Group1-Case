@@ -1,4 +1,4 @@
-package hello;
+package api.Models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +14,8 @@ public class User {
     private String name;
 
     private String password;
+
+    private String status = "active";
 
 	public Integer getId() {
 		return id;
@@ -39,5 +41,12 @@ public class User {
 		this.password = password;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

@@ -1,4 +1,4 @@
-package hello;
+package api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hello.User;
-import hello.UserRepository;
+//Old imports
+/*import api.User;
+import api.UserRepository;
+import api.Person;
+import api.PersonRepository;*/
+//New imports
+import api.Repositories.*;
+import api.Models.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
-import hello.Person;
-import hello.PersonRepository;
+
 
 @Controller    // This means that this class is a Controller
 public class MainController {
@@ -26,16 +32,20 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
-	@PostMapping(path="/signup")
-	public @ResponseBody String addNewUser (@RequestParam Map<String, String> body) {
-		User n = new User();
-		n.setName(body.get("name"));
-		n.setPassword(body.get("pw"));
-		userRepository.save(n);
-		return "Success";
+	@PostMapping(path="/adduser")
+	public @ResponseBody String addNewUser (@RequestBody User newUser) {
+		if(userRepository.findByName(newUser.getName()) != null){
+			return "Failure: Name taken";
+		}else{
+			User n = new User();
+			n.setName(newUser.getName());
+			n.setPassword(newUser.getPassword());
+			userRepository.save(n);
+			return "Success";
+		}
 	}
 
-	@GetMapping(path="/all")
+	@GetMapping(path="/getallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
 		return userRepository.findAll();
@@ -52,7 +62,7 @@ public class MainController {
 	}
 
 	@GetMapping(path="/updateusername")
-	public @ResponseBody String updateAUser(@RequestParam String oldName,@RequestParam String newName) {
+	public @ResponseBody String updateAUserName(@RequestParam String oldName,@RequestParam String newName) {
 		User u = (userRepository.findByName(oldName));
 		u.setName(newName);
 		userRepository.save(u);
@@ -60,9 +70,17 @@ public class MainController {
 	}
 
 	@GetMapping(path="/updatepw")
-	public @ResponseBody String updateAUser(@RequestParam String name,@RequestParam String oldPw,@RequestParam String newPw) {
+	public @ResponseBody String updateAUserPW(@RequestParam String name,@RequestParam String oldPw,@RequestParam String newPw) {
 		User u = (userRepository.verifyUser(name,oldPw));
 		u.setPassword(newPw);
+		userRepository.save(u);
+		return "Updated";
+	}
+
+	@GetMapping(path="/deleteuser")
+	public @ResponseBody String deleteAUser(@RequestParam String name) {
+		User u = (userRepository.findByName(name));
+		u.setStatus("inactive");
 		userRepository.save(u);
 		return "Updated";
 	}

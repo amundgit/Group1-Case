@@ -1,11 +1,11 @@
-package hello;
+package api.Repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import hello.User;
+import api.Models.User;
 
 import java.util.List;
 
