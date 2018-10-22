@@ -32,7 +32,7 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
-	@PostMapping(path="/adduser")
+	/*@PostMapping(path="/adduser")
 	public @ResponseBody String addNewUser (@RequestBody User newUser) {
 		if(userRepository.findByName(newUser.getName()) != null){
 			return "Failure: Name taken";
@@ -40,6 +40,20 @@ public class MainController {
 			User n = new User();
 			n.setName(newUser.getName());
 			n.setPassword(newUser.getPassword());
+			userRepository.save(n);
+			return "Success";
+		}
+	}*/
+
+	//test flexible
+	@PostMapping(path="/adduser")
+	public @ResponseBody String addNewUser (@RequestBody String name, String password) {
+		if(userRepository.findByName(name) != null){
+			return "Failure: Name taken";
+		}else{
+			User n = new User();
+			n.setName(name);
+			n.setPassword(password);
 			userRepository.save(n);
 			return "Success";
 		}
