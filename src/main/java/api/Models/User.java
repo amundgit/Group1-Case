@@ -15,7 +15,18 @@ public class User {
 
     private String password;
 
+    private Integer roleId = "0";
+
+
     private String status = "active";
+
+    public Integer getRoleId() {
+		return id;
+	}
+
+	public Integer setRoleId(Integer id) {
+		roleId = id;
+	}
 
 	public Integer getId() {
 		return id;

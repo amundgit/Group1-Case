@@ -32,6 +32,9 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
+	@Autowired
+	private PersonRepository userRoleRepository;
+
 	@PostMapping(path="/adduser")
 	public @ResponseBody String addNewUser (@RequestBody User newUser) {
 		if(userRepository.findByName(newUser.getName()) != null){
@@ -48,13 +51,20 @@ public class MainController {
 	@PostMapping(path="/finduser")
 	public @ResponseBody String findUser (@RequestBody User myUser) {
 		boolean check = false;
-		if (userRepository.verifyUser(myUser.getName(),myUser.getPassword()) != null) {
-			check = userRepository.verifyUser(myUser.getName(),myUser.getPassword()).getStatus().equals("active");
+		User user = userRepository.verifyUser(myUser.getName(),myUser.getPassword()); 
+		if (user != null) {
+			check = user.getStatus().equals("active");
 		}
 
 		if(check){
-			return "Success";
-		}else{
+			if (user.getRoleID() == 0) {
+				return "User";
+			}
+			else{
+				return "Admin";				
+			}
+		}
+		else{
 			return "Failure";
 		}
 	}
