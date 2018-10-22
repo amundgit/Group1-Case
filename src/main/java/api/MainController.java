@@ -48,6 +48,23 @@ public class MainController {
 		}
 	}
 
+	//test flexible - vil ittj! Se senere
+	/*@PostMapping(path="/adduser")
+	public @ResponseBody String addNewUser (@RequestBody Map<String,String> test) {
+		String name = test.get("name");
+		//String password = test.get("password");
+		String password = "derp;"
+		if(userRepository.findByName(name) != null){
+			return "Failure: Name taken";
+		}else{
+			User n = new User();
+			n.setName(name);
+			n.setPassword(password);
+			userRepository.save(n);
+			return "Success";
+		}
+	}*/
+
 	@PostMapping(path="/finduser")
 	public @ResponseBody String findUser (@RequestBody User myUser) {
 		boolean check = false;
