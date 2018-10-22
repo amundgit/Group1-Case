@@ -25,7 +25,7 @@ public class User {
     	return cookie;
     }
 
-    public void setCookie(string cookie){
+    public void setCookie(String cookie){
     	this.cookie = cookie;
     }
 
