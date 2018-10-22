@@ -111,7 +111,7 @@ public class MainController {
 		}
 
 		if(check){
-			return "Success"
+			return "Success";
 		}
 		else{
 			return "Failure";
