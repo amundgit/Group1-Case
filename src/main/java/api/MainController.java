@@ -74,7 +74,7 @@ public class MainController {
 		}
 
 		if(check){
-			if (user.getRoleID() == 0) {
+			if (user.getRole() == 0) {
 				return "User";
 			}
 			else{
