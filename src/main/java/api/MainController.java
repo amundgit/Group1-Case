@@ -132,7 +132,7 @@ public class MainController {
 		}
 		if (check) {
 			Person p = new Person();
-			System.out.println(body.get("address_Id").toString());
+			System.out.println(body.get("addressId").toString());
 			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressId").toString())));
 			p.setFirstName(body.get("firstName").toString());
 			p.setLastName(body.get("lastName").toString());
