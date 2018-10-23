@@ -79,6 +79,21 @@ public class MainController {
 		}
 	}
 
+	@PostMapping(path="/addAddress")
+	public @ResponseBody String addAddress (@RequestBody Address newAddress){
+		boolean check = false;
+		Address address = addressRepository.getByAddress(newAddress.getAddressLine1());
+		if(!check){
+			//Address a = new Address();
+			//a.setAddressLine1 = newAddress
+			addressRepository.save(newAddress);
+			return "Success";
+		}
+		else{
+			return "Failure";
+		}
+	}
+
 	@GetMapping(path="/getallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
