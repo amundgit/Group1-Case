@@ -123,15 +123,20 @@ public class MainController {
 	}
 
 	@PostMapping(path = "/addPerson")
-	public @ResponseBody String addPerson(@RequestBody Person newPerson) {
+	public @ResponseBody String addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Person person = personRepository.findByFirstAndLastandBirth(newPerson.getFirstName(), newPerson.getLastName(),
-				newPerson.getDateOfBirth());
+		Person person = personRepository.findByFirstAndLastandBirth(body.get("firstName").toString(),
+				body.get("lastName").toString(), body.get("dateOfBirth").toString());
 		if (person == null) {
 			check = true;
 		}
 		if (check) {
-			personRepository.save(newPerson);
+			Person p = new Person();
+			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressID").toString())));
+			p.setFirstName(body.get("firstName").toString());
+			p.setLastName(body.get("lastName").toString());
+			p.setDateOfBirth(body.get("dateOfBirth").toString());
+			personRepository.save(p);
 			return "Success";
 		} else {
 			return "Failure";
