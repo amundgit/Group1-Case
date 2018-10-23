@@ -132,7 +132,8 @@ public class MainController {
 		}
 		if (check) {
 			Person p = new Person();
-			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressID").toString())));
+			System.out.println(body.get("address_Id").toString());
+			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressId").toString())));
 			p.setFirstName(body.get("firstName").toString());
 			p.setLastName(body.get("lastName").toString());
 			p.setDateOfBirth(body.get("dateOfBirth").toString());
