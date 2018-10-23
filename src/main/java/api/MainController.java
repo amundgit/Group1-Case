@@ -36,19 +36,16 @@ public class MainController {
 	private PersonRepository userRoleRepository;
 
 	@PostMapping(path="/adduser")
-	public @ResponseBody String addNewUser (@RequestBody Map<String,Object> body, @RequestBody User newUser/*@RequestParam("sessionid") String session*/) {
-		
-		//return "This users session id= "+session;
-		//return body.get("name").toString();
+	public @ResponseBody String addNewUser (@RequestBody Map<String,Object> body) {
 
-		if(userRepository.findByName(newUser.getName()) != null){
+		if(userRepository.findByName(body.get("name").toString()) != null){
 			return "Failure: Name taken";
 		}else {
 			User n = new User();
-			n.setName(newUser.getName());
-			n.setPassword(newUser.getPassword());
+			n.setName(body.get("name").toString());
+			n.setPassword(body.get("password").toString());
 			userRepository.save(n);
-			return "Success"+body.get("name").toString();
+			return "Success";
 		}
 	}
 
