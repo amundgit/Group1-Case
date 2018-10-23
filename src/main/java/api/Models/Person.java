@@ -1,9 +1,11 @@
 package api.Models;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;*/
+import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Person {
@@ -11,7 +13,10 @@ public class Person {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-    private Integer address_id;
+    @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  	@JoinColumn(name = "address_id", nullable = false)
+  	//@JsonIgnore
+    private Address address;
 
     private String first_name;
 
@@ -27,12 +32,20 @@ public class Person {
 		this.id = id;
 	}
 
-	public Integer getAddressId() {
+	/*public Integer getAddressId() {
 		return address_id;
 	}
 
 	public void setAddressId(Integer address_id) {
 		this.address_id = address_id;
+	}*/
+
+	public Integer getAddressId() {
+		return address.getId();
+	}
+
+	public void setAddressId(Address address) {
+		this.address = address;
 	}
 
 	public String getFirstName() {

@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//Old imports
-/*import api.User;
-import api.UserRepository;
-import api.Person;
-import api.PersonRepository;*/
 //New imports
 import api.Repositories.*;
 import api.Models.*;
@@ -33,7 +28,8 @@ public class MainController {
 	private PersonRepository personRepository;
 
 	@Autowired
-	private PersonRepository userRoleRepository;
+	private AddressRepository addressRepository;
+
 
 	@PostMapping(path="/adduser")
 	public @ResponseBody String addNewUser (@RequestBody Map<String,Object> body) {
@@ -48,19 +44,15 @@ public class MainController {
 			return "Success";
 		}
 	}
-
-	//test flexible - vil ittj! Se senere
+	//old
 	/*@PostMapping(path="/adduser")
-	public @ResponseBody String addNewUser (@RequestBody Map<String,String> test) {
-		String name = test.get("name");
-		//String password = test.get("password");
-		String password = "derp;"
-		if(userRepository.findByName(name) != null){
+	public @ResponseBody String addNewUser (@RequestBody User newUser) {
+		if(userRepository.findByName(newUser.getName()) != null){
 			return "Failure: Name taken";
 		}else{
 			User n = new User();
-			n.setName(name);
-			n.setPassword(password);
+			n.setName(newUser.getName());
+			n.setPassword(newUser.getPassword());
 			userRepository.save(n);
 			return "Success";
 		}
@@ -119,8 +111,6 @@ public class MainController {
 		}
 	}
 
-
-
 	@GetMapping(path="/updateusername")
 	public @ResponseBody String updateAUserName(@RequestParam String oldName,@RequestParam String newName) {
 		User u = (userRepository.findByName(oldName));
@@ -158,7 +148,7 @@ public class MainController {
 			return "Error: Name taken";
 		}else{
 			Person p = new Person();
-			p.setAddressId(addressID);
+			p.setAddressId(addressRepository.getById(addressID));
 			p.setFirstName(firstName);
 			p.setLastName(lastName);
 			p.setDateOfBirth(bday);
@@ -186,4 +176,29 @@ public class MainController {
 	public @ResponseBody Iterable<Person> getAPersonByFirstAndLast(@RequestParam String firstName,@RequestParam String lastName) {
 		return personRepository.findByFirstAndLast(firstName,lastName);
 	}
+
+
+	//ADDRESS TESTING FOLLOWS
+	@GetMapping(path="/getalladdresses")
+	public @ResponseBody Iterable<Address> getAllAddresses() {
+		return addressRepository.findAll();
+	}
+
+	@PostMapping(path="/addaddress")
+	public @ResponseBody String addNewAddress (@RequestBody Address newAddress) {
+		//maybe ready?
+		Address a = new Address();
+		a.setAddressLine1(newAddress.getAddressLine1()); //postal_code, city, country
+		a.setPostalCode(newAddress.getPostalCode());
+		a.setCity(newAddress.getCity());
+		a.setCountry(newAddress.getCountry());
+		addressRepository.save(a);
+		return "Success";		
+	}	
+	@GetMapping(path="/getaddressbyid")
+	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
+		return addressRepository.getById(id);
+	}
+
+	 
 }
