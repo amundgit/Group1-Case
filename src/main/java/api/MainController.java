@@ -83,7 +83,7 @@ public class MainController {
 	public @ResponseBody String addAddress (@RequestBody Address newAddress){
 		boolean check = false;
 		Address address = addressRepository.getByAddress(newAddress.getAddressLine1());
-		if (address != null) {
+		if (address == null) {
 			check = true;
 		}
 		if(check){
