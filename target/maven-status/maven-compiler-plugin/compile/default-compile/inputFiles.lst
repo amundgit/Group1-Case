@@ -1,6 +1,7 @@
-/home/noroff-experis-17/dbtest/src/main/java/hello/UserRepository.java
-/home/noroff-experis-17/dbtest/src/main/java/hello/User.java
-/home/noroff-experis-17/dbtest/src/main/java/hello/PersonRepository.java
-/home/noroff-experis-17/dbtest/src/main/java/hello/Person.java
-/home/noroff-experis-17/dbtest/src/main/java/hello/Application.java
-/home/noroff-experis-17/dbtest/src/main/java/hello/MainController.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/Repositories/PersonRepository.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/SwaggerConfig.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/MainController.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/Models/Person.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/Models/User.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/Application.java
+/home/vavvar/project/Group1-Case-API/src/main/java/api/Repositories/UserRepository.java
