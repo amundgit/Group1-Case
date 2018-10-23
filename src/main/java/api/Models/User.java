@@ -15,7 +15,27 @@ public class User {
 
     private String password;
 
+    private Integer role = 0;
+
+    private String cookie;
+
     private String status = "active";
+
+    public String getCookie(){
+    	return cookie;
+    }
+
+    public void setCookie(String cookie){
+    	this.cookie = cookie;
+    }
+
+    public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer id) {
+		role = id;
+	}
 
 	public Integer getId() {
 		return id;

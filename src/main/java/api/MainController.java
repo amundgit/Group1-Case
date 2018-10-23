@@ -32,6 +32,9 @@ public class MainController {
 	@Autowired
 	private PersonRepository personRepository;
 
+	@Autowired
+	private PersonRepository userRoleRepository;
+
 	@PostMapping(path="/adduser")
 	public @ResponseBody String addNewUser (@RequestBody User newUser) {
 		if(userRepository.findByName(newUser.getName()) != null){
@@ -42,6 +45,44 @@ public class MainController {
 			n.setPassword(newUser.getPassword());
 			userRepository.save(n);
 			return "Success";
+		}
+	}
+
+	//test flexible - vil ittj! Se senere
+	/*@PostMapping(path="/adduser")
+	public @ResponseBody String addNewUser (@RequestBody Map<String,String> test) {
+		String name = test.get("name");
+		//String password = test.get("password");
+		String password = "derp;"
+		if(userRepository.findByName(name) != null){
+			return "Failure: Name taken";
+		}else{
+			User n = new User();
+			n.setName(name);
+			n.setPassword(password);
+			userRepository.save(n);
+			return "Success";
+		}
+	}*/
+
+	@PostMapping(path="/finduser")
+	public @ResponseBody String findUser (@RequestBody User myUser) {
+		boolean check = false;
+		User user = userRepository.verifyUser(myUser.getName(),myUser.getPassword()); 
+		if (user != null) {
+			check = user.getStatus().equals("active");
+		}
+
+		if(check){
+			if (user.getRole() == 0) {
+				return "User";
+			}
+			else{
+				return "Admin";				
+			}
+		}
+		else{
+			return "Failure";
 		}
 	}
 
@@ -60,6 +101,24 @@ public class MainController {
 	public @ResponseBody User getAUser(@RequestParam String name) {
 		return userRepository.findByName(name);
 	}
+
+	@PostMapping(path="/searchuser")
+	public @ResponseBody String searchUser (@RequestBody User myUser) {
+		boolean check = false;
+		User user = userRepository.findByName(myUser.getName()); 
+		if (user != null) {
+			check = user.getStatus().equals("active");
+		}
+
+		if(check){
+			return "Success";
+		}
+		else{
+			return "Failure";
+		}
+	}
+
+
 
 	@GetMapping(path="/updateusername")
 	public @ResponseBody String updateAUserName(@RequestParam String oldName,@RequestParam String newName) {

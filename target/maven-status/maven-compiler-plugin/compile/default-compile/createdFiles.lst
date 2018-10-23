@@ -1,7 +1,7 @@
-api/Application.class
-api/MainController.class
 api/Repositories/UserRepository.class
 api/Models/Person.class
-api/Models/User.class
 api/Repositories/PersonRepository.class
+api/Models/User.class
+api/Application.class
+api/MainController.class
 api/SwaggerConfig.class
