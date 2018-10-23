@@ -33,30 +33,19 @@ public class MainController {
 
 	@PostMapping(path="/adduser")
 	public @ResponseBody String addNewUser (@RequestBody Map<String,Object> body) {
-
 		if(userRepository.findByName(body.get("name").toString()) != null){
-			return "Failure: Name taken";
-		}else {
-			User n = new User();
-			n.setName(body.get("name").toString());
-			n.setPassword(body.get("password").toString());
-			userRepository.save(n);
-			return "Success";
+			return "Username already exist";
+		} else {
+			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
+			String hashedSessionId = BcryptSetup.generateSessionId();
+			User user = new User();
+			user.setName(body.get("name").toString());
+			user.setPassword(hashedpassword);
+			user.setCookie(hashedSessionId);
+			userRepository.save(user);
+			return user.getCookie();
 		}
 	}
-	//old
-	/*@PostMapping(path="/adduser")
-	public @ResponseBody String addNewUser (@RequestBody User newUser) {
-		if(userRepository.findByName(newUser.getName()) != null){
-			return "Failure: Name taken";
-		}else{
-			User n = new User();
-			n.setName(newUser.getName());
-			n.setPassword(newUser.getPassword());
-			userRepository.save(n);
-			return "Success";
-		}
-	}*/
 
 	@PostMapping(path="/finduser")
 	public @ResponseBody String findUser (@RequestBody User myUser) {

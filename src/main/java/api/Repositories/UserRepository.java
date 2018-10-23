@@ -14,8 +14,10 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 	
-	User findByName(String name); //test
+	//Check if username exist
+	User findByName(String name);
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);
+
 }
