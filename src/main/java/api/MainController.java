@@ -83,10 +83,16 @@ public class MainController {
 	public @ResponseBody String addAddress (@RequestBody Address newAddress){
 		boolean check = false;
 		Address address = addressRepository.getByAddress(newAddress.getAddressLine1());
-		if(!check){
-			//Address a = new Address();
-			//a.setAddressLine1 = newAddress
-			addressRepository.save(newAddress);
+		if (address != null) {
+			check = true;
+		}
+		if(check){
+			Address a = new Address();
+			a.setAddressLine1(newAddress.getAddressLine1()); //postal_code, city, country
+			a.setPostalCode(newAddress.getPostalCode());
+			a.setCity(newAddress.getCity());
+			a.setCountry(newAddress.getCountry());
+			addressRepository.save(a);
 			return "Success";
 		}
 		else{
@@ -199,7 +205,7 @@ public class MainController {
 		return addressRepository.findAll();
 	}
 
-	
+
 	@GetMapping(path="/getaddressbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
