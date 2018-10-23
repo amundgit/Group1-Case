@@ -22,6 +22,6 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 	@Query("SELECT a FROM Address a WHERE address_id = :id")
 	Address getById(@Param("id")Integer id);
 
-	@Query("SELECT a FROM Address a WHERE address_line_1 = :address_line_1")
-	Address getByAddress(@Param("address_line1")String address_line_1);
+	@Query("SELECT a FROM Address a WHERE address_line_1 = :address")
+	Address getByAddress(@Param("address")String address);
 }
