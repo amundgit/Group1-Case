@@ -199,17 +199,7 @@ public class MainController {
 		return addressRepository.findAll();
 	}
 
-	@PostMapping(path="/addaddress")
-	public @ResponseBody String addNewAddress (@RequestBody Address newAddress) {
-		//maybe ready?
-		Address a = new Address();
-		a.setAddressLine1(newAddress.getAddressLine1()); //postal_code, city, country
-		a.setPostalCode(newAddress.getPostalCode());
-		a.setCity(newAddress.getCity());
-		a.setCountry(newAddress.getCountry());
-		addressRepository.save(a);
-		return "Success";		
-	}	
+	
 	@GetMapping(path="/getaddressbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
