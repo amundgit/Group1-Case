@@ -79,6 +79,9 @@ public class MainController {
 	/**
 	 * This method creates a new address if it does not exist and checks based on
 	 * the first address line.
+	 * 
+	 * @param newAddress
+	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
 	public @ResponseBody String addAddress(@RequestBody Address newAddress) {
@@ -90,12 +93,20 @@ public class MainController {
 		if (check) {
 			addressRepository.save(newAddress);
 			address = addressRepository.getByAddress(newAddress.getAddressLine1());
+			System.out.println(address.getId().toString());
 			return address.getId().toString();
 		} else {
 			return "Failure";
 		}
 	}
 
+	/**
+	 * This method creates a new location if it does not exist and checks based on
+	 * the name.
+	 * 
+	 * @param newLocation
+	 * @return
+	 */
 	@PostMapping(path = "/addLocation")
 	public @ResponseBody String addLocation(@RequestBody Location newLocation) {
 		boolean check = false;
@@ -105,6 +116,22 @@ public class MainController {
 		}
 		if (check) {
 			locationRepository.save(newLocation);
+			return "Success";
+		} else {
+			return "Failure";
+		}
+	}
+
+	@PostMapping(path = "/addPerson")
+	public @ResponseBody String addPerson(@RequestBody Person newPerson) {
+		boolean check = false;
+		Person person = personRepository.findByFirstAndLastandBirth(newPerson.getFirstName(), newPerson.getLastName(),
+				newPerson.getDateOfBirth());
+		if (person == null) {
+			check = true;
+		}
+		if (check) {
+			personRepository.save(newPerson);
 			return "Success";
 		} else {
 			return "Failure";
@@ -191,12 +218,6 @@ public class MainController {
 		}
 	}
 
-	@GetMapping(path = "/allP")
-	public @ResponseBody Iterable<Person> getAllPersons() {
-		// This returns a JSON or XML with the users
-		return personRepository.findAll();
-	}
-
 	// test
 	@GetMapping(path = "/searchPfirst")
 	public @ResponseBody Iterable<Person> getAPersonByFirstName(@RequestParam String name) {
@@ -226,6 +247,14 @@ public class MainController {
 	@GetMapping(path = "/getalllocations")
 	public @ResponseBody Iterable<Location> getAllLocations() {
 		return locationRepository.findAll();
+	}
+
+	/**
+	 * Get to show all Persons in the database
+	 */
+	@GetMapping(path = "/getallpersons")
+	public @ResponseBody Iterable<Person> getAllPersons() {
+		return personRepository.findAll();
 	}
 
 	@GetMapping(path = "/getaddressbyid")
