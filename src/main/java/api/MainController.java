@@ -36,7 +36,7 @@ public class MainController {
 	public @ResponseBody String addNewUser (@RequestBody User newUser) {
 		if(userRepository.findByName(newUser.getName()) != null){
 			return "Failure: Name taken";
-		}else{
+		}else {
 			User n = new User();
 			n.setName(newUser.getName());
 			n.setPassword(newUser.getPassword());
