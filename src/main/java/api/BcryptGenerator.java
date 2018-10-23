@@ -1,6 +1,6 @@
 package api;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+/*import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class BcryptGenerator {
 	public static void main(String[] args) {
@@ -16,4 +16,4 @@ public class BcryptGenerator {
 		}
 
 	  }
-}
+}*/
