@@ -202,10 +202,8 @@ public class MainController {
 			@RequestParam String lastName, @RequestParam String bday) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
-		List<Person> test = new ArrayList<>();
-		test = personRepository.findByFirstAndLast(firstName, lastName);
-		System.out.println(test.isEmpty());
-		if (!test.isEmpty()) {
+		Person test = personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
+		if (test == null) {
 			return "Error: Name taken";
 		} else {
 			Person p = new Person();
@@ -230,9 +228,9 @@ public class MainController {
 	}
 
 	@GetMapping(path = "/searchP")
-	public @ResponseBody Iterable<Person> getAPersonByFirstAndLast(@RequestParam String firstName,
-			@RequestParam String lastName) {
-		return personRepository.findByFirstAndLast(firstName, lastName);
+	public @ResponseBody Person getAPersonByFirstAndLast(@RequestParam String firstName, @RequestParam String lastName,
+			@RequestParam String bday) {
+		return personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
 	}
 
 	// ADDRESS TESTING FOLLOWS
