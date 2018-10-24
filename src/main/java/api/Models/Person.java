@@ -9,13 +9,14 @@ import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Person {
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "address_id", nullable = false)
+	// @JsonIgnore
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer person_id;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "address_id", nullable = false)
-	// @JsonIgnore
 	private Address address;
 
 	private String first_name;

@@ -12,6 +12,10 @@ import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Contact {
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "person_id", nullable = false)
+  private Person person;
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer contact_id;
@@ -19,10 +23,6 @@ public class Contact {
   private String contact_type;
 
   private String contact_detail;
-
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
-  @JoinColumn(name = "person_id", nullable = false)
-  private Person person;
 
   private String status = "active";
 

@@ -87,20 +87,20 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
-	public @ResponseBody String addAddress(@RequestBody Map<String, String> body) {
+	public @ResponseBody String addAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Address address = addressRepository.getByAddress(body.get("address_line_1"));
+		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
 		if (address == null) {
 			check = true;
 		}
 		if (check) {
 			Address a = new Address();
-			a.setAddressLine1(body.get("address_line_1"));
-			a.setAddressLine2(body.get("address_line_2"));
-			a.setAddressLine3(body.get("address_line_3"));
-			a.setPostalCode(body.get("postal_code"));
-			a.setCity(body.get("city"));
-			a.setCountry(body.get("country"));
+			a.setAddressLine1(body.get("address_line_1").toString());
+			a.setAddressLine2(body.get("address_line_2").toString());
+			a.setAddressLine3(body.get("address_line_3").toString());
+			a.setPostalCode(body.get("postal_code").toString());
+			a.setCity(body.get("city").toString());
+			a.setCountry(body.get("country").toString());
 			addressRepository.save(a);
 			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
@@ -118,17 +118,17 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addLocation")
-	public @ResponseBody String addLocation(@RequestBody Map<String, String> body) {
+	public @ResponseBody String addLocation(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Location location = locationRepository.getByName(body.get("name"));
+		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
 			check = true;
 		}
 		if (check) {
 			Location l = new Location();
-			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id"))));
-			l.setName(body.get("name"));
-			l.setDescription(body.get("description"));
+			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			l.setName(body.get("name").toString());
+			l.setDescription(body.get("description").toString());
 			locationRepository.save(l);
 			return "Success";
 		} else {
@@ -164,19 +164,19 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addContact")
-	public @ResponseBody String addContact(@RequestBody Map<String, String> body) {
+	public @ResponseBody String addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id")),
-				body.get("contact_detail"));
+		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
+				body.get("contact_detail").toString());
 		if (contact == null) {
 			check = true;
 		}
 		if (check) {
 			Contact c = new Contact();
 			System.out.println(body.get("person_id"));
-			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id"))));
-			c.setContactType(body.get("contact_type"));
-			c.setContactDetail(body.get("contact_detail"));
+			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			c.setContactType(body.get("contact_type").toString());
+			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
 			return "Success";
 		} else {
