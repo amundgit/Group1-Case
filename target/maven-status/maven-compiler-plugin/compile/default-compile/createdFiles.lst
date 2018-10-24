@@ -1,4 +1,6 @@
 api/Models/Match.class
+api/Pojos/SessionInfo.class
+api/ErrorMsg.class
 api/Models/Goal_type.class
 api/Models/Association.class
 api/Models/Owner.class
@@ -10,6 +12,7 @@ api/Models/Contact.class
 api/Models/Player.class
 api/Repositories/AddressRepository.class
 api/Models/Result.class
+api/Repositories/LocationRepository.class
 api/Models/Match_position.class
 api/Models/Location.class
 api/Models/Season.class
