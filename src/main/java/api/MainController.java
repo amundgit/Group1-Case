@@ -129,6 +129,11 @@ public class MainController {
 			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
+			System.out.println(l.getName());
+			System.out.println(l.getDescription());
+			System.out.println(l.getAddressId());
+			System.out.println(l.getLocationId());
+
 			locationRepository.save(l);
 			return "Success";
 		} else {
