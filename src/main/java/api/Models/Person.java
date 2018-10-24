@@ -11,12 +11,7 @@ import javax.persistence.*;
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "address_id", nullable = false)
-	// @JsonIgnore
-	private Address address;
+	private Integer person_id;
 
 	private String first_name;
 
@@ -24,15 +19,27 @@ public class Person {
 
 	private String date_of_birth; // datatype just for testing
 
-	public Person() {
-	}
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "address_id", nullable = false)
+	// @JsonIgnore
+	private Address address;
+
+	private String status = "active";
 
 	public Integer getId() {
-		return id;
+		return person_id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId(Integer person_id) {
+		this.person_id = person_id;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/*

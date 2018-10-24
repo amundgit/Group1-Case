@@ -32,6 +32,12 @@ public class MainController {
 	@Autowired
 	private LocationRepository locationRepository;
 
+	@Autowired
+	private ContactRepository contactRepository;
+
+	/**
+	 * This method is used at sign up a new user, and return the session values.
+	 */
 	@PostMapping(path="/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser (@RequestBody Map<String,Object> body) {
 		if(userRepository.findByName(body.get("name").toString()) != null) {
@@ -79,15 +85,22 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
-	public @ResponseBody String addAddress(@RequestBody Address newAddress) {
+	public @ResponseBody String addAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Address address = addressRepository.getByAddress(newAddress.getAddressLine1());
+		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
 		if (address == null) {
 			check = true;
 		}
 		if (check) {
-			addressRepository.save(newAddress);
-			address = addressRepository.getByAddress(newAddress.getAddressLine1());
+			Address a = new Address();
+			a.setAddressLine1(body.get("address_line_1").toString());
+			a.setAddressLine2(body.get("address_line_2").toString());
+			a.setAddressLine3(body.get("address_line_3").toString());
+			a.setPostalCode(body.get("postal_code").toString());
+			a.setCity(body.get("city").toString());
+			a.setCountry(body.get("country").toString());
+			addressRepository.save(a);
+			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
 			return address.getId().toString();
 		} else {
@@ -103,14 +116,18 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addLocation")
-	public @ResponseBody String addLocation(@RequestBody Location newLocation) {
+	public @ResponseBody String addLocation(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Location location = locationRepository.getByName(newLocation.getName());
+		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
 			check = true;
 		}
 		if (check) {
-			locationRepository.save(newLocation);
+			Location l = new Location();
+			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			l.setName(body.get("name").toString());
+			l.setDescription(body.get("description").toString());
+			locationRepository.save(l);
 			return "Success";
 		} else {
 			return "Failure";
@@ -120,19 +137,45 @@ public class MainController {
 	@PostMapping(path = "/addPerson")
 	public @ResponseBody String addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Person person = personRepository.findByFirstAndLastandBirth(body.get("firstName").toString(),
-				body.get("lastName").toString(), body.get("dateOfBirth").toString());
+		Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
+				body.get("last_name").toString(), body.get("date_of_birth").toString());
 		if (person == null) {
 			check = true;
 		}
 		if (check) {
 			Person p = new Person();
-			System.out.println(body.get("addressId").toString());
-			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressId").toString())));
-			p.setFirstName(body.get("firstName").toString());
-			p.setLastName(body.get("lastName").toString());
-			p.setDateOfBirth(body.get("dateOfBirth").toString());
+			System.out.println(body.get("address_id").toString());
+			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			p.setFirstName(body.get("first_name").toString());
+			p.setLastName(body.get("last_name").toString());
+			p.setDateOfBirth(body.get("date_of_birth").toString());
 			personRepository.save(p);
+			return "Success";
+		} else {
+			return "Failure";
+		}
+	}
+
+	/**
+	 * 
+	 * @param body
+	 * @return
+	 */
+	@PostMapping(path = "/addContact")
+	public @ResponseBody String addContact(@RequestBody Map<String, Object> body) {
+		boolean check = false;
+		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
+				body.get("contact_detail").toString());
+		if (contact == null) {
+			check = true;
+		}
+		if (check) {
+			Contact c = new Contact();
+			System.out.println(body.get("person_id"));
+			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			c.setContactType(body.get("contact_type").toString());
+			c.setContactDetail(body.get("contact_detail").toString());
+			contactRepository.save(c);
 			return "Success";
 		} else {
 			return "Failure";
@@ -254,6 +297,14 @@ public class MainController {
 	@GetMapping(path = "/getallpersons")
 	public @ResponseBody Iterable<Person> getAllPersons() {
 		return personRepository.findAll();
+	}
+
+	/**
+	 * Get to show all contacts in the database
+	 */
+	@GetMapping(path = "/getallcontacts")
+	public @ResponseBody Iterable<Contact> getAllContacts() {
+		return contactRepository.findAll();
 	}
 
 	@GetMapping(path = "/getaddressbyid")
