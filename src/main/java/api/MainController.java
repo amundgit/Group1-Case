@@ -152,7 +152,9 @@ public class MainController {
 			p.setLastName(body.get("last_name").toString());
 			p.setDateOfBirth(body.get("date_of_birth").toString());
 			personRepository.save(p);
-			return "Success";
+			person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
+			System.out.println(person.getId().toString());
+			return person.getId().toString();
 		} else {
 			return "Failure";
 		}
