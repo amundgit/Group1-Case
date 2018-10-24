@@ -301,6 +301,14 @@ public class MainController {
 		return personRepository.findAll();
 	}
 
+	/**
+	 * Get to show all contacts in the database
+	 */
+	@GetMapping(path = "/getallcontacts")
+	public @ResponseBody Iterable<Contact> getAllContacts() {
+		return contactRepository.findAll();
+	}
+
 	@GetMapping(path = "/getaddressbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
