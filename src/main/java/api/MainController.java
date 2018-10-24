@@ -31,8 +31,8 @@ public class MainController {
 	@Autowired
 	private LocationRepository locationRepository;
 
-	@Autowired
-	private ContactRepository contactRepository;
+	// @Autowired
+	// private ContactRepository contactRepository;
 
 	@PostMapping(path = "/adduser")
 	public @ResponseBody String addNewUser(@RequestBody Map<String, Object> body) {
@@ -158,26 +158,24 @@ public class MainController {
 		}
 	}
 
-	@PostMapping(path = "/addContact")
-	public @ResponseBody String addContact(@RequestBody Map<String, String> body) {
-		boolean check = false;
-		Contact contact = contactRepository.findByIDandTypeandDetails(Integer.parseInt(body.get("person_id")),
-				body.get("contact_type"), body.get("contact_detail"));
-		if (contact == null) {
-			check = true;
-		}
-		if (check) {
-			Contact c = new Contact();
-			System.out.println(body.get("person_id"));
-			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id"))));
-			c.setContactType(body.get("contact_type"));
-			c.setContactDetail(body.get("contact_detail"));
-			contactRepository.save(c);
-			return "Success";
-		} else {
-			return "Failure";
-		}
-	}
+	/**
+	 * 
+	 * @param body
+	 * @return
+	 */
+	/*
+	 * @PostMapping(path = "/addContact") public @ResponseBody String
+	 * addContact(@RequestBody Map<String, String> body) { boolean check = false;
+	 * Contact contact =
+	 * contactRepository.findByIDandTypeandDetails(Integer.parseInt(body.get(
+	 * "person_id")), body.get("contact_type"), body.get("contact_detail")); if
+	 * (contact == null) { check = true; } if (check) { Contact c = new Contact();
+	 * System.out.println(body.get("person_id"));
+	 * c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id"
+	 * )))); c.setContactType(body.get("contact_type"));
+	 * c.setContactDetail(body.get("contact_detail")); contactRepository.save(c);
+	 * return "Success"; } else { return "Failure"; } }
+	 */
 
 	@GetMapping(path = "/getallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
