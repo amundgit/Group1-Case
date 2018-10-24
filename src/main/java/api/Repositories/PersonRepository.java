@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface PersonRepository extends CrudRepository<Person, Integer> {
 
+	@Query("SELECT p FROM Person p WHERE person_id = :id")
+	Person getById(@Param("id") Integer id);
+
 	@Query("SELECT p FROM Person p WHERE LOWER(p.first_name) = LOWER(:first_name)")
 	List<Person> findByFirstName(@Param("first_name") String first_name);
 
