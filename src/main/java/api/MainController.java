@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //New imports
 import api.Repositories.*;
 import api.Models.*;
+import api.Pojos.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,27 +35,24 @@ public class MainController {
 	@Autowired
 	private ContactRepository contactRepository;
 
-	@PostMapping(path = "/adduser")
-	public @ResponseBody String addNewUser(@RequestBody Map<String, Object> body) {
-
-		if (userRepository.findByName(body.get("name").toString()) != null) {
-			return "Failure: Name taken";
+	/**
+	 * This method is used at sign up a new user, and return the session values.
+	 */
+	@PostMapping(path="/adduser", produces = "application/json")
+	public @ResponseBody Object addNewUser (@RequestBody Map<String,Object> body) {
+		if(userRepository.findByName(body.get("name").toString()) != null) {
+			return new ErrorMsg("Username already exist");
 		} else {
-			User n = new User();
-			n.setName(body.get("name").toString());
-			n.setPassword(body.get("password").toString());
-			userRepository.save(n);
-			return "Success";
+			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
+			String hashedSessionId = BcryptSetup.generateSessionId();
+			User user = new User();
+			user.setName(body.get("name").toString());
+			user.setPassword(hashedpassword);
+			user.setSessionId(hashedSessionId);
+			userRepository.save(user);
+			return userRepository.findSessionByName(user.getName());
 		}
 	}
-	// old
-	/*
-	 * @PostMapping(path="/adduser") public @ResponseBody String addNewUser
-	 * (@RequestBody User newUser) { if(userRepository.findByName(newUser.getName())
-	 * != null){ return "Failure: Name taken"; }else{ User n = new User();
-	 * n.setName(newUser.getName()); n.setPassword(newUser.getPassword());
-	 * userRepository.save(n); return "Success"; } }
-	 */
 
 	/**
 	 * This method is used at login, to determene if the user and what type of role
