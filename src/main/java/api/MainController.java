@@ -151,6 +151,11 @@ public class MainController {
 			p.setFirstName(body.get("first_name").toString());
 			p.setLastName(body.get("last_name").toString());
 			p.setDateOfBirth(body.get("date_of_birth").toString());
+			System.out.println(p.getAddressId());
+			System.out.println(p.getFirstName());
+			System.out.println(p.getLastName());
+			System.out.println(p.getId());
+
 			personRepository.save(p);
 			return "Success";
 		} else {
