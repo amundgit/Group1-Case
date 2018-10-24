@@ -24,11 +24,11 @@ public class Person {
 
 	private String date_of_birth; // datatype just for testing
 
-	public Integer getId() {
+	public Integer getPersonId() {
 		return person_id;
 	}
 
-	public void setId(Integer person_id) {
+	public void setPersonId(Integer person_id) {
 		this.person_id = person_id;
 	}
 
