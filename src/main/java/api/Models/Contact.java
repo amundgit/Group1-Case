@@ -52,7 +52,7 @@ public class Contact {
   }
 
   public Integer getPersonId() {
-    return person.getPersonId();
+    return person.getId();
   }
 
   public void setPersonId(Person person) {
