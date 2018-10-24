@@ -20,11 +20,11 @@ public class Contact {
 
   private String contact_detail;
 
-  private String status = "active";
-
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "person_id", nullable = false)
   private Person person;
+
+  private String status = "active";
 
   // GETTERS AND SETTERS
   public Integer getId() {
