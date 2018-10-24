@@ -132,7 +132,7 @@ public class MainController {
 			System.out.println(l.getName());
 			System.out.println(l.getDescription());
 			System.out.println(l.getAddressId());
-			System.out.println(l.getLocationId());
+			System.out.println(l.getId());
 
 			locationRepository.save(l);
 			return "Success";
@@ -159,7 +159,7 @@ public class MainController {
 			System.out.println(p.getAddressId());
 			System.out.println(p.getFirstName());
 			System.out.println(p.getLastName());
-			System.out.println(p.getPersonId());
+			System.out.println(p.getId());
 
 			personRepository.save(p);
 			return "Success";

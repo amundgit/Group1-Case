@@ -34,11 +34,11 @@ public class Location {
 	 * (address_id) REFERENCES ADDRESS(address_id) );
 	 */
 
-	public Integer getLocationId() {
+	public Integer getId() {
 		return location_id;
 	}
 
-	public void setLocationId(Integer location_id) {
+	public void setId(Integer location_id) {
 		this.location_id = location_id;
 	}
 
