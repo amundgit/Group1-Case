@@ -23,7 +23,7 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     List<Contact> findByIDandHome(@Param("person_id") Integer person_id);
 
     @Query("SELECT c FROM Contact c WHERE (c.person.person_id) = (:person_id) AND LOWER(contact_detail) AND LOWER(:contact_detail)")
-    Contact findByIDandTypeandDetails(@Param("person_id") Integer person_id, @Param("contact_type") String contact_type,
+    Contact findByIDandTypeandDetails(@Param("person_id") Integer person_id,
             @Param("contact_detail") String contact_detail);
 
 }
