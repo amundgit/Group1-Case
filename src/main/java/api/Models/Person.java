@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer person_id;
+	private Integer id;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "address_id", nullable = false)
