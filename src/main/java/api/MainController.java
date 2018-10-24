@@ -84,15 +84,22 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
-	public @ResponseBody String addAddress(@RequestBody Address newAddress) {
+	public @ResponseBody String addAddress(@RequestBody Map<String, String> body) {
 		boolean check = false;
-		Address address = addressRepository.getByAddress(newAddress.getAddressLine1());
+		Address address = addressRepository.getByAddress(body.get("address_line_1"));
 		if (address == null) {
 			check = true;
 		}
 		if (check) {
-			addressRepository.save(newAddress);
-			address = addressRepository.getByAddress(newAddress.getAddressLine1());
+			Address a = new Address();
+			a.setAddressLine1(body.get("address_line_1"));
+			a.setAddressLine2(body.get("address_line_2"));
+			a.setAddressLine3(body.get("address_line_3"));
+			a.setPostalCode(body.get("postal_code"));
+			a.setCity(body.get("city"));
+			a.setCountry(body.get("country"));
+			addressRepository.save(a);
+			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
 			return address.getId().toString();
 		} else {
@@ -108,14 +115,18 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addLocation")
-	public @ResponseBody String addLocation(@RequestBody Location newLocation) {
+	public @ResponseBody String addLocation(@RequestBody Map<String, String> body) {
 		boolean check = false;
-		Location location = locationRepository.getByName(newLocation.getName());
+		Location location = locationRepository.getByName(body.get("name"));
 		if (location == null) {
 			check = true;
 		}
 		if (check) {
-			locationRepository.save(newLocation);
+			Location l = new Location();
+			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id"))));
+			l.setName(body.get("name"));
+			l.setDescription(body.get("description"));
+			locationRepository.save(l);
 			return "Success";
 		} else {
 			return "Failure";
@@ -125,18 +136,18 @@ public class MainController {
 	@PostMapping(path = "/addPerson")
 	public @ResponseBody String addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Person person = personRepository.findByFirstAndLastandBirth(body.get("firstName").toString(),
-				body.get("lastName").toString(), body.get("dateOfBirth").toString());
+		Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
+				body.get("last_name").toString(), body.get("date_of_birth").toString());
 		if (person == null) {
 			check = true;
 		}
 		if (check) {
 			Person p = new Person();
-			System.out.println(body.get("addressId").toString());
-			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("addressId").toString())));
-			p.setFirstName(body.get("firstName").toString());
-			p.setLastName(body.get("lastName").toString());
-			p.setDateOfBirth(body.get("dateOfBirth").toString());
+			System.out.println(body.get("address_id").toString());
+			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			p.setFirstName(body.get("first_name").toString());
+			p.setLastName(body.get("last_name").toString());
+			p.setDateOfBirth(body.get("date_of_birth").toString());
 			personRepository.save(p);
 			return "Success";
 		} else {
