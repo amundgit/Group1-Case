@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ContactRepository extends CrudRepository<Contact, Integer> {
 
-    @Query("SELECT c FROM Contact c WHERE (c.person_id) = (:person_id)")
+    @Query("SELECT c FROM Contact c WHERE person_id = :person_id")
     List<Contact> findByID(@Param("person_id") Integer person_id);
 
     @Query("SELECT c FROM Contact c WHERE (c.person_id) = (:person_id) AND LOWER(c.contact_type) = \"work\"")
