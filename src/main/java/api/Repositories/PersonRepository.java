@@ -22,4 +22,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth)")
 	Person findByFirstAndLastandBirth(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") String date_of_birth);
+
+	@Query("SELECT p FROM Address p WHERE person_id = :id")
+	Person getById(@Param("id") Integer id);
 }
