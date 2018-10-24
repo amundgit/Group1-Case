@@ -159,7 +159,7 @@ public class MainController {
 			System.out.println(p.getAddressId());
 			System.out.println(p.getFirstName());
 			System.out.println(p.getLastName());
-			System.out.println(p.getId());
+			// System.out.println(p.getId());
 
 			personRepository.save(p);
 			return "Success";
