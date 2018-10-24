@@ -9,22 +9,20 @@ import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Person {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer person_id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer person_id;
 
-	private String first_name;
+    //seems to work
+    @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  	@JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
-	private String last_name;
+    private String first_name;
 
-	private String date_of_birth; // datatype just for testing
+    private String last_name;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "address_id", nullable = false)
-	// @JsonIgnore
-	private Address address;
-
-	private String status = "active";
+    private String date_of_birth; //datatype just for testing
 
 	public Integer getId() {
 		return person_id;
@@ -34,20 +32,13 @@ public class Person {
 		this.person_id = person_id;
 	}
 
-	public String getStatus() {
-		return status;
+	/*public Integer getAddressId() {
+		return address_id;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	/*
-	 * public Integer getAddressId() { return address_id; }
-	 * 
-	 * public void setAddressId(Integer address_id) { this.address_id = address_id;
-	 * }
-	 */
+	public void setAddressId(Integer address_id) {
+		this.address_id = address_id;
+	}*/
 
 	public Integer getAddressId() {
 		return address.getId();
@@ -80,5 +71,6 @@ public class Person {
 	public void setDateOfBirth(String date_of_birth) {
 		this.date_of_birth = date_of_birth;
 	}
+
 
 }

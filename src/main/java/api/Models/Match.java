@@ -1,17 +1,89 @@
 package api.Models;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;*/
+import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Match{
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer match_id;
+  @Id
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private Integer match_id;
+
+  private String match_date; //CHANGE DATATYPE LATER?
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "season_id", nullable = false)
+  private Season season;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "location_id", nullable = false)
+  private Location location;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "home_team_id", nullable = false)
+  private Team home_team;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "away_team_id", nullable = false)
+  private Team away_team;
 
 	private String status = "active";
+
+  //GETTERS AND SETTERS
+  public Integer getId() {
+    return match_id;
+  }
+  public void setId(Integer match_id) {
+    this.match_id = match_id;
+  }
+  //-----CHANGE DATATYPE LATER?-----------------
+  public String getMatchDate() {
+    return match_date;
+  }
+  public void setMatchDate(String match_date) {
+    this.match_date = match_date;
+  }
+  //-------------------------------------------
+  //FOREIGN KEYS
+  public Integer getSeasonId(){
+    return season.getId();
+  }
+  public void setSeasonId(Season season){
+    this.season = season;
+  }
+
+  public Integer getLocationId(){
+    return location.getId();
+  }
+  public void setLocationId(Location location){
+    this.location = location;
+  }
+
+  public String getHomeTeamId(){
+    return home_team.getId();
+  }
+  public void setHomeTeamId(Team home_team){
+    this.home_team = home_team;
+  }
+
+  public String getAwayTeamId(){
+    return away_team.getId();
+  }
+  public void setAwayTeam(Team away_team){
+    this.away_team = away_team;
+  }
+  //-------------------------------------------
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }
 
 //SQL:

@@ -1,18 +1,64 @@
 package api.Models;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;*/
+import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Result{
-	//Primary key needs some setup mebbeh? Lager basic for tests
+	//Foreign key as primary key
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
-  private Integer id;
+  private Integer result_id;
+
+  @OneToOne
+  @MapsId
+  private Match match;
+
+  private String score;
+
+  private String result;
 
 	private String status = "active";
+
+  //GETTERS AND SETTERS
+  public Integer getId(){
+    return result_id;
+  }
+  public void setId(Integer result_id){
+    this.result_id = result_id;
+  }
+  //FOREIGN KEY
+  public Match getMatch(){
+    return match;
+  }
+  public void setMatch(Match match){
+    this.match = match;
+  }
+
+  public String getScore(){
+    return score;
+  }
+  public void setScore(String score){
+    this.score = score;
+  }
+
+  public String getResult(){
+    return result;
+  }
+  public void setResult(String result){
+    this.result = result;
+  }
+
+  public String getStatus(){
+    return status;
+  }
+  public void setStatus(String status){
+    this.status = status;
+  }
 }
 
 //SQL:

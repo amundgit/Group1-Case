@@ -17,23 +17,16 @@ public class User {
 
     private Integer role = 0;
 
-    private String sessionId;
+    private String cookie;
 
     private String status = "active";
 
-    public User() {}
-
-    public User(String name, String sessionId) {
-        this.name = name;
-        this.sessionId = sessionId;
+    public String getCookie(){
+    	return cookie;
     }
 
-    public String getSessionId(){
-    	return sessionId;
-    }
-
-    public void setSessionId(String sessionId){
-    	this.sessionId = sessionId;
+    public void setCookie(String cookie){
+    	this.cookie = cookie;
     }
 
     public Integer getRole() {

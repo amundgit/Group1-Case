@@ -1,9 +1,12 @@
 package api.Models;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;*/
+import javax.persistence.*;//backup
 
 import java.time.LocalDate; //will this create sql date?
 
@@ -37,14 +40,27 @@ public class Season{
 	);
 	*/
 
-	public Integer getSeasonId() {
+	public Integer getId() {
 		return season_id;
 	}
-	public void setSeasonId(Integer season_id) {
+	public void setId(Integer season_id) {
 		this.season_id = season_id;
 	}
 
 	//Date getters and setters go here
+	public LocalDate getStartDate(){
+		return start_date;
+	}
+	public void setStartDate(LocalDate start_date){
+		this.start_date = start_date;
+	}
+
+	public LocalDate getEndDate(){
+		return end_date;
+	}
+	public void setEndDate(LocalDate end_date){
+		this.end_date = end_date;
+	}
 
 	public String getName() {
 		return name;
