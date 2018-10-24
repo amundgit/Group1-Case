@@ -16,10 +16,10 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     @Query("SELECT c FROM Contact c WHERE person_id = :person_id")
     List<Contact> findByID(@Param("person_id") Integer person_id);
 
-    @Query("SELECT c FROM Contact c WHERE (person_id) = (:person_id) AND LOWER(contact_type) = \"work\"")
+    @Query("SELECT c FROM Contact c WHERE (person_id) = (:person_id) AND LOWER(contact_type) = \'work\'")
     List<Contact> findByIDandWork(@Param("person_id") Integer person_id);
 
-    @Query("SELECT c FROM Contact c WHERE (person_id) = (:person_id) AND LOWER(contact_type) = \"home\"")
+    @Query("SELECT c FROM Contact c WHERE (person_id) = (:person_id) AND LOWER(contact_type) = \'home\'")
     List<Contact> findByIDandHome(@Param("person_id") Integer person_id);
 
     @Query("SELECT c FROM Contact c WHERE (person_id) = (:person_id) AND LOWER(contact_type) = LOWER(:contact_type) and LOWER(contact_detail) and LOWER(:contact_detail)")
