@@ -23,6 +23,6 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	Person findByFirstAndLastandBirth(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") String date_of_birth);
 
-	@Query("SELECT p FROM Person p WHERE id = :person_id")
+	@Query("SELECT p FROM Person p WHERE person_id = :person_id")
 	Person getById(@Param("person_id") Integer person_id);
 }

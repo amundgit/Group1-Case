@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Integer person_id;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "address_id", nullable = false)
@@ -25,11 +25,11 @@ public class Person {
 	private String date_of_birth; // datatype just for testing
 
 	public Integer getId() {
-		return id;
+		return person_id;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.person_id = id;
 	}
 
 	/*
