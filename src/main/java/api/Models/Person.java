@@ -13,16 +13,18 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer person_id;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "address_id", nullable = false)
-	// @JsonIgnore
-	private Address address;
-
 	private String first_name;
 
 	private String last_name;
 
 	private String date_of_birth; // datatype just for testing
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "address_id", nullable = false)
+	// @JsonIgnore
+	private Address address;
+
+	private String status = "active";
 
 	public Integer getId() {
 		return person_id;
@@ -30,6 +32,14 @@ public class Person {
 
 	public void setId(Integer person_id) {
 		this.person_id = person_id;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/*
