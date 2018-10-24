@@ -129,11 +129,6 @@ public class MainController {
 			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
-			System.out.println(l.getName());
-			System.out.println(l.getDescription());
-			System.out.println(l.getAddressId());
-			System.out.println(l.getId());
-
 			locationRepository.save(l);
 			return "Success";
 		} else {
@@ -156,11 +151,6 @@ public class MainController {
 			p.setFirstName(body.get("first_name").toString());
 			p.setLastName(body.get("last_name").toString());
 			p.setDateOfBirth(body.get("date_of_birth").toString());
-			System.out.println(p.getAddressId());
-			System.out.println(p.getFirstName());
-			System.out.println(p.getLastName());
-			// System.out.println(p.getId());
-
 			personRepository.save(p);
 			return "Success";
 		} else {
