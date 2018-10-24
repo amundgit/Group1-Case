@@ -4,14 +4,61 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+//import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Contact{
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer contact_id;
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private Integer contact_id;
+
+  private String contact_type;
+
+  private String contact_detail;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "person_id", nullable = false)
+  private Person person;
 
 	private String status = "active";
+
+  //GETTERS AND SETTERS
+  public Integer getId() {
+    return contact_id;
+  }
+  public void setId(Integer contact_id) {
+    this.contact_id = contact_id;
+  }
+
+  public String getContactType(){
+    return contact_type;
+  }
+  public void setContactType(String contact_type){
+    this.contact_type = contact_type;
+  }
+
+  public String getContactDetail(){
+    return contact_detail;
+  }
+  public void setContactDetail(String contact_detail){
+    this.contact_detail = contact_detail;
+  }
+
+  public Integer getPersonId(){
+    return person.getId();
+  }
+  public void setPersonId(Person person){
+    this.person = person;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }
 
 //SQL:
