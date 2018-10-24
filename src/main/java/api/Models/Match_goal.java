@@ -1,17 +1,78 @@
 package api.Models;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;*/
+import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Match_goal{
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer goal_id;
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private Integer goal_id;
 
+  private String description;
+
+  //FOREIGN KEYS-------------------------------------
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "goal_type_id", nullable = false)
+  private Goal_type goal_type;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "match_id", nullable = false)
+  private Match match;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "player_id", nullable = false)
+  private Player player;
+  //-------------------------------------------------
 	private String status = "active";
+
+  //GETTERS AND SETTERS
+  public Integer getId() {
+    return goal_id;
+  }
+  public void setId(Integer goal_id) {
+    this.goal_id = goal_id;
+  }
+
+  public String getDescription(){
+    return description;
+  }
+  public void setDescription(String description){
+    this.description = description;
+  }
+  //FOREIGN KEYS
+  public Integer getGoalTypeId(){
+    return goal_type.getId();
+  }
+  public void setGoalTypeId(Goal_type goal_type){
+    this.goal_type = goal_type;
+  }
+
+  public Integer getMatchId(){
+    return match.getId();
+  }
+  public void setMatchId(Match match){
+    this.match = match;
+  }
+
+  public Integer getPlayerId(){
+    return player.getId();
+  }
+  public void setPlayerId(Player player){
+    this.player = player;
+  }
+  //----------------------------------------
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }
 
 //SQL:

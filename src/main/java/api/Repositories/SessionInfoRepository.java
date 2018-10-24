@@ -1,11 +1,10 @@
-package api.Repositories;
+/*package api.Repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import api.Models.User;
 import api.Pojos.SessionInfo;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface SessionInfoRepository extends CrudRepository<SessionInfo, Integer> {
 	
 	//Check if username exist
 	User findByName(String name);
@@ -23,6 +22,10 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	User verifyUser(@Param("name")String name, @Param("password")String password);
 
 	//Get username and sessionid by username.
-  	@Query("select new api.Pojos.SessionInfo(u.name, u.sessionId) from User u where u.name = ?1")
+	@Query(value = "SELECT name, sessionId FROM USER WHERE name = ?1", nativeQuery = true)
+  	User findSessionByName(String name);
+
+  	@Query("select u.name, u.sessionId from User u where u.name = ?1")
 	SessionInfo findSessionByName(String name);
 }
+*/
