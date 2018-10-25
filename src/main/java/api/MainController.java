@@ -16,6 +16,7 @@ import api.Pojos.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.time.*;
 
 @Controller // This means that this class is a Controller
 public class MainController {
@@ -38,9 +39,9 @@ public class MainController {
 	/**
 	 * This method is used at sign up a new user, and return the session values.
 	 */
-	@PostMapping(path="/adduser", produces = "application/json")
-	public @ResponseBody Object addNewUser (@RequestBody Map<String,Object> body) {
-		if(userRepository.findByName(body.get("name").toString()) != null) {
+	@PostMapping(path = "/adduser", produces = "application/json")
+	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
+		if (userRepository.findByName(body.get("name").toString()) != null) {
 			return new ErrorMsg("Username already exist");
 		} else {
 			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
@@ -85,7 +86,7 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
-	public @ResponseBody String addAddress(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
 		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
 		if (address == null) {
@@ -100,11 +101,11 @@ public class MainController {
 			a.setCity(body.get("city").toString());
 			a.setCountry(body.get("country").toString());
 			addressRepository.save(a);
-			address = addressRepository.getByAddress(a.getAddressLine1());
+			// Return the id the new address got in the database.
 			System.out.println(address.getId().toString());
-			return address.getId().toString();
+			return addressRepository.findIDByName(a.getAddressLine1());
 		} else {
-			return "Failure";
+			return new ErrorMsg("Failure, Address was not created.");
 		}
 	}
 
@@ -116,7 +117,7 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addLocation")
-	public @ResponseBody String addLocation(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
 		boolean check = false;
 		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
@@ -128,17 +129,21 @@ public class MainController {
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
 			locationRepository.save(l);
-			return "Success";
+			return new SuccessMsg("Success, Location was created.");
 		} else {
-			return "Failure";
+			return new ErrorMsg("Failure, Location was not created.");
 		}
 	}
 
 	@PostMapping(path = "/addPerson")
-	public @ResponseBody String addPerson(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		String dateArr[] = body.get("date_of_birth").toString().split("-");
+		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
+				Integer.parseInt(dateArr[2]));
+		System.out.println(date);
 		Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
-				body.get("last_name").toString(), body.get("date_of_birth").toString());
+				body.get("last_name").toString(), date);
 		if (person == null) {
 			check = true;
 		}
@@ -148,13 +153,13 @@ public class MainController {
 			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
 			p.setFirstName(body.get("first_name").toString());
 			p.setLastName(body.get("last_name").toString());
-			p.setDateOfBirth(body.get("date_of_birth").toString());
+			p.setDateOfBirth(date);
 			personRepository.save(p);
 			person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
 			System.out.println(person.getId().toString());
 			return person.getId().toString();
 		} else {
-			return "Failure";
+			return new ErrorMsg("Failure, Person was not created.");
 		}
 	}
 
@@ -164,7 +169,7 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addContact")
-	public @ResponseBody String addContact(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
 		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
 				body.get("contact_detail").toString());
@@ -178,9 +183,9 @@ public class MainController {
 			c.setContactType(body.get("contact_type").toString());
 			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
-			return "Success";
+			return new SuccessMsg("Success, Contact was created.");
 		} else {
-			return "Failure";
+			return new ErrorMsg("Failure, Contact was not created.");
 		}
 	}
 

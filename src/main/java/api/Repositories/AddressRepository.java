@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import api.Models.Address;
+import api.Pojos.IdInfo;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 
 	@Query("SELECT a FROM Address a WHERE LOWER(address_line_1) = LOWER(:address)")
 	Address getByAddress(@Param("address") String address);
+
+	// Get id by address_line_1.
+	@Query("SELECT new api.Pojos.IdInfo(a.address_id) FROM Address a WHERE a.address_line_1 = ?1")
+	IdInfo findIDByName(String address_line_1);
 }
