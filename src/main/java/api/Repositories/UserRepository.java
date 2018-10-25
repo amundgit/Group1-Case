@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import api.Models.User;
-import api.Pojos.SessionInfo;
+import api.Pojos.*;
 
 import java.util.List;
 
@@ -14,15 +14,18 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface UserRepository extends CrudRepository<User, Integer> {
-	
-	//Check if username exist
+
+	// Check if username exist
 	User findByName(String name);
 
-
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
-	User verifyUser(@Param("name")String name, @Param("password")String password);
+	User verifyUser(@Param("name") String name, @Param("password") String password);
 
-	//Get username and sessionid by username.
-  	@Query("SELECT new api.Pojos.SessionInfo(u.name, u.sessionId) FROM User u WHERE u.name = ?1")
+	// Get userid, username and sessionid by username.
+	@Query("select new api.Pojos.SessionInfo(u.id, u.name, u.sessionId) from User u where u.name = ?1")
 	SessionInfo findSessionByName(String name);
+
+	// Get userrole by userid.
+	@Query("select new api.Pojos.UserRoleInfo(u.role) from User u where u.id = ?1")
+	UserRoleInfo findRoleByUserid(int userid);
 }

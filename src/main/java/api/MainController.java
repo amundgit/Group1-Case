@@ -40,8 +40,9 @@ public class MainController {
 	@Autowired
 	private AssociationRepository associationRepository;
 
-	/**
-	 * This method is used at sign up a new user, and return the session values.
+	/*
+	 * This method is used to sign up a new user. It returns an error message if the user exist, 
+	 * else it returns the created users Id, name and sessionid. 
 	 */
 	@PostMapping(path = "/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
@@ -61,7 +62,22 @@ public class MainController {
 		}
 	}
 
-	/**
+	/*
+	 * This method is used to get the role of a user. It returns an error message if parameter
+	 * is undefined, else it returns the role for the user.
+	 */
+	@GetMapping(path = "/getuserrole")
+	public @ResponseBody Object getUserRole(@RequestParam("userid") int userid) {
+		if(userid == 0) {
+			Messages m = new Messages();
+			m.setError("Parameter userid not defined");
+			return m;
+		} else {
+			return userRepository.findRoleByUserid(userid);
+		}
+	}
+
+	/*
 	 * This method is used at login, to determene if the user and what type of role
 	 * it has.
 	 */
