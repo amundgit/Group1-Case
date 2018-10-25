@@ -1,5 +1,6 @@
 package api;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -247,26 +248,22 @@ public class MainController {
 		return "Updated";
 	}
 
-	// PERSONTEST follows
-	@GetMapping(path = "/addP") // Map ONLY GET Requests
-	public @ResponseBody String addNewPerson(@RequestParam Integer addressID, @RequestParam String firstName,
-			@RequestParam String lastName, @RequestParam String bday) {
-		// @ResponseBody means the returned String is the response, not a view name
-		// @RequestParam means it is a parameter from the GET or POST request
-		Person test = personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
-		if (test == null) {
-			return "Error: Name taken";
-		} else {
-			Person p = new Person();
-			p.setAddressId(addressRepository.getById(addressID));
-			p.setFirstName(firstName);
-			p.setLastName(lastName);
-			p.setDateOfBirth(bday);
-			personRepository.save(p);
-			return "Saved";
-		}
-	}
-
+	/*
+	 * // PERSONTEST follows
+	 * 
+	 * @GetMapping(path = "/addP") // Map ONLY GET Requests public @ResponseBody
+	 * String addNewPerson(@RequestParam Integer addressID, @RequestParam String
+	 * firstName,
+	 * 
+	 * @RequestParam String lastName, @RequestParam String bday) { // @ResponseBody
+	 * means the returned String is the response, not a view name // @RequestParam
+	 * means it is a parameter from the GET or POST request Person test =
+	 * personRepository.findByFirstAndLastandBirth(firstName, lastName, bday); if
+	 * (test == null) { return "Error: Name taken"; } else { Person p = new
+	 * Person(); p.setAddressId(addressRepository.getById(addressID));
+	 * p.setFirstName(firstName); p.setLastName(lastName); p.setDateOfBirth(bday);
+	 * personRepository.save(p); return "Saved"; } }
+	 */
 	// test
 	@GetMapping(path = "/searchPfirst")
 	public @ResponseBody Iterable<Person> getAPersonByFirstName(@RequestParam String name) {
@@ -280,7 +277,7 @@ public class MainController {
 
 	@GetMapping(path = "/searchP")
 	public @ResponseBody Person getAPersonByFirstAndLast(@RequestParam String firstName, @RequestParam String lastName,
-			@RequestParam String bday) {
+			@RequestParam LocalDate bday) {
 		return personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
 	}
 
