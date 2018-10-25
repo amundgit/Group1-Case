@@ -363,9 +363,11 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
-		//System.out.print("SESSION COOKIE!!!: "+body.get("session").toString());
+		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
 		Messages m = new Messages();
-		boolean check = false;
+		m.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
+		return m; 
+		/*boolean check = false;
 		String name = body.get("name").toString();
 		String description = body.get("description").toString();
 		Association existenceCheck = associationRepository.getByName(name);
@@ -381,7 +383,7 @@ public class MainController {
 		} else {
 			m.setError("Error: Association exists");
 		}
-		return m;
+		return m;*/
 	}
 
 
