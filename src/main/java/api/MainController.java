@@ -201,7 +201,7 @@ public class MainController {
 		if (check) {
 			Contact c = new Contact();
 			System.out.println(body.get("person_id"));
-			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("person_id").toString())));
 			c.setContactType(body.get("contact_type").toString());
 			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
