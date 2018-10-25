@@ -35,8 +35,9 @@ public class MainController {
 	@Autowired
 	private ContactRepository contactRepository;
 
-	/**
-	 * This method is used at sign up a new user, and return the session values.
+	/*
+	 * This method is used at sign up a new user. It returns an error message if the user exist, 
+	 * else it returns the created users Id, name and sessionid. 
 	 */
 	@PostMapping(path="/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser (@RequestBody Map<String,Object> body) {
@@ -54,7 +55,18 @@ public class MainController {
 		}
 	}
 
-	/**
+	/*
+	 * 
+	 */
+	@GetMapping(path = "/getrole")
+	public @ResponseBody Object getUserRole(@RequestParam("userid") int userid) {
+		if(userid == 0) {
+			return 
+		}
+		findRoleByUserid(userid);
+	}
+
+	/*
 	 * This method is used at login, to determene if the user and what type of role
 	 * it has.
 	 */
