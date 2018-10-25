@@ -103,10 +103,11 @@ public class MainController {
 			a.setCountry(body.get("country").toString());
 			addressRepository.save(a);
 			// Return the id the new address got in the database.
+			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
-			return addressRepository.findIDByName(a.getAddressLine1());
+			return new Message().setMessage(address.getId().toString());
 		} else {
-			return new ErrorMsg("Failure, Address was not created.");
+			return new Message().setError("Failure, Address was not created.");
 		}
 	}
 
