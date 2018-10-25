@@ -37,6 +37,9 @@ public class MainController {
 	@Autowired
 	private ContactRepository contactRepository;
 
+	@Autowired
+	private AssociationRepository associationRepository;
+
 	/**
 	 * This method is used at sign up a new user, and return the session values.
 	 */
@@ -108,7 +111,9 @@ public class MainController {
 			System.out.println(address.getId().toString());
 			return addressRepository.findIDByName(a.getAddressLine1());
 		} else {
-			return new ErrorMsg("Failure, Address was not created.");
+			Messages m = new Messages();
+			m.setError("Username already exists");
+			return m;
 		}
 	}
 
