@@ -363,7 +363,7 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
-		System.out.print("SESSION COOKIE!!!: "+body.get("session").toString());
+		//System.out.print("SESSION COOKIE!!!: "+body.get("session").toString());
 		Messages m = new Messages();
 		boolean check = false;
 		String name = body.get("name").toString();
