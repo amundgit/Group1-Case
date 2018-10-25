@@ -29,6 +29,6 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 			@Param("date_of_birth") LocalDate date_of_birth);
 
 	// Get id pojo by addresssline.
-	@Query("SELECT new api.Pojos.IdInfo(p.person_id) FROM Person p WHERE LOWER(p.address_line_1) = LOWER(:address_line_1) AND LOWER(p.last_name) = LOWER(?2) AND p.date_of_birth = ?3")
+	@Query("SELECT new api.Pojos.IdInfo(p.person_id) FROM Person p WHERE LOWER(p.first_name) = LOWER(?1) AND LOWER(p.last_name) = LOWER(?2) AND p.date_of_birth = ?3")
 	IdInfo findIDByName(String first_name, String last_name, LocalDate date_of_birth);
 }
