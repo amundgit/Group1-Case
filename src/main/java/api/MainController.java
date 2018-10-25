@@ -183,6 +183,7 @@ public class MainController {
 	@PostMapping(path = "/addContact")
 	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages m = new Messages();
 		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
 				body.get("contact_detail").toString());
 		if (contact == null) {
@@ -195,10 +196,11 @@ public class MainController {
 			c.setContactType(body.get("contact_type").toString());
 			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
-			return new SuccessMsg("Success, Contact was created.");
+			m.setMessage("Success, Contact was created.");
 		} else {
-			return new ErrorMsg("Failure, Contact was not created.");
+			m.setError("Failure, Contact was not created.");
 		}
+		return m;
 	}
 
 	@GetMapping(path = "/getallusers")
