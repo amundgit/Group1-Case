@@ -126,7 +126,7 @@ public class MainController {
 	 */
 	@PostMapping(path = "/addLocation")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
-		Messages m = new Messages;
+		Messages m = new Messages();
 		boolean check = false;
 		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
