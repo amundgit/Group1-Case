@@ -43,7 +43,9 @@ public class MainController {
 	@PostMapping(path = "/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
 		if (userRepository.findByName(body.get("name").toString()) != null) {
-			return new ErrorMsg("Username already exist");
+			Messages m = new Messages();
+			m.setError("Username already exists");
+			return m;
 		} else {
 			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
 			String hashedSessionId = BcryptSetup.generateSessionId();
@@ -314,6 +316,33 @@ public class MainController {
 	@GetMapping(path = "/getaddressbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
+	}
+	@GetMapping(path = "/getallassociations")
+	public @ResponseBody Iterable<Association> getAllAssociations(){
+		return associationRepository.findAll();
+	}
+
+	//TEST - return other value?
+	@PostMapping(path = "/addassociation")
+	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		boolean check = false;
+		String name = body.get("name").toString();
+		String description = body.get("description").toString();
+		Association existenceCheck = associationRepository.getByName(name);
+		if(existenceCheck == null){
+			check = true;
+		}
+		if(check){
+			Association a = new Association();
+			a.setName(name);
+			a.setDescription(description);
+			associationRepository.save(a);
+			m.setMessage("Success");
+		} else {
+			m.setError("Error: Association exists");
+		}
+		return m;
 	}
 
 }

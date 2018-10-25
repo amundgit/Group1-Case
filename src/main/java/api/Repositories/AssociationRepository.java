@@ -17,6 +17,9 @@ public interface AssociationRepository extends CrudRepository<Association, Integ
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 
-	@Query("SELECT a FROM Association a WHERE association_id = :id")
+	@Query("SELECT a FROM Association a WHERE association_id = :id AND status = \'active\'")
 	Association getById(@Param("id")Integer id);
+
+	@Query("SELECT a FROM Association a WHERE LOWER(a.name) = LOWER(:name) AND a.status = \'active\'")
+	Association getByName(@Param("name")String name);
 }
