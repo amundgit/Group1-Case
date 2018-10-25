@@ -189,6 +189,10 @@ public class MainController {
 	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
 		Messages msg = new Messages();
+		System.out.println(body.get("person_id").toString());
+		System.out.println(body.get("contact_type").toString());
+		System.out.println(body.get("contact_detail").toString());
+
 		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
 				body.get("contact_detail").toString());
 		if (contact == null) {
