@@ -37,6 +37,9 @@ public class MainController {
 	@Autowired
 	private ContactRepository contactRepository;
 
+	@Autowired
+	private AssociationRepository associationRepository;
+
 	/**
 	 * This method is used at sign up a new user, and return the session values.
 	 */
@@ -125,6 +128,7 @@ public class MainController {
 	 */
 	@PostMapping(path = "/addLocation")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
 		boolean check = false;
 		Messages msg = new Messages();
 		Location location = locationRepository.getByName(body.get("name").toString());
