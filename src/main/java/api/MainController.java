@@ -1,5 +1,6 @@
 package api;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import api.Pojos.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.time.*;
 
 @Controller // This means that this class is a Controller
 public class MainController {
@@ -35,14 +37,19 @@ public class MainController {
 	@Autowired
 	private ContactRepository contactRepository;
 
+	@Autowired
+	private AssociationRepository associationRepository;
+
 	/*
-	 * This method is used at sign up a new user. It returns an error message if the user exist, 
+	 * This method is used to sign up a new user. It returns an error message if the user exist, 
 	 * else it returns the created users Id, name and sessionid. 
 	 */
-	@PostMapping(path="/adduser", produces = "application/json")
-	public @ResponseBody Object addNewUser (@RequestBody Map<String,Object> body) {
-		if(userRepository.findByName(body.get("name").toString()) != null) {
-			return new ErrorMsg("Username already exist");
+	@PostMapping(path = "/adduser", produces = "application/json")
+	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
+		if (userRepository.findByName(body.get("name").toString()) != null) {
+			Messages m = new Messages();
+			m.setError("Username already exists");
+			return m;
 		} else {
 			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
 			String hashedSessionId = BcryptSetup.generateSessionId();
@@ -56,14 +63,18 @@ public class MainController {
 	}
 
 	/*
-	 * 
+	 * This method is used to get the role of a user. It returns an error message if parameter
+	 * is undefined, else it returns the role for the user.
 	 */
-	@GetMapping(path = "/getrole")
+	@GetMapping(path = "/getuserrole")
 	public @ResponseBody Object getUserRole(@RequestParam("userid") int userid) {
 		if(userid == 0) {
-			return 
+			Messages m = new Messages();
+			m.setError("Parameter userid not defined");
+			return m;
+		} else {
+			return userRepository.findRoleByUserid(userid);
 		}
-		findRoleByUserid(userid);
 	}
 
 	/*
@@ -97,8 +108,9 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addAddress")
-	public @ResponseBody String addAddress(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
 		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
 		if (address == null) {
 			check = true;
@@ -112,11 +124,14 @@ public class MainController {
 			a.setCity(body.get("city").toString());
 			a.setCountry(body.get("country").toString());
 			addressRepository.save(a);
+			// Return the id the new address got in the database.
 			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
-			return address.getId().toString();
+			msg.setMessage(address.getId().toString());
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure, Address was not created.");
+			return msg;
 		}
 	}
 
@@ -128,8 +143,10 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addLocation")
-	public @ResponseBody String addLocation(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
 		boolean check = false;
+		Messages msg = new Messages();
 		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
 			check = true;
@@ -140,17 +157,24 @@ public class MainController {
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
 			locationRepository.save(l);
-			return "Success";
+			msg.setMessage("Success, Location was created.");
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure, Location was not created.");
+			return msg;
 		}
 	}
 
 	@PostMapping(path = "/addPerson")
-	public @ResponseBody String addPerson(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
+		String dateArr[] = body.get("date_of_birth").toString().split("-");
+		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
+				Integer.parseInt(dateArr[2]));
+		System.out.println(date);
 		Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
-				body.get("last_name").toString(), body.get("date_of_birth").toString());
+				body.get("last_name").toString(), date);
 		if (person == null) {
 			check = true;
 		}
@@ -160,13 +184,15 @@ public class MainController {
 			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
 			p.setFirstName(body.get("first_name").toString());
 			p.setLastName(body.get("last_name").toString());
-			p.setDateOfBirth(body.get("date_of_birth").toString());
+			p.setDateOfBirth(date);
 			personRepository.save(p);
 			person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
 			System.out.println(person.getId().toString());
-			return person.getId().toString();
+			msg.setMessage(person.getId().toString());
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure, Person was not created.");
+			return msg;
 		}
 	}
 
@@ -176,8 +202,13 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/addContact")
-	public @ResponseBody String addContact(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
+		System.out.println(body.get("person_id").toString());
+		System.out.println(body.get("contact_type").toString());
+		System.out.println(body.get("contact_detail").toString());
+
 		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
 				body.get("contact_detail").toString());
 		if (contact == null) {
@@ -186,13 +217,15 @@ public class MainController {
 		if (check) {
 			Contact c = new Contact();
 			System.out.println(body.get("person_id"));
-			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("person_id").toString())));
 			c.setContactType(body.get("contact_type").toString());
 			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
-			return "Success";
+			msg.setMessage("Success, Contact was created.");
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure, Contact was not created.");
+			return msg;
 		}
 	}
 
@@ -254,26 +287,22 @@ public class MainController {
 		return "Updated";
 	}
 
-	// PERSONTEST follows
-	@GetMapping(path = "/addP") // Map ONLY GET Requests
-	public @ResponseBody String addNewPerson(@RequestParam Integer addressID, @RequestParam String firstName,
-			@RequestParam String lastName, @RequestParam String bday) {
-		// @ResponseBody means the returned String is the response, not a view name
-		// @RequestParam means it is a parameter from the GET or POST request
-		Person test = personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
-		if (test == null) {
-			return "Error: Name taken";
-		} else {
-			Person p = new Person();
-			p.setAddressId(addressRepository.getById(addressID));
-			p.setFirstName(firstName);
-			p.setLastName(lastName);
-			p.setDateOfBirth(bday);
-			personRepository.save(p);
-			return "Saved";
-		}
-	}
-
+	/*
+	 * // PERSONTEST follows
+	 * 
+	 * @GetMapping(path = "/addP") // Map ONLY GET Requests public @ResponseBody
+	 * String addNewPerson(@RequestParam Integer addressID, @RequestParam String
+	 * firstName,
+	 * 
+	 * @RequestParam String lastName, @RequestParam String bday) { // @ResponseBody
+	 * means the returned String is the response, not a view name // @RequestParam
+	 * means it is a parameter from the GET or POST request Person test =
+	 * personRepository.findByFirstAndLastandBirth(firstName, lastName, bday); if
+	 * (test == null) { return "Error: Name taken"; } else { Person p = new
+	 * Person(); p.setAddressId(addressRepository.getById(addressID));
+	 * p.setFirstName(firstName); p.setLastName(lastName); p.setDateOfBirth(bday);
+	 * personRepository.save(p); return "Saved"; } }
+	 */
 	// test
 	@GetMapping(path = "/searchPfirst")
 	public @ResponseBody Iterable<Person> getAPersonByFirstName(@RequestParam String name) {
@@ -287,7 +316,7 @@ public class MainController {
 
 	@GetMapping(path = "/searchP")
 	public @ResponseBody Person getAPersonByFirstAndLast(@RequestParam String firstName, @RequestParam String lastName,
-			@RequestParam String bday) {
+			@RequestParam LocalDate bday) {
 		return personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
 	}
 
@@ -324,6 +353,34 @@ public class MainController {
 	@GetMapping(path = "/getaddressbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
+	}
+
+	@GetMapping(path = "/getallassociations")
+	public @ResponseBody Iterable<Association> getAllAssociations() {
+		return associationRepository.findAll();
+	}
+
+	// TEST - return other value?
+	@PostMapping(path = "/addassociation")
+	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		boolean check = false;
+		String name = body.get("name").toString();
+		String description = body.get("description").toString();
+		Association existenceCheck = associationRepository.getByName(name);
+		if (existenceCheck == null) {
+			check = true;
+		}
+		if (check) {
+			Association a = new Association();
+			a.setName(name);
+			a.setDescription(description);
+			associationRepository.save(a);
+			m.setMessage("Success");
+		} else {
+			m.setError("Error: Association exists");
+		}
+		return m;
 	}
 
 }

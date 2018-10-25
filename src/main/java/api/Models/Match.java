@@ -9,7 +9,8 @@ import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
 @Entity // This tells Hibernate to make a table out of this class
-public class Match{
+@Table(name = "match_table")
+public class Match {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer match_id;
@@ -32,7 +33,7 @@ public class Match{
   @JoinColumn(name = "away_team_id", nullable = false)
   private Team away_team;
 
-	private String status = "active";
+  private String status = "active";
 
   //GETTERS AND SETTERS
   public Integer getId() {

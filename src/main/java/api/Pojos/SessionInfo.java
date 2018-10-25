@@ -1,28 +1,15 @@
 package api.Pojos;
 
-public class UserPojo {
+public class SessionInfo {
 
     private Integer id;
     private String name;
     private String sessionId;
-    private Integer role;
 
-    public UserPojo(Integer id, String name, String sessionId) {
+    public SessionInfo(Integer id, String name, String sessionId) {
        this.id = id;
        this.name = name;
        this.sessionId = sessionId;
-    }
-
-    public UserPojo(Integer role) {
-       this.role = role;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getId() {

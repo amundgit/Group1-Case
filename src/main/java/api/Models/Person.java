@@ -6,23 +6,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;*/
 import javax.persistence.*;
+import java.time.*;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Person {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer person_id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer person_id;
 
-    //seems to work
-    @ManyToOne(fetch = FetchType.EAGER, optional=false)
-  	@JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+	// seems to work
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "address_id", nullable = false)
+	private Address address;
 
-    private String first_name;
+	private String first_name;
 
-    private String last_name;
+	private String last_name;
 
-    private String date_of_birth; //datatype just for testing
+	private LocalDate date_of_birth; // datatype just for testing
 
 	public Integer getId() {
 		return person_id;
@@ -32,13 +33,12 @@ public class Person {
 		this.person_id = person_id;
 	}
 
-	/*public Integer getAddressId() {
-		return address_id;
-	}
-
-	public void setAddressId(Integer address_id) {
-		this.address_id = address_id;
-	}*/
+	/*
+	 * public Integer getAddressId() { return address_id; }
+	 * 
+	 * public void setAddressId(Integer address_id) { this.address_id = address_id;
+	 * }
+	 */
 
 	public Integer getAddressId() {
 		return address.getId();
@@ -64,13 +64,12 @@ public class Person {
 		this.last_name = last_name;
 	}
 
-	public String getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return date_of_birth;
 	}
 
-	public void setDateOfBirth(String date_of_birth) {
+	public void setDateOfBirth(LocalDate date_of_birth) {
 		this.date_of_birth = date_of_birth;
 	}
-
 
 }
