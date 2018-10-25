@@ -207,6 +207,7 @@ public class MainController {
 			msg.setError("Failure, Contact was not created.");
 			return msg;
 		}
+		return m;
 	}
 
 	@GetMapping(path = "/getallusers")
