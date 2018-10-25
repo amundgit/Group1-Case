@@ -126,6 +126,7 @@ public class MainController {
 	 */
 	@PostMapping(path = "/addLocation")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages;
 		boolean check = false;
 		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
@@ -137,10 +138,11 @@ public class MainController {
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
 			locationRepository.save(l);
-			return new SuccessMsg("Success, Location was created.");
+			m.setMessage("Success, Location was created.");
 		} else {
-			return new ErrorMsg("Failure, Location was not created.");
+			m.setError("Failure, Location was not created.");
 		}
+		return m;
 	}
 
 	@PostMapping(path = "/addPerson")
@@ -167,7 +169,9 @@ public class MainController {
 			System.out.println(person.getId().toString());
 			return person.getId().toString();
 		} else {
-			return new ErrorMsg("Failure, Person was not created.");
+			Messages m = new Messages();
+			m.setError("Username already exists");
+			return m;
 		}
 	}
 
