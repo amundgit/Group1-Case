@@ -91,6 +91,7 @@ public class MainController {
 	@PostMapping(path = "/addAddress")
 	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
 		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
 		if (address == null) {
 			check = true;
@@ -107,9 +108,11 @@ public class MainController {
 			// Return the id the new address got in the database.
 			address = addressRepository.getByAddress(a.getAddressLine1());
 			System.out.println(address.getId().toString());
-			return new Message().setMessage(address.getId().toString());
+			msg.setMessage(address.getId().toString());
+			return msg;
 		} else {
-			return new Message().setError("Failure, Address was not created.");
+			msg.setError("Failure, Address was not created.");
+			return msg;
 		}
 	}
 
@@ -123,6 +126,7 @@ public class MainController {
 	@PostMapping(path = "/addLocation")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
 		Location location = locationRepository.getByName(body.get("name").toString());
 		if (location == null) {
 			check = true;
@@ -133,15 +137,18 @@ public class MainController {
 			l.setName(body.get("name").toString());
 			l.setDescription(body.get("description").toString());
 			locationRepository.save(l);
-			return new SuccessMsg("Success, Location was created.");
+			msg.setMessage("Success, Location was created.");
+			return msg;
 		} else {
-			return new ErrorMsg("Failure, Location was not created.");
+			msg.setError("Failure, Location was not created.");
+			return msg;
 		}
 	}
 
 	@PostMapping(path = "/addPerson")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
 		String dateArr[] = body.get("date_of_birth").toString().split("-");
 		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
 				Integer.parseInt(dateArr[2]));
@@ -161,9 +168,11 @@ public class MainController {
 			personRepository.save(p);
 			person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
 			System.out.println(person.getId().toString());
-			return person.getId().toString();
+			msg.setMessage(person.getId().toString());
+			return msg;
 		} else {
-			return new ErrorMsg("Failure, Person was not created.");
+			msg.setError("Failure, Person was not created.");
+			return msg;
 		}
 	}
 
@@ -175,6 +184,7 @@ public class MainController {
 	@PostMapping(path = "/addContact")
 	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
 		boolean check = false;
+		Messages msg = new Messages();
 		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
 				body.get("contact_detail").toString());
 		if (contact == null) {
@@ -187,9 +197,11 @@ public class MainController {
 			c.setContactType(body.get("contact_type").toString());
 			c.setContactDetail(body.get("contact_detail").toString());
 			contactRepository.save(c);
-			return new SuccessMsg("Success, Contact was created.");
+			msg.setMessage("Success, Contact was created.");
+			return msg;
 		} else {
-			return new ErrorMsg("Failure, Contact was not created.");
+			msg.setError("Failure, Contact was not created.");
+			return msg;
 		}
 	}
 
@@ -318,12 +330,13 @@ public class MainController {
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);
 	}
+
 	@GetMapping(path = "/getallassociations")
-	public @ResponseBody Iterable<Association> getAllAssociations(){
+	public @ResponseBody Iterable<Association> getAllAssociations() {
 		return associationRepository.findAll();
 	}
 
-	//TEST - return other value?
+	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
@@ -331,10 +344,10 @@ public class MainController {
 		String name = body.get("name").toString();
 		String description = body.get("description").toString();
 		Association existenceCheck = associationRepository.getByName(name);
-		if(existenceCheck == null){
+		if (existenceCheck == null) {
 			check = true;
 		}
-		if(check){
+		if (check) {
 			Association a = new Association();
 			a.setName(name);
 			a.setDescription(description);
