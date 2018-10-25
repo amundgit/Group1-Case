@@ -23,6 +23,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	User verifyUser(@Param("name")String name, @Param("password")String password);
 
 	//Get username and sessionid by username.
-  	@Query("select new api.Pojos.SessionInfo(u.name, u.sessionId) from User u where u.name = ?1")
+  	@Query("SELECT new api.Pojos.SessionInfo(u.name, u.sessionId) FROM User u WHERE u.name = ?1")
 	SessionInfo findSessionByName(String name);
 }
