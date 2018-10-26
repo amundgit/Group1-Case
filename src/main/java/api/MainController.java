@@ -118,9 +118,7 @@ public class MainController {
 		}
 
 		if (check) {
-			System.out.println(userRepository.findSessionByName(user.getName()).getSessionId());
 			String newSessionId = SecurityUtil.generateSessionId();
-			System.out.println(newSessionId);
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
@@ -128,6 +126,31 @@ public class MainController {
 			return msg;
 		} else {
 			msg.setError("Failure");
+			return msg;
+		}
+	}
+
+	/**
+	 * This method creates a new address if it does not exist and checks based on
+	 * the first address line.
+	 * 
+	 * @param newAddress
+	 * @return
+	 */
+	@PostMapping(path = "/getAddress")
+	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
+		boolean check = false;
+		Messages msg = new Messages();
+		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
+		if (address == null) {
+			check = true;
+		}
+		if (check) {
+			System.out.println(address.getId().toString());
+			msg.setMessage(address.getId().toString());
+			return msg;
+		} else {
+			msg.setError("Error: Address does not exist.");
 			return msg;
 		}
 	}
