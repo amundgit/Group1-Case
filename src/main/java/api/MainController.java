@@ -97,7 +97,7 @@ public class MainController {
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
-			msg.setMessage(user.getSessionId());
+			msg.setSession(user.getSessionId());
 			return msg;
 		} else {
 			msg.setError("Failure");
@@ -368,19 +368,22 @@ public class MainController {
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 
-		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(body.get("sessionuser").toString());
+		SessionVerifyInfo sessionVerifyInfo = userRepository
+				.findSessionVerifyByUsername(body.get("sessionuser").toString());
 		String sessionId = sessionVerifyInfo.getSessionId();
 		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
 
-		if(sessionId != null) {
+		if (sessionId != null) {
 			isSessionValid = SecurityUtil.verifySessionId(body.get("sessionid").toString(), sessionId);
 		} else {
 			isSessionValid = false;
 		}
 
 		Messages m = new Messages();
-		if(isSessionValid) {
+	
+		if (isSessionValid) {
+
 			m.setRole(role);
 			return m;
 		} else {
