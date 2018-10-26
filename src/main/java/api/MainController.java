@@ -41,11 +41,14 @@ public class MainController {
 	private AssociationRepository associationRepository;
 
 	public Messages verifySession(String inputSessionId, String inputUser) {
+		System.out.print("FIRST INSIDE");
+		System.out.print(inputSessionId);
+		System.out.print(inputUser);
 		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(inputUser);
 		String sessionId = sessionVerifyInfo.getSessionId();
 		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
-
+		
 		if (sessionId != null) {
 			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
 		} else {
