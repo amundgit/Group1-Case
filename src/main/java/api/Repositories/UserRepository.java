@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	// Check if username exist
 	User findByName(String name);
 
-	@Query("UPDATE User SET session_id = :session_id WHERE u.name = :name")
+	@Query("UPDATE User SET session_id = :session_id WHERE name = :name")
 	User setUserSession(@Param("session_id") String session_id, @Param("name") String name);
 
 	// Get userid, username and sessionid by username.
