@@ -419,11 +419,12 @@ public class MainController {
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		System.out.print("FIRST");
-		Messages m = new Messages(verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString()));
+		Messages m = new Messages();
+		m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
 		System.out.print("FIRST AFTER");
 		System.out.print(m.getRole());
 		System.out.print(m.getError());
-		if(m.getError().equals("Invalid Session")) {
+		if(m.getError() != null) {
 			System.out.print("SECOND");
 			return m;
 		} else {
