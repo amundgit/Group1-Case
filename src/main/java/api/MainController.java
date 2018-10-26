@@ -50,17 +50,21 @@ public class MainController {
 		Boolean isSessionValid;
 		
 		if (sessionId != null) {
+			System.out.print("SESSIONID NOT NULL");
 			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
 		} else {
+			System.out.print("SESSIONID NULL");
 			isSessionValid = false;
 		}
 
 		Messages m = new Messages();
 
 		if (isSessionValid) {
+			System.out.print("VALID SESSION");
 			m.setRole(role);
 			return m;
 		} else {
+			System.out.print("INVALID SESSION");
 			m.setError("Invalid Session");
 			return m;
 		}
