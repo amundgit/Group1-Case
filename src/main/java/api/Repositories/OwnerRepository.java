@@ -16,4 +16,9 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
+	@Query("SELECT o FROM Owner o WHERE person_id = :person_id AND status = \'active\'")
+	Owner getByPersonId(@Param("person_id")Integer person_id);
+
+	@Query("SELECT o FROM Owner o WHERE owner_id = :owner_id AND status = \'active\'")
+	Owner getById(@Param("owner_id")Integer owner_id);
 }
