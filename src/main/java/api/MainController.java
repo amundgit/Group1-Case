@@ -40,6 +40,19 @@ public class MainController {
 	@Autowired
 	private AssociationRepository associationRepository;
 
+	@Autowired
+	private CoachRepository coachRepository;
+
+	@Autowired
+	private OwnerRepository ownerRepository;
+
+	@Autowired
+	private TeamRepository teamRepository;
+
+	@Autowired
+	private PlayerRepository playerRepository;
+
+
 	public Messages verifySession(String inputSessionId, String inputUser) {
 		System.out.print("FIRST INSIDE");
 		System.out.print(inputSessionId);
@@ -449,5 +462,122 @@ public class MainController {
 		  		m.setError("Error: Association exists"); }
 		  		return m;
 		 }
+	}
+
+	@GetMapping(path = "/getallcoaches")
+	public @ResponseBody Iterable<Coach> getAllCoaches() {
+		return coachRepository.findAll();
+	}
+
+	@PostMapping(path = "/assigncoach")
+	public @ResponseBody Messages assignCoach(@RequestBody Map<String, Object> body) {
+		boolean check = false;
+		Messages m = new Messages();
+		Integer person_id = Integer.parseInt(body.get("person_id").toString());
+		Coach existenceCheck = coachRepository.getByPersonId(person_id);
+		if (existenceCheck == null) {
+			check = true;
+		}
+		if (check){
+			Coach c = new Coach();
+			c.setPersonId(personRepository.getById(person_id));
+			c = coachRepository.save(c);
+			m.setMessage("Success");
+		} else {
+			m.setError("Person already a coach");
+		}
+		return m;
+	}
+
+	@GetMapping(path = "/getallowners")
+	public @ResponseBody Iterable<Owner> getAllOwners() {
+		return ownerRepository.findAll();
+	}
+
+	@PostMapping(path = "/assignowner")
+	public @ResponseBody Messages assignOwner(@RequestBody Map<String, Object> body) {
+		boolean check = false;
+		Messages m = new Messages();
+		Integer person_id = Integer.parseInt(body.get("person_id").toString());
+		Owner existenceCheck = ownerRepository.getByPersonId(person_id);
+		if (existenceCheck == null) {
+			check = true;
+		}
+		if (check){
+			Owner o = new Owner();
+			o.setPersonId(personRepository.getById(person_id));
+			o = ownerRepository.save(o);
+			m.setMessage("Success");
+		} else {
+			m.setError("Person already an owner");
+		}
+		return m;
+	}
+
+	@GetMapping(path = "/getallteams")
+	public @ResponseBody Iterable<Team> getAllTeams() {
+		return teamRepository.findAll();
+	}
+
+	@PostMapping(path = "/addteam")
+	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		boolean check = false;
+		String team_id = body.get("team_id").toString();
+		Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
+		Integer association_id = Integer.parseInt(body.get("association_id").toString());
+		Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
+		Integer location_id = Integer.parseInt(body.get("location_id").toString());
+		Team existenceCheck = teamRepository.getByTeamId(team_id);
+		//Actually do stuff
+		
+		if (existenceCheck == null) {
+			check = true;
+		}
+		if (check) {
+			Team t = new Team(team_id);
+			t.setOwnerId(ownerRepository.getById(owner_id));
+			t.setAssociationId(associationRepository.getById(association_id));
+			t.setCoachId(coachRepository.getById(coach_id));
+			t.setLocationId(locationRepository.getById(location_id));
+			teamRepository.save(t);
+			m.setMessage("Success");
+		} else {
+			m.setError("Error: Team exists");
+		}
+		return m;
+	}
+
+	@GetMapping(path = "/getallplayers")
+	public @ResponseBody Iterable<Player> getAllPlayers() {
+		return playerRepository.findAll();
+	}
+
+	@PostMapping(path = "/assignplayer")
+	public @ResponseBody Messages addPlayer(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		boolean check = false;
+		String normal_position = body.get("normal_position").toString();
+		Integer number = Integer.parseInt(body.get("number").toString());
+		Integer person_id = Integer.parseInt(body.get("person_id").toString());
+		String team_id = body.get("team_id").toString();
+		Player existenceCheck = playerRepository.getByPersonId(person_id);
+		//Actually do stuff
+		
+		if (existenceCheck == null) {
+			check = true;
+		}
+		if (check) {
+			Player p = new Player();
+			p.setNormalPosition(normal_position);
+			p.setNumber(number);
+			p.setPersonId(personRepository.getById(person_id));
+			p.setTeamId(teamRepository.getByTeamId(team_id));
+			playerRepository.save(p);
+			m.setMessage("Success");
+		} else {
+			m.setError("Error: Person already a player");
+		}
+		return m;
 	}
 }
