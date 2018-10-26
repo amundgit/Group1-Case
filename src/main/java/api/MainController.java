@@ -112,7 +112,9 @@ public class MainController {
 		System.out.println(body.get("name").toString());
 		System.out.println(user.getName());
 		if (user != null) {
-			check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
+			if (user.getName().equals(body.get("name"))) {
+				check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
+			}
 		}
 
 		if (check) {
@@ -195,6 +197,13 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * This method creates a new person if it does not exist and checks based on the
+	 * name and birth.
+	 * 
+	 * @param body
+	 * @return
+	 */
 	@PostMapping(path = "/addPerson")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
 		boolean check = false;
@@ -227,6 +236,8 @@ public class MainController {
 	}
 
 	/**
+	 * This method creates a new contact if it does not exist and checks based on
+	 * the contact_Details.
 	 * 
 	 * @param body
 	 * @return
@@ -312,6 +323,14 @@ public class MainController {
 	public @ResponseBody String deleteAUser(@RequestParam String name) {
 		User u = (userRepository.findByName(name));
 		u.setStatus("inactive");
+		userRepository.save(u);
+		return "Updated";
+	}
+
+	@GetMapping(path = "/makeadmin")
+	public @ResponseBody String makeAdmin(@RequestParam String name) {
+		User u = (userRepository.findByName(name));
+		u.setRole(1);
 		userRepository.save(u);
 		return "Updated";
 	}
