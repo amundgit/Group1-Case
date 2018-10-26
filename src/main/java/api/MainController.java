@@ -40,6 +40,29 @@ public class MainController {
 	@Autowired
 	private AssociationRepository associationRepository;
 
+	public Messages verifySession(String inputSessionId, String inputUser) {
+		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(inputUser);
+		String sessionId = sessionVerifyInfo.getSessionId();
+		Integer role = sessionVerifyInfo.getRole();
+		Boolean isSessionValid;
+
+		if (sessionId != null) {
+			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
+		} else {
+			isSessionValid = false;
+		}
+
+		Messages m = new Messages();
+
+		if (isSessionValid) {
+			m.setRole(role);
+			return m;
+		} else {
+			m.setError("Invalid Session");
+			return m;
+		}
+	}
+
 	/*
 	 * This method is used to sign up a new user. It returns an error message if the
 	 * user exist, else it returns the created users Id, name and sessionid.
@@ -368,29 +391,7 @@ public class MainController {
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 
-		SessionVerifyInfo sessionVerifyInfo = userRepository
-				.findSessionVerifyByUsername(body.get("sessionuser").toString());
-		String sessionId = sessionVerifyInfo.getSessionId();
-		Integer role = sessionVerifyInfo.getRole();
-		Boolean isSessionValid;
-
-		if (sessionId != null) {
-			isSessionValid = SecurityUtil.verifySessionId(body.get("sessionid").toString(), sessionId);
-		} else {
-			isSessionValid = false;
-		}
-
-		Messages m = new Messages();
-	
-		if (isSessionValid) {
-
-			m.setRole(role);
-			return m;
-		} else {
-			m.setError("Invalid Session");
-			return m;
-		}
-
+		Messages authMsg = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
 		/*
 		 * boolean check = false; String name = body.get("name").toString(); String
 		 * description = body.get("description").toString(); Association existenceCheck
@@ -400,6 +401,7 @@ public class MainController {
 		 * m.setMessage("Success"); } else { m.setError("Error: Association exists"); }
 		 * return m;
 		 */
+		return authMsg;
 	}
 
 }
