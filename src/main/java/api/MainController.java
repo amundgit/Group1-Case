@@ -41,8 +41,8 @@ public class MainController {
 	private AssociationRepository associationRepository;
 
 	/*
-	 * This method is used to sign up a new user. It returns an error message if the user exist, 
-	 * else it returns the created users Id, name and sessionid. 
+	 * This method is used to sign up a new user. It returns an error message if the
+	 * user exist, else it returns the created users Id, name and sessionid.
 	 */
 	@PostMapping(path = "/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
@@ -63,12 +63,12 @@ public class MainController {
 	}
 
 	/*
-	 * This method is used to get the role of a user. It returns an error message if parameter
-	 * is undefined, else it returns the role for the user.
+	 * This method is used to get the role of a user. It returns an error message if
+	 * parameter is undefined, else it returns the role for the user.
 	 */
 	@GetMapping(path = "/getuserrole")
 	public @ResponseBody Object getUserRole(@RequestParam("userid") int userid) {
-		if(userid == 0) {
+		if (userid == 0) {
 			Messages m = new Messages();
 			m.setError("Parameter userid not defined");
 			return m;
@@ -81,22 +81,25 @@ public class MainController {
 	 * This method is used at login, to determene if the user and what type of role
 	 * it has.
 	 */
-	@PostMapping(path = "/finduser")
-	public @ResponseBody String findUser(@RequestBody User myUser) {
+	@PostMapping(path = "/getuser")
+	public @ResponseBody Object getUser(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		User user = userRepository.verifyUser(myUser.getName(), myUser.getPassword());
+		Messages msg = new Messages();
+		User user = userRepository.findByName(body.get("name").toString());
 		if (user != null) {
-			check = user.getStatus().equals("active");
+			check = BcryptSetup.verifyPassword(body.get("password").toString(), user.getPassword());
 		}
 
 		if (check) {
-			if (user.getRole() == 0) {
-				return "User";
-			} else {
-				return "Admin";
-			}
+			System.out.println(userRepository.findSessionByName(user.getName()));
+			String newSessionId = BcryptSetup.generateSessionId();
+			System.out.println(newSessionId);
+			userRepository.setUserSession(newSessionId, user.getName());
+			msg.setMessage(user.getRole().toString());
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure");
+			return msg;
 		}
 	}
 
@@ -363,31 +366,19 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
-		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
+		// System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
 		Messages m = new Messages();
-		m.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
-		return m; 
-		/*boolean check = false;
-		String name = body.get("name").toString();
-		String description = body.get("description").toString();
-		Association existenceCheck = associationRepository.getByName(name);
-		if (existenceCheck == null) {
-			check = true;
-		}
-		if (check) {
-			Association a = new Association();
-			a.setName(name);
-			a.setDescription(description);
-			associationRepository.save(a);
-			m.setMessage("Success");
-		} else {
-			m.setError("Error: Association exists");
-		}
-		return m;*/
+		m.setMessage("SESSIONID: " + body.get("sessionid").toString() + " NAME: " + body.get("sessionuser").toString());
+		return m;
+		/*
+		 * boolean check = false; String name = body.get("name").toString(); String
+		 * description = body.get("description").toString(); Association existenceCheck
+		 * = associationRepository.getByName(name); if (existenceCheck == null) { check
+		 * = true; } if (check) { Association a = new Association(); a.setName(name);
+		 * a.setDescription(description); associationRepository.save(a);
+		 * m.setMessage("Success"); } else { m.setError("Error: Association exists"); }
+		 * return m;
+		 */
 	}
-
-
-
-
 
 }

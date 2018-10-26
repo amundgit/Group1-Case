@@ -18,8 +18,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	// Check if username exist
 	User findByName(String name);
 
-	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
-	User verifyUser(@Param("name") String name, @Param("password") String password);
+	@Query("INSERT INTO User (session_id) SELECT (session_id) FROM User u WHERE u.name = :name ")
+	User setUserSession(@Param("session_id") String session_id, @Param("name") String name);
 
 	// Get userid, username and sessionid by username.
 	@Query("select new api.Pojos.SessionInfo(u.id, u.name, u.sessionId) from User u where u.name = ?1")
