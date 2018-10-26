@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-	@Query("SELECT u FROM Person u WHERE name = :name")
+	@Query("SELECT u FROM User u WHERE name = :name")
 	User findByName(@Param("name") String name);
 
 	// Get userid, username and sessionid by username.
