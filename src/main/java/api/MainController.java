@@ -52,7 +52,6 @@ public class MainController {
 	@Autowired
 	private PlayerRepository playerRepository;
 
-
 	public Messages verifySession(String inputSessionId, String inputUser) {
 		System.out.print("FIRST INSIDE");
 		System.out.print(inputSessionId);
@@ -61,7 +60,7 @@ public class MainController {
 		String sessionId = sessionVerifyInfo.getSessionId();
 		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
-		
+
 		if (sessionId != null) {
 			System.out.print("SESSIONID NOT NULL");
 			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
@@ -158,7 +157,7 @@ public class MainController {
 	 * @return
 	 */
 	@PostMapping(path = "/getAddress")
-	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object getAddress(@RequestBody Map<String, Object> body) {
 		boolean check = false;
 		Messages msg = new Messages();
 		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
@@ -460,31 +459,32 @@ public class MainController {
 		System.out.print("FIRST AFTER");
 		System.out.print(m.getRole());
 		System.out.print(m.getError());
-		if(m.getError() != null) {
+		if (m.getError() != null) {
 			System.out.print("SECOND");
 			return m;
 		} else {
 			System.out.print("THIRD");
-		 	boolean check = false;
-		 	String name = body.get("name").toString(); 
-		 	String description = body.get("description").toString(); 
-		 	Association existenceCheck = associationRepository.getByName(name); 
-		 	if (existenceCheck == null) { 
-		 		System.out.print("FOURTH");
-		 		check = true; 
-		 	} 
-		 	if (check) { 
-		 		System.out.print("FIFTH");
-		 		Association a = new Association(); 
-		 		a.setName(name);
-		  		a.setDescription(description); 
-		  		associationRepository.save(a);
-		  		m.setMessage("Success"); 
-		  	} else {
-		  		System.out.print("SIXTH");
-		  		m.setError("Error: Association exists"); }
-		  		return m;
-		 }
+			boolean check = false;
+			String name = body.get("name").toString();
+			String description = body.get("description").toString();
+			Association existenceCheck = associationRepository.getByName(name);
+			if (existenceCheck == null) {
+				System.out.print("FOURTH");
+				check = true;
+			}
+			if (check) {
+				System.out.print("FIFTH");
+				Association a = new Association();
+				a.setName(name);
+				a.setDescription(description);
+				associationRepository.save(a);
+				m.setMessage("Success");
+			} else {
+				System.out.print("SIXTH");
+				m.setError("Error: Association exists");
+			}
+			return m;
+		}
 	}
 
 	@GetMapping(path = "/getallcoaches")
@@ -501,7 +501,7 @@ public class MainController {
 		if (existenceCheck == null) {
 			check = true;
 		}
-		if (check){
+		if (check) {
 			Coach c = new Coach();
 			c.setPersonId(personRepository.getById(person_id));
 			c = coachRepository.save(c);
@@ -526,7 +526,7 @@ public class MainController {
 		if (existenceCheck == null) {
 			check = true;
 		}
-		if (check){
+		if (check) {
 			Owner o = new Owner();
 			o.setPersonId(personRepository.getById(person_id));
 			o = ownerRepository.save(o);
@@ -552,8 +552,8 @@ public class MainController {
 		Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
 		Integer location_id = Integer.parseInt(body.get("location_id").toString());
 		Team existenceCheck = teamRepository.getByTeamId(team_id);
-		//Actually do stuff
-		
+		// Actually do stuff
+
 		if (existenceCheck == null) {
 			check = true;
 		}
@@ -585,8 +585,8 @@ public class MainController {
 		Integer person_id = Integer.parseInt(body.get("person_id").toString());
 		String team_id = body.get("team_id").toString();
 		Player existenceCheck = playerRepository.getByPersonId(person_id);
-		//Actually do stuff
-		
+		// Actually do stuff
+
 		if (existenceCheck == null) {
 			check = true;
 		}
