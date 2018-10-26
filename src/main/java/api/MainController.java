@@ -393,17 +393,26 @@ public class MainController {
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 
-		Messages authMsg = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
-		/*
-		 * boolean check = false; String name = body.get("name").toString(); String
-		 * description = body.get("description").toString(); Association existenceCheck
-		 * = associationRepository.getByName(name); if (existenceCheck == null) { check
-		 * = true; } if (check) { Association a = new Association(); a.setName(name);
-		 * a.setDescription(description); associationRepository.save(a);
-		 * m.setMessage("Success"); } else { m.setError("Error: Association exists"); }
-		 * return m;
-		 */
-		return authMsg;
+		Messages m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
+		if(m.getError.equals("Invalid Session")) {
+			return m;
+		} else {
+		 	boolean check = false; 
+		 	String name = body.get("name").toString(); 
+		 	String description = body.get("description").toString(); 
+		 	Association existenceCheck = associationRepository.getByName(name); 
+		 	if (existenceCheck == null) { 
+		 		check = true; 
+		 	} 
+		 	if (check) { 
+		 		Association a = new Association(); 
+		 		a.setName(name);
+		  		a.setDescription(description); 
+		  		associationRepository.save(a);
+		  		m.setMessage("Success"); 
+		  	} else {
+		  		m.setError("Error: Association exists"); }
+		  		return m;
+		 }
 	}
-
 }
