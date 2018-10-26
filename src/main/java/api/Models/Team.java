@@ -34,6 +34,13 @@ public class Team{
 
 	private String status = "active";
 
+  //BASIC CONSTRUCTOR
+  public Team(){}
+
+  public Team(String team_id){
+    this.team_id = team_id;
+  }
+
   //GETTERS AND SETTERS
   public String getId(){
     return team_id;

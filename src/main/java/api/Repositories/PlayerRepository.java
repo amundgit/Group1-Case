@@ -16,4 +16,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
+	@Query("SELECT p FROM Player p WHERE person_id = :person_id AND status = \'active\'")
+	Player getByPersonId(@Param("person_id")Integer person_id);
 }

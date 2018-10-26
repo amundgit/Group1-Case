@@ -94,8 +94,10 @@ public class MainController {
 			System.out.println(userRepository.findSessionByName(user.getName()));
 			String newSessionId = SecurityUtil.generateSessionId();
 			System.out.println(newSessionId);
-			userRepository.setUserSession(newSessionId, user.getName());
+			user.setSessionId(newSessionId);
+			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
+			msg.setMessage(user.getSessionId());
 			return msg;
 		} else {
 			msg.setError("Failure");
@@ -370,6 +372,7 @@ public class MainController {
 		String sessionId = sessionVerifyInfo.getSessionId();
 		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
+
 		if(sessionId != null) {
 			isSessionValid = SecurityUtil.verifySessionId(body.get("sessionid").toString(), sessionId);
 		} else {
@@ -378,30 +381,22 @@ public class MainController {
 
 		Messages m = new Messages();
 		if(isSessionValid) {
-			m.setRole()
-			return new UserRoleInfo(role);
+			m.setRole(role)
+			return m;
 		} else {
 			m.setError("Invalid Session");
 			return m;
 		}
 
-		/*boolean check = false;
-		String name = body.get("name").toString();
-		String description = body.get("description").toString();
-		Association existenceCheck = associationRepository.getByName(name);
-		if (existenceCheck == null) {
-			check = true;
-		}
-		if (check) {
-			Association a = new Association();
-			a.setName(name);
-			a.setDescription(description);
-			associationRepository.save(a);
-			m.setMessage("Success");
-		} else {
-			m.setError("Error: Association exists");
-		}
-		return m;*/
+		/*
+		 * boolean check = false; String name = body.get("name").toString(); String
+		 * description = body.get("description").toString(); Association existenceCheck
+		 * = associationRepository.getByName(name); if (existenceCheck == null) { check
+		 * = true; } if (check) { Association a = new Association(); a.setName(name);
+		 * a.setDescription(description); associationRepository.save(a);
+		 * m.setMessage("Success"); } else { m.setError("Error: Association exists"); }
+		 * return m;
+		 */
 	}
 
 }

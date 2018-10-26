@@ -16,4 +16,9 @@ public interface CoachRepository extends CrudRepository<Coach, Integer> {
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
+	@Query("SELECT c FROM Coach c WHERE person_id = :person_id AND status = \'active\'")
+	Coach getByPersonId(@Param("person_id")Integer person_id);
+
+	@Query("SELECT c FROM Coach c WHERE coach_id = :coach_id AND status = \'active\'")
+	Coach getById(@Param("coach_id")Integer coach_id);
 }

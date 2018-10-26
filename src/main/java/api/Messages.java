@@ -5,12 +5,13 @@ public class Messages {
 	private String error;
 	private String message;
 	private Integer role;
+	private String session;
 
 	public String getError() {
 		return error;
 	}
 
-	public void setError(String error){
+	public void setError(String error) {
 		this.error = error;
 	}
 
@@ -18,7 +19,7 @@ public class Messages {
 		return message;
 	}
 
-	public void setMessage(String message){
+	public void setMessage(String message) {
 		this.message = message;
 	}
 
@@ -29,5 +30,13 @@ public class Messages {
 	public void setRole(Integer role){
 		this.role = role;
 	}
-	
+
+	public String getSettion() {
+		return session;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
+	}
+
 }
