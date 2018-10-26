@@ -1,13 +1,23 @@
 package api.Pojos;
 
-public class SessionInfo{
+public class SessionInfo {
 
+    private Integer id;
     private String name;
     private String sessionId;
 
-    public SessionInfo(String name, String sessionId){
+    public SessionInfo(Integer id, String name, String sessionId) {
+       this.id = id;
        this.name = name;
        this.sessionId = sessionId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

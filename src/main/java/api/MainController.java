@@ -53,7 +53,8 @@ public class MainController {
 	private PlayerRepository playerRepository;
 
 	/**
-	 * This method is used at sign up a new user, and return the session values.
+	 * This method is used to sign up a new user. It returns an error message if the
+	 * user exist, else it returns the created users Id, name and sessionid.
 	 */
 	@PostMapping(path = "/adduser", produces = "application/json")
 	public @ResponseBody Object addNewUser(@RequestBody Map<String, Object> body) {
@@ -73,26 +74,45 @@ public class MainController {
 		}
 	}
 
-	/**
+	/*
+	 * This method is used to get the role of a user. It returns an error message if
+	 * parameter is undefined, else it returns the role for the user.
+	 */
+	@GetMapping(path = "/getuserrole")
+	public @ResponseBody Object getUserRole(@RequestParam("userid") int userid) {
+		if (userid == 0) {
+			Messages m = new Messages();
+			m.setError("Parameter userid not defined");
+			return m;
+		} else {
+			return userRepository.findRoleByUserid(userid);
+		}
+	}
+
+	/*
 	 * This method is used at login, to determene if the user and what type of role
 	 * it has.
 	 */
-	@PostMapping(path = "/finduser")
-	public @ResponseBody String findUser(@RequestBody User myUser) {
+	@PostMapping(path = "/getuser")
+	public @ResponseBody Object getUser(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		User user = userRepository.verifyUser(myUser.getName(), myUser.getPassword());
+		Messages msg = new Messages();
+		User user = userRepository.findByName(body.get("name").toString());
 		if (user != null) {
-			check = user.getStatus().equals("active");
+			check = BcryptSetup.verifyPassword(body.get("password").toString(), user.getPassword());
 		}
 
 		if (check) {
-			if (user.getRole() == 0) {
-				return "User";
-			} else {
-				return "Admin";
-			}
+			System.out.println(userRepository.findSessionByName(user.getName()));
+			String newSessionId = BcryptSetup.generateSessionId();
+			System.out.println(newSessionId);
+			user.setSessionId(newSessionId);
+			userRepository.save(user);
+			msg.setMessage(user.getRole().toString());
+			return msg;
 		} else {
-			return "Failure";
+			msg.setError("Failure");
+			return msg;
 		}
 	}
 
@@ -266,14 +286,13 @@ public class MainController {
 		return "Updated";
 	}
 
-	@GetMapping(path = "/updatepw")
-	public @ResponseBody String updateAUserPW(@RequestParam String name, @RequestParam String oldPw,
-			@RequestParam String newPw) {
-		User u = (userRepository.verifyUser(name, oldPw));
-		u.setPassword(newPw);
-		userRepository.save(u);
-		return "Updated";
-	}
+	/*
+	 * @GetMapping(path = "/updatepw") public @ResponseBody String
+	 * updateAUserPW(@RequestParam String name, @RequestParam String oldPw,
+	 * 
+	 * @RequestParam String newPw) { User u = (userRepository.verifyUser(name,
+	 * oldPw)); u.setPassword(newPw); userRepository.save(u); return "Updated"; }
+	 */
 
 	@GetMapping(path = "/deleteuser")
 	public @ResponseBody String deleteAUser(@RequestParam String name) {
@@ -357,9 +376,30 @@ public class MainController {
 	}
 
 	@PostMapping(path = "/addassociation")
-	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
-		Messages m = new Messages();
-		boolean check = false;
+	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
+		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
+		Messages mes = new Messages();
+		mes.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
+		//return m;
+
+		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(body.get("sessionuser").toString());
+		String sessionId = sessionVerifyInfo.getSessionId();
+		int role = sessionVerifyInfo.getRole();
+		Boolean isSessionValid;
+		if(sessionId != null) {
+			isSessionValid = BcryptSetup.verifySessionId(body.get("sessionid").toString(), sessionId);
+		} else {
+			isSessionValid = false;
+		}
+		if(isSessionValid) {
+			return new UserRoleInfo(role);
+		} else {
+			Messages m = new Messages();
+			m.setError("Invalid Session");
+			return m;
+		}
+
+		/*boolean check = false;
 		String name = body.get("name").toString();
 		String description = body.get("description").toString();
 		Association existenceCheck = associationRepository.getByName(name);
@@ -375,7 +415,7 @@ public class MainController {
 		} else {
 			m.setError("Error: Association exists");
 		}
-		return m;
+		return m;*/
 	}
 
 	@GetMapping(path = "/getallcoaches")
