@@ -421,6 +421,7 @@ public class MainController {
 		System.out.print("FIRST");
 		Messages m = new Messages();
 		m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
+		System.out.print("FIRST AFTER");
 		if(m.getError().equals("Invalid Session")) {
 			System.out.print("SECOND");
 			return m;
