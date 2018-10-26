@@ -381,7 +381,7 @@ public class MainController {
 
 		Messages m = new Messages();
 		if(isSessionValid) {
-			m.setRole(role)
+			m.setRole(role);
 			return m;
 		} else {
 			m.setError("Invalid Session");
