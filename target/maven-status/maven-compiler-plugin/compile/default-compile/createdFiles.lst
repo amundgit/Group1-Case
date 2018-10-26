@@ -25,6 +25,7 @@ api/Models/Player.class
 api/Repositories/PlayerRepository.class
 api/Repositories/AddressRepository.class
 api/Models/Result.class
+api/Pojos/SessionVerifyInfo.class
 api/Repositories/LocationRepository.class
 api/Models/Match_position.class
 api/Models/Location.class
