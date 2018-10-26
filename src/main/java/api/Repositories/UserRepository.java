@@ -28,4 +28,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	// Get userrole by userid.
 	@Query("select new api.Pojos.UserRoleInfo(u.role) from User u where u.id = ?1")
 	UserRoleInfo findRoleByUserid(int userid);
+
+	// Get sessionid and role by username.
+	@Query("select new api.Pojos.SessionVerifyInfo(u.sessionId, u.role) from User u where u.name = ?1")
+	SessionVerifyInfo findSessionVerifyByUsername(String name);
 }

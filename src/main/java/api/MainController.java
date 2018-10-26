@@ -362,11 +362,29 @@ public class MainController {
 
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
-	public @ResponseBody Messages addAssociation(@RequestBody Map<String, Object> body) {
+	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
-		Messages m = new Messages();
-		m.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
-		return m; 
+		Messages mes = new Messages();
+		mes.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
+		//return m;
+
+		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(body.get("sessionuser").toString());
+		String sessionId = sessionVerifyInfo.getSessionId();
+		int role = sessionVerifyInfo.getRole();
+		Boolean isSessionValid;
+		if(sessionId != null) {
+			isSessionValid = BcryptSetup.verifySessionId(body.get("sessionid").toString(), sessionId);
+		} else {
+			isSessionValid = false;
+		}
+		if(isSessionValid) {
+			return new UserRoleInfo(role);
+		} else {
+			Messages m = new Messages();
+			m.setError("Invalid Session");
+			return m;
+		}
+
 		/*boolean check = false;
 		String name = body.get("name").toString();
 		String description = body.get("description").toString();
