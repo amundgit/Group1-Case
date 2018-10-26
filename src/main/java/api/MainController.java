@@ -413,7 +413,7 @@ public class MainController {
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 
 		Messages m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
-		if(m.getError.equals("Invalid Session")) {
+		if(m.getError().equals("Invalid Session")) {
 			return m;
 		} else {
 		 	boolean check = false; 
