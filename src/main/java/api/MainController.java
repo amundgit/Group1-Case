@@ -97,6 +97,7 @@ public class MainController {
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
+			msg.setMessage(user.getSessionId());
 			return msg;
 		} else {
 			msg.setError("Failure");
@@ -366,21 +367,23 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
-		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
+		// System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
 		Messages mes = new Messages();
-		mes.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
-		//return m;
+		mes.setMessage(
+				"SESSIONID: " + body.get("sessionid").toString() + " NAME: " + body.get("sessionuser").toString());
+		// return m;
 
-		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(body.get("sessionuser").toString());
+		SessionVerifyInfo sessionVerifyInfo = userRepository
+				.findSessionVerifyByUsername(body.get("sessionuser").toString());
 		String sessionId = sessionVerifyInfo.getSessionId();
 		int role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
-		if(sessionId != null) {
+		if (sessionId != null) {
 			isSessionValid = BcryptSetup.verifySessionId(body.get("sessionid").toString(), sessionId);
 		} else {
 			isSessionValid = false;
 		}
-		if(isSessionValid) {
+		if (isSessionValid) {
 			return new UserRoleInfo(role);
 		} else {
 			Messages m = new Messages();
@@ -388,23 +391,15 @@ public class MainController {
 			return m;
 		}
 
-		/*boolean check = false;
-		String name = body.get("name").toString();
-		String description = body.get("description").toString();
-		Association existenceCheck = associationRepository.getByName(name);
-		if (existenceCheck == null) {
-			check = true;
-		}
-		if (check) {
-			Association a = new Association();
-			a.setName(name);
-			a.setDescription(description);
-			associationRepository.save(a);
-			m.setMessage("Success");
-		} else {
-			m.setError("Error: Association exists");
-		}
-		return m;*/
+		/*
+		 * boolean check = false; String name = body.get("name").toString(); String
+		 * description = body.get("description").toString(); Association existenceCheck
+		 * = associationRepository.getByName(name); if (existenceCheck == null) { check
+		 * = true; } if (check) { Association a = new Association(); a.setName(name);
+		 * a.setDescription(description); associationRepository.save(a);
+		 * m.setMessage("Success"); } else { m.setError("Error: Association exists"); }
+		 * return m;
+		 */
 	}
 
 }
