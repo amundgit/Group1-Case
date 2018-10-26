@@ -27,11 +27,11 @@ public class Messages {
 		return role;
 	}
 
-	public void setRole(Integer role){
+	public void setRole(Integer role) {
 		this.role = role;
 	}
 
-	public String getSettion() {
+	public String getSession() {
 		return session;
 	}
 

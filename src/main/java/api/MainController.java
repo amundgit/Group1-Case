@@ -91,13 +91,13 @@ public class MainController {
 		}
 
 		if (check) {
-			System.out.println(userRepository.findSessionByName(user.getName()));
+			System.out.println(userRepository.findSessionByName(user.getName()).getSessionId());
 			String newSessionId = SecurityUtil.generateSessionId();
 			System.out.println(newSessionId);
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
-			msg.setSession(user.getSessionId());
+			msg.setSession(newSessionId);
 			return msg;
 		} else {
 			msg.setError("Failure");
