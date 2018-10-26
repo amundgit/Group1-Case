@@ -89,7 +89,9 @@ public class MainController {
 		System.out.println(body.get("name").toString());
 		System.out.println(user.getName());
 		if (user != null) {
-			check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
+			if (user.getName().equals(body.get("name"))) {
+				check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
+			}
 		}
 
 		if (check) {
