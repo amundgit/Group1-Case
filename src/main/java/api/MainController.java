@@ -273,14 +273,13 @@ public class MainController {
 		return "Updated";
 	}
 
-	@GetMapping(path = "/updatepw")
-	public @ResponseBody String updateAUserPW(@RequestParam String name, @RequestParam String oldPw,
-			@RequestParam String newPw) {
-		User u = (userRepository.verifyUser(name, oldPw));
-		u.setPassword(newPw);
-		userRepository.save(u);
-		return "Updated";
-	}
+	/*
+	 * @GetMapping(path = "/updatepw") public @ResponseBody String
+	 * updateAUserPW(@RequestParam String name, @RequestParam String oldPw,
+	 * 
+	 * @RequestParam String newPw) { User u = (userRepository.verifyUser(name,
+	 * oldPw)); u.setPassword(newPw); userRepository.save(u); return "Updated"; }
+	 */
 
 	@GetMapping(path = "/deleteuser")
 	public @ResponseBody String deleteAUser(@RequestParam String name) {
