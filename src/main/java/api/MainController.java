@@ -161,7 +161,7 @@ public class MainController {
 		boolean check = false;
 		Messages msg = new Messages();
 		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
-		if (address == null) {
+		if (address != null) {
 			check = true;
 		}
 		if (check) {
