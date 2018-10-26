@@ -97,7 +97,7 @@ public class MainController {
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
-			msg.setMessage(user.getSessionId());
+			msg.setSession(user.getSessionId());
 			return msg;
 		} else {
 			msg.setError("Failure");
