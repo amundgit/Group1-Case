@@ -7,6 +7,14 @@ public class Messages {
 	private Integer role;
 	private String session;
 
+	public Messages() {
+	}
+
+	public Messages(Messages mes) {
+		this.error = mes.getError();
+		this.role = mes.getRole();
+	}
+
 	public String getError() {
 		return error;
 	}
