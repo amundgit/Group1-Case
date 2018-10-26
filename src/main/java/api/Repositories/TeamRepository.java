@@ -18,4 +18,7 @@ public interface TeamRepository extends CrudRepository<Team, String> {
 
 	//@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	//User verifyUser(@Param("name")String name, @Param("password")String password);
+
+	@Query("SELECT t FROM Team t WHERE LOWER(t.team_id) = LOWER(:team_id) AND t.status = \'active\'")
+	Team getByTeamId(@Param("team_id")String team_id);
 }
