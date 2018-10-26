@@ -4,6 +4,7 @@ public class Messages {
 
 	private String error;
 	private String message;
+	private Integer role;
 
 	public String getError() {
 		return error;
@@ -19,6 +20,14 @@ public class Messages {
 
 	public void setMessage(String message){
 		this.message = message;
+	}
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role){
+		this.role = role;
 	}
 	
 }

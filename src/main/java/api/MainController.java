@@ -51,8 +51,8 @@ public class MainController {
 			m.setError("Username already exists");
 			return m;
 		} else {
-			String hashedpassword = BcryptSetup.hashPassword(body.get("password").toString());
-			String hashedSessionId = BcryptSetup.generateSessionId();
+			String hashedpassword = SecurityUtil.hashPassword(body.get("password").toString());
+			String hashedSessionId = SecurityUtil.generateSessionId();
 			User user = new User();
 			user.setName(body.get("name").toString());
 			user.setPassword(hashedpassword);
@@ -87,12 +87,12 @@ public class MainController {
 		Messages msg = new Messages();
 		User user = userRepository.findByName(body.get("name").toString());
 		if (user != null) {
-			check = BcryptSetup.verifyPassword(body.get("password").toString(), user.getPassword());
+			check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
 		}
 
 		if (check) {
 			System.out.println(userRepository.findSessionByName(user.getName()));
-			String newSessionId = BcryptSetup.generateSessionId();
+			String newSessionId = SecurityUtil.generateSessionId();
 			System.out.println(newSessionId);
 			userRepository.setUserSession(newSessionId, user.getName());
 			msg.setMessage(user.getRole().toString());
@@ -365,24 +365,22 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
-		//System.out.print("SESSION COOKIE!!!: "+body.get("sessionid").toString());
-		Messages mes = new Messages();
-		mes.setMessage("SESSIONID: "+body.get("sessionid").toString()+" NAME: "+body.get("sessionuser").toString());
-		//return m;
 
 		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(body.get("sessionuser").toString());
 		String sessionId = sessionVerifyInfo.getSessionId();
-		int role = sessionVerifyInfo.getRole();
+		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
 		if(sessionId != null) {
-			isSessionValid = BcryptSetup.verifySessionId(body.get("sessionid").toString(), sessionId);
+			isSessionValid = SecurityUtil.verifySessionId(body.get("sessionid").toString(), sessionId);
 		} else {
 			isSessionValid = false;
 		}
+
+		Messages m = new Messages();
 		if(isSessionValid) {
+			m.setRole()
 			return new UserRoleInfo(role);
 		} else {
-			Messages m = new Messages();
 			m.setError("Invalid Session");
 			return m;
 		}
