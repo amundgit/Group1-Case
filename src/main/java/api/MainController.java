@@ -86,6 +86,8 @@ public class MainController {
 		boolean check = false;
 		Messages msg = new Messages();
 		User user = userRepository.findByName(body.get("name").toString());
+		System.out.println(body.get("name").toString());
+		System.out.println(user.getName());
 		if (user != null) {
 			check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
 		}
@@ -381,7 +383,7 @@ public class MainController {
 		}
 
 		Messages m = new Messages();
-	
+
 		if (isSessionValid) {
 
 			m.setRole(role);
