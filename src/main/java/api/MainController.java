@@ -94,7 +94,8 @@ public class MainController {
 			System.out.println(userRepository.findSessionByName(user.getName()));
 			String newSessionId = BcryptSetup.generateSessionId();
 			System.out.println(newSessionId);
-			userRepository.setUserSession(newSessionId, user.getName());
+			user.setSessionId(newSessionId);
+			userRepository.save(user);
 			msg.setMessage(user.getRole().toString());
 			return msg;
 		} else {
