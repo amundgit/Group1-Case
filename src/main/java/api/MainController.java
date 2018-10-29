@@ -53,30 +53,20 @@ public class MainController {
 	private PlayerRepository playerRepository;
 
 	public Messages verifySession(String inputSessionId, String inputUser) {
-		System.out.print("FIRST INSIDE");
-		System.out.print(inputSessionId);
-		System.out.print(inputUser);
 		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(inputUser);
 		String sessionId = sessionVerifyInfo.getSessionId();
 		Integer role = sessionVerifyInfo.getRole();
 		Boolean isSessionValid;
-
 		if (sessionId != null) {
-			System.out.print("SESSIONID NOT NULL");
 			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
 		} else {
-			System.out.print("SESSIONID NULL");
 			isSessionValid = false;
 		}
-
 		Messages m = new Messages();
-
 		if (isSessionValid) {
-			System.out.print("VALID SESSION");
 			m.setRole(role);
 			return m;
 		} else {
-			System.out.print("INVALID SESSION");
 			m.setError("Invalid Session");
 			return m;
 		}
@@ -455,9 +445,9 @@ public class MainController {
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
-		if(m.getError() != null) {
+		if(m.getRole() != 1) {
 			return m;
-		} else {
+		} else { 
 		 	boolean check = false;
 		 	String name = body.get("name").toString(); 
 		 	String description = body.get("description").toString(); 
@@ -475,6 +465,7 @@ public class MainController {
 		  		m.setError("Error: Association exists"); }
 		  		return m;
 		 }
+	}
 
 	@GetMapping(path = "/getallcoaches")
 	public @ResponseBody Iterable<Coach> getAllCoaches() {
