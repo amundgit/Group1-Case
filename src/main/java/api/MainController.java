@@ -418,34 +418,25 @@ public class MainController {
 	// TEST - return other value?
 	@PostMapping(path = "/addassociation")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
-		System.out.print("FIRST");
 		Messages m = new Messages();
 		m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
-		System.out.print("FIRST AFTER");
-		System.out.print(m.getRole());
-		System.out.print(m.getError());
 		if(m.getError() != null) {
-			System.out.print("SECOND");
 			return m;
 		} else {
-			System.out.print("THIRD");
 		 	boolean check = false;
 		 	String name = body.get("name").toString(); 
 		 	String description = body.get("description").toString(); 
 		 	Association existenceCheck = associationRepository.getByName(name); 
 		 	if (existenceCheck == null) { 
-		 		System.out.print("FOURTH");
 		 		check = true; 
 		 	} 
 		 	if (check) { 
-		 		System.out.print("FIFTH");
 		 		Association a = new Association(); 
 		 		a.setName(name);
 		  		a.setDescription(description); 
 		  		associationRepository.save(a);
 		  		m.setMessage("Success"); 
 		  	} else {
-		  		System.out.print("SIXTH");
 		  		m.setError("Error: Association exists"); }
 		  		return m;
 		 }
