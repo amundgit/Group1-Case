@@ -37,7 +37,6 @@ public class PersonController {
 	 */
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Person> getAllPersons() {
-		System.out.println(personRepository.findAll().toString());
 		return personRepository.findAll();
 	}
 
