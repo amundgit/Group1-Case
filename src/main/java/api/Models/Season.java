@@ -8,12 +8,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import org.hibernate.annotations.GenericGenerator;
+
 import java.time.LocalDate; //will this create sql date?
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Season{
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
     private Integer season_id;
 
     private LocalDate start_date;

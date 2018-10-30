@@ -8,37 +8,40 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Goal_type{
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer goal_type_id;
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+  @GenericGenerator(name = "native", strategy = "native")
+  private Integer goal_type_id;
 
-    private String type;
+  private String type;
 
 	private String status = "active";
 
 	//GETTERS AND SETTERS
-  	public Integer getId() {
-    	return goal_type_id;
-  	}
-  	public void setId(Integer goal_type_id) {
-    	this.goal_type_id = goal_type_id;
-  	}
+  public Integer getId() {
+    return goal_type_id;
+  }
+  public void setId(Integer goal_type_id) {
+    this.goal_type_id = goal_type_id;
+  }
 
-  	public String getType() {
-    	return type;
-  	}
-  	public void setType(String type) {
-    	this.type = type;
-  	}
+  public String getType() {
+    return type;
+  }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-  	public String getStatus() {
-	    return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }
 
 //SQL:

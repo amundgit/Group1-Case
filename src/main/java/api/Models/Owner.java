@@ -8,39 +8,42 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Owner{
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer owner_id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+  @GenericGenerator(name = "native", strategy = "native")
+  private Integer owner_id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional=false)
-  	@JoinColumn(name = "person_id", nullable = false)
-  	private Person person;
+  @ManyToOne(fetch = FetchType.EAGER, optional=false)
+  @JoinColumn(name = "person_id", nullable = false)
+  private Person person;
 
-	private String status = "active";
+  private String status = "active";
 
-	//GETTERS AND SETTERS
-	public Integer getId() {
-    	return owner_id;
-  	}
-  	public void setId(Integer owner_id) {
-    	this.owner_id = owner_id;
-  	}
+  //GETTERS AND SETTERS
+  public Integer getId() {
+  	return owner_id;
+  }
+  public void setId(Integer owner_id) {
+  	this.owner_id = owner_id;
+  }
 
-  	public Integer getPersonId() {
-		return person.getId();
-	}
-	public void setPersonId(Person person) {
-		this.person = person;
-	}
+  public Integer getPersonId() {
+  return person.getId();
+  }
+  public void setPersonId(Person person) {
+  this.person = person;
+  }
 
-  	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public String getStatus() {
+  return status;
+  }
+  public void setStatus(String status) {
+  this.status = status;
+  }
 }
 
 //SQL:

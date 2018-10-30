@@ -8,10 +8,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Location {
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
     private Integer location_id;
 
     private String name;
