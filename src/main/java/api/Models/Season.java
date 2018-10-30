@@ -16,9 +16,9 @@ public class Season{
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer season_id;
 
-    private LocalDate start_date; //WILL NEED TESTING
+    private LocalDate start_date;
 
-    private LocalDate end_date; //WILL NEED TESTING
+    private LocalDate end_date;
 
     private String name;
 
