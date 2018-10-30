@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
-@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
+
 @Controller // This means that this class is a Controller
 public class MainController {
 	@Autowired // This means to get the bean called userRepository
