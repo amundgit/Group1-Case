@@ -2,6 +2,10 @@ api/Pojos/SessionInfo.class
 api/Repositories/MatchRepository.class
 api/Repositories/Match_goalRepository.class
 api/Models/User.class
+<<<<<<< HEAD
+=======
+api/Models/Goal_type.class
+>>>>>>> e5b3b0c682ac6d5508d698435f96f84a4c2853a9
 api/Controllers/OwnerController.class
 api/Models/Goal_type.class
 api/Application.class
@@ -12,18 +16,30 @@ api/Repositories/ResultRepository.class
 api/Repositories/CoachRepository.class
 api/Repositories/OwnerRepository.class
 api/Models/Match_goal.class
+<<<<<<< HEAD
 api/Controllers/CoachController.class
 api/Repositories/PersonRepository.class
 api/Repositories/AssociationRepository.class
+=======
+api/Repositories/PersonRepository.class
+api/Repositories/AssociationRepository.class
+api/Controllers/CoachController.class
+>>>>>>> e5b3b0c682ac6d5508d698435f96f84a4c2853a9
 api/Repositories/SeasonRepository.class
 api/Models/Player.class
 api/Repositories/PlayerRepository.class
 api/Controllers/AddressController.class
 api/Models/Result.class
-api/Controllers/ContactController.class
 api/Repositories/LocationRepository.class
+<<<<<<< HEAD
 api/Models/Season.class
 api/Models/Location.class
+=======
+api/Controllers/ContactController.class
+api/Models/Season.class
+api/Models/Location.class
+api/Controllers/MatchController.class
+>>>>>>> e5b3b0c682ac6d5508d698435f96f84a4c2853a9
 api/Controllers/AssociationController.class
 api/Controllers/PersonController.class
 api/Models/Match.class
@@ -36,9 +52,14 @@ api/Repositories/Goal_typeRepository.class
 api/Controllers/SeasonController.class
 api/Controllers/TeamController.class
 api/Repositories/UserRepository.class
-api/Messages.class
 api/Models/Person.class
+api/Messages.class
 api/Repositories/ContactRepository.class
+<<<<<<< HEAD
+=======
+api/Models/Contact.class
+api/Models/Address.class
+>>>>>>> e5b3b0c682ac6d5508d698435f96f84a4c2853a9
 api/Controllers/LocationController.class
 api/Models/Contact.class
 api/Models/Address.class
