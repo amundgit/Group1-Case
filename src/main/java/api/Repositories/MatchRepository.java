@@ -16,4 +16,6 @@ public interface MatchRepository extends CrudRepository<Match, Integer> {
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
+	@Query("SELECT m FROM Match m WHERE match_id = :match_id AND status = \'active\'")
+	Match getById(@Param("match_id")Integer match_id);
 }

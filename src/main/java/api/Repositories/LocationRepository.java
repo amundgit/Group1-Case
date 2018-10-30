@@ -21,9 +21,9 @@ public interface LocationRepository extends CrudRepository<Location, Integer> {
      * password);
      */
 
-    @Query("SELECT a FROM Location a WHERE LOWER(name) = LOWER(:name)")
+    @Query("SELECT a FROM Location a WHERE LOWER(name) = LOWER(:name) AND status = \'active\'")
     Location getByName(@Param("name") String name);
 
-    @Query("SELECT a FROM Location a WHERE location_id = :location_id")
+    @Query("SELECT a FROM Location a WHERE location_id = :location_id AND status = \'active\'")
     Location getById(@Param("location_id") Integer location_id);
 }
