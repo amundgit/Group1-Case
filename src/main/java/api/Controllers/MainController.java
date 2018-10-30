@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin(origins = "https://group1-case-frontend.herokuapp.com")
 @Controller // This means that this class is a Controller
 public class MainController {
 	@Autowired // This means to get the bean called userRepository
@@ -66,34 +67,30 @@ public class MainController {
 	}
 
 	/*
-	 * This method is used at login, to determene if the user and what type of role
+	 * This method is used at login, to determine the user and what type of role
 	 * it has.
 	 */
 	@PostMapping(path = "/getuser")
 	public @ResponseBody Object getUser(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Messages msg = new Messages();
+		Messages m = new Messages();
 		User user = userRepository.findByName(body.get("name").toString());
-		System.out.println(body.get("name").toString());
-		System.out.println(user.getName());
 		if (user != null) {
 			if (user.getName().equals(body.get("name"))) {
 				check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
 			}
 		}
-
 		if (check) {
-			System.out.println(userRepository.findSessionByName(user.getName()).getSessionId());
 			String newSessionId = SecurityUtil.generateSessionId();
 			System.out.println(newSessionId);
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
-			msg.setMessage(user.getRole().toString());
-			msg.setSession(newSessionId);
-			return msg;
+			m.setMessage(user.getRole().toString());
+			m.setSession(newSessionId);
+			return m;
 		} else {
-			msg.setError("Failure");
-			return msg;
+			m.setError("Failure");
+			return m;
 		}
 	}
 
@@ -122,7 +119,6 @@ public class MainController {
 		if (user != null) {
 			check = user.getStatus().equals("active");
 		}
-
 		if (check) {
 			return "Success";
 		} else {

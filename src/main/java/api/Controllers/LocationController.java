@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin(origins = "https://group1-case-frontend.herokuapp.com")
 @Controller // This means that this class is a Controller
 @RequestMapping("/locations")
 public class LocationController {
@@ -30,6 +31,8 @@ public class LocationController {
 	@Autowired
 	private LocationRepository locationRepository;
 
+	@Autowired
+	private UserRepository userRepository;
 	/**
 	 * Get to show all locations in the database
 	 */
@@ -48,23 +51,27 @@ public class LocationController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		boolean check = false;
-		Messages msg = new Messages();
-		Location location = locationRepository.getByName(body.get("name").toString());
-		if (location == null) {
-			check = true;
-		}
-		if (check) {
-			Location l = new Location();
-			l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
-			l.setName(body.get("name").toString());
-			l.setDescription(body.get("description").toString());
-			locationRepository.save(l);
-			msg.setMessage("Success, Location was created.");
-			return msg;
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			msg.setError("Failure, Location was not created.");
-			return msg;
+			boolean check = false;
+			Location location = locationRepository.getByName(body.get("name").toString());
+			if (location == null) {
+				check = true;
+			}
+			if (check) {
+				Location l = new Location();
+				l.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+				l.setName(body.get("name").toString());
+				l.setDescription(body.get("description").toString());
+				locationRepository.save(l);
+				m.setMessage("Success, Location was created.");
+				return m;
+			} else {
+				m.setError("Failure, Location was not created.");
+				return m;
+			}
 		}
 	}
 }

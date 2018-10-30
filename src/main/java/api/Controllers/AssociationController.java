@@ -41,7 +41,7 @@ public class AssociationController {
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getError() != null) {
+		if(m.getRole() != 1) {
 			return m;
 		} else {
 		 	boolean check = false;
