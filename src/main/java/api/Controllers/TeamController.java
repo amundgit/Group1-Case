@@ -39,6 +39,8 @@ public class TeamController {
 	@Autowired
 	private LocationRepository locationRepository;
 
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Team> getAllTeams() {
@@ -48,29 +50,33 @@ public class TeamController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		boolean check = false;
-		String team_id = body.get("team_id").toString();
-		Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
-		Integer association_id = Integer.parseInt(body.get("association_id").toString());
-		Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
-		Integer location_id = Integer.parseInt(body.get("location_id").toString());
-		Team existenceCheck = teamRepository.getByTeamId(team_id);
-		//Actually do stuff
-		
-		if (existenceCheck == null) {
-			check = true;
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {		
+			boolean check = false;
+			String team_id = body.get("team_id").toString();
+			Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
+			Integer association_id = Integer.parseInt(body.get("association_id").toString());
+			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
+			Integer location_id = Integer.parseInt(body.get("location_id").toString());
+			Team existenceCheck = teamRepository.getByTeamId(team_id);
+			//Actually do stuff
+			if (existenceCheck == null) {
+				check = true;
+			}
+			if (check) {
+				Team t = new Team(team_id);
+				t.setOwnerId(ownerRepository.getById(owner_id));
+				t.setAssociationId(associationRepository.getById(association_id));
+				t.setCoachId(coachRepository.getById(coach_id));
+				t.setLocationId(locationRepository.getById(location_id));
+				teamRepository.save(t);
+				m.setMessage("Success");
+			} else {
+				m.setError("Error: Team exists");
+			}
+			return m;
 		}
-		if (check) {
-			Team t = new Team(team_id);
-			t.setOwnerId(ownerRepository.getById(owner_id));
-			t.setAssociationId(associationRepository.getById(association_id));
-			t.setCoachId(coachRepository.getById(coach_id));
-			t.setLocationId(locationRepository.getById(location_id));
-			teamRepository.save(t);
-			m.setMessage("Success");
-		} else {
-			m.setError("Error: Team exists");
-		}
-		return m;
 	}
 }

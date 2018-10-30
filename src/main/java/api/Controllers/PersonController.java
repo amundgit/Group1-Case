@@ -29,6 +29,9 @@ public class PersonController {
 
 	@Autowired
 	private AddressRepository addressRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 	/**
 	 * Get to show all Persons in the database
 	 */
@@ -46,32 +49,34 @@ public class PersonController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
-		boolean check = false;
-		Messages msg = new Messages();
-		String dateArr[] = body.get("date_of_birth").toString().split("-");
-		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
-				Integer.parseInt(dateArr[2]));
-		System.out.println(date);
-		Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
-				body.get("last_name").toString(), date);
-		if (person == null) {
-			check = true;
-		}
-		if (check) {
-			Person p = new Person();
-			System.out.println(body.get("address_id").toString());
-			p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
-			p.setFirstName(body.get("first_name").toString());
-			p.setLastName(body.get("last_name").toString());
-			p.setDateOfBirth(date);
-			personRepository.save(p);
-			person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
-			System.out.println(person.getId().toString());
-			msg.setMessage(person.getId().toString());
-			return msg;
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			msg.setError("Failure, Person was not created.");
-			return msg;
+			boolean check = false;
+			String dateArr[] = body.get("date_of_birth").toString().split("-");
+			LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
+					Integer.parseInt(dateArr[2]));
+			Person person = personRepository.findByFirstAndLastandBirth(body.get("first_name").toString(),
+					body.get("last_name").toString(), date);
+			if (person == null) {
+				check = true;
+			}
+			if (check) {
+				Person p = new Person();
+				p.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+				p.setFirstName(body.get("first_name").toString());
+				p.setLastName(body.get("last_name").toString());
+				p.setDateOfBirth(date);
+				personRepository.save(p);
+				person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
+				m.setMessage(person.getId().toString());
+				return m;
+			} else {
+				m.setError("Failure, Person was not created.");
+				return m;
+			}
 		}
 	}
 
