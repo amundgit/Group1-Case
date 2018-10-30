@@ -41,8 +41,17 @@ public class AddressController {
 	}
 
 	@GetMapping(path = "/getbyname")
-	public @ResponseBody Integer getId(@RequestParam String address_line_1) {
-		return addressRepository.getIdByAddress(address_line_1);
+	public @ResponseBody Object getId(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			String address[] = body.get("address_line_1").toString().split(",");
+			m.setMessage(addressRepository.getIdByAddress(address[0]).toString());
+			return m;
+		}
 	}
 
 	/**
