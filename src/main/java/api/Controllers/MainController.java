@@ -99,60 +99,45 @@ public class MainController {
 		return userRepository.findAll();
 	}
 
-	// test, works. Syntax: /demo/search?name=searchname
-	/*
-	 * @GetMapping(path="/search") public @ResponseBody Iterable<User>
-	 * getAUser(@RequestParam String name) { return userRepository.findByName(name);
-	 * }
-	 */
-	// testing non-list
-	@GetMapping(path = "/search")
-	public @ResponseBody User getAUser(@RequestParam String name) {
-		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != null) {
-			return m;
-		} else {
-			return userRepository.findByName(name);
-		}
-	}
-
 	@PostMapping(path = "/searchuser")
-	public @ResponseBody String searchUser(@RequestBody User myUser) {
+	public @ResponseBody Object searchUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = false;
-			User user = userRepository.findByName(myUser.getName());
+			User user = userRepository.findByName(body.get("inputuser").toString());
 			if (user != null) {
 				check = user.getStatus().equals("active");
 			}
 			if (check) {
-				return "Success";
+				m.setMessage("Success");
+				return m;
 			} else {
-				return "Failure";
+				m.setError("Failure");
+				return m;
 			}
 		}
 	}
 
-	@GetMapping(path = "/updateusername")
-	public @ResponseBody String updateAUserName(@RequestParam String newName) {
+	@PostMapping(path = "/updateusername")
+	public @ResponseBody Object updateAUserName(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getError() != null) {
 			return m;
 		} else {
 			User u = userRepository.findByName(body.get("sessionuser").toString());
-			u.setName(newName);
+			u.setName(body.get("newusername").toString());
 			userRepository.save(u);
-			return "Updated";
+			m.setMessage("Success");
+			return m;
 		}
 	}
 
-	@GetMapping(path = "/deleteuser")
-	public @ResponseBody String deleteAUser() {
+	@PostMapping(path = "/deleteuser")
+	public @ResponseBody Object deleteAUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getError() != null) {
@@ -161,20 +146,23 @@ public class MainController {
 			User u = userRepository.findByName(body.get("sessionuser").toString());
 			u.setStatus("inactive");
 			userRepository.save(u);
-		}	return "Updated";
+			m.setMessage("Updated");
+			return m;
+		}	
 	}
 
-	@GetMapping(path = "/makeadmin")
-	public @ResponseBody String makeAdmin(@RequestParam String name) {
+	@PostMapping(path = "/makeadmin")
+	public @ResponseBody Object makeAdmin(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getRole() != 1) {
 			return m;
 		} else {		
-			User u = userRepository.findByName(name);
+			User u = userRepository.findByName(body.get("inputuser").toString());
 			u.setRole(1);
 			userRepository.save(u);
-			return "Updated";
+			m.setMessage("Updated");
+			return m;
 		}
 	}
 }
