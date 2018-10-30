@@ -3,7 +3,8 @@ package api;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.apache.commons.lang3.RandomStringUtils;
 
-
+import api.Repositories.*;
+import api.Pojos.*;
 
 public class SecurityUtil {
 
@@ -31,6 +32,26 @@ public class SecurityUtil {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public static Messages verifySession(String inputSessionId, String inputUser, UserRepository userRepository) {
+		SessionVerifyInfo sessionVerifyInfo = userRepository.findSessionVerifyByUsername(inputUser);
+		String sessionId = sessionVerifyInfo.getSessionId();
+		Integer role = sessionVerifyInfo.getRole();
+		Boolean isSessionValid;
+		if (sessionId != null) {
+			isSessionValid = SecurityUtil.verifySessionId(inputSessionId, sessionId);
+		} else {
+			isSessionValid = false;
+		}
+		Messages m = new Messages();
+		if (isSessionValid) {
+			m.setRole(role);
+			return m;
+		} else {
+			m.setError("Invalid Session");
+			return m;
 		}
 	}
 

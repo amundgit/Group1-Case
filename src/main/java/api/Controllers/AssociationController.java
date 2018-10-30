@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import api.Repositories.*;
 import api.Models.*;
 import api.Pojos.*;
-import api.Controllers.MainController;
 
 //More imports
 import api.*;
@@ -29,6 +28,9 @@ public class AssociationController {
 	@Autowired
 	private AssociationRepository associationRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Association> getAllAssociations() {
 		return associationRepository.findAll();
@@ -38,7 +40,7 @@ public class AssociationController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		//m = verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString());
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getError() != null) {
 			return m;
 		} else {
