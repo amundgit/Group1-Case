@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
-@CrossOrigin(origins = "https://group1-case-frontend.herokuapp.com")
 @Controller // This means that this class is a Controller
 public class MainController {
 	@Autowired // This means to get the bean called userRepository
