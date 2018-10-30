@@ -27,6 +27,9 @@ public class SeasonController {
 	@Autowired
 	private SeasonRepository seasonRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Season> getAllSeasons() {
 		return seasonRepository.findAll();
@@ -35,28 +38,33 @@ public class SeasonController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addSeason(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		boolean check = false;
-		String startDateArr[] = body.get("start_date").toString().split("-");
-		LocalDate start_date = LocalDate.of(Integer.parseInt(startDateArr[0]), Integer.parseInt(startDateArr[1]), Integer.parseInt(startDateArr[2]));
-		String endDateArr[] = body.get("end_date").toString().split("-");
-		LocalDate end_date = LocalDate.of(Integer.parseInt(endDateArr[0]), Integer.parseInt(endDateArr[1]), Integer.parseInt(endDateArr[2]));
-		String name = body.get("name").toString();
-		String description = body.get("description").toString();
-		Season existenceCheck = seasonRepository.getByName(name);
-		if (existenceCheck == null) {
-			check = true;
-		}
-		if (check) {
-			Season s = new Season();
-			s.setStartDate(start_date);
-			s.setEndDate(end_date);
-			s.setName(name);
-			s.setDescription(description);
-			seasonRepository.save(s);
-			m.setMessage("Success");
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			m.setError("Error: Season by that name already exists");
+			boolean check = false;
+			String startDateArr[] = body.get("start_date").toString().split("-");
+			LocalDate start_date = LocalDate.of(Integer.parseInt(startDateArr[0]), Integer.parseInt(startDateArr[1]), Integer.parseInt(startDateArr[2]));
+			String endDateArr[] = body.get("end_date").toString().split("-");
+			LocalDate end_date = LocalDate.of(Integer.parseInt(endDateArr[0]), Integer.parseInt(endDateArr[1]), Integer.parseInt(endDateArr[2]));
+			String name = body.get("name").toString();
+			String description = body.get("description").toString();
+			Season existenceCheck = seasonRepository.getByName(name);
+			if (existenceCheck == null) {
+				check = true;
+			}
+			if (check) {
+				Season s = new Season();
+				s.setStartDate(start_date);
+				s.setEndDate(end_date);
+				s.setName(name);
+				s.setDescription(description);
+				seasonRepository.save(s);
+				m.setMessage("Success");
+			} else {
+				m.setError("Error: Season by that name already exists");
+			}
+			return m;
 		}
-		return m;
 	}
 }

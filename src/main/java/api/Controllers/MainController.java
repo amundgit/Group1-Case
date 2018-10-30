@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin
 @Controller // This means that this class is a Controller
 public class MainController {
 	@Autowired // This means to get the bean called userRepository
@@ -66,34 +67,30 @@ public class MainController {
 	}
 
 	/*
-	 * This method is used at login, to determene if the user and what type of role
+	 * This method is used at login, to determine the user and what type of role
 	 * it has.
 	 */
 	@PostMapping(path = "/getuser")
 	public @ResponseBody Object getUser(@RequestBody Map<String, Object> body) {
 		boolean check = false;
-		Messages msg = new Messages();
+		Messages m = new Messages();
 		User user = userRepository.findByName(body.get("name").toString());
-		System.out.println(body.get("name").toString());
-		System.out.println(user.getName());
 		if (user != null) {
 			if (user.getName().equals(body.get("name"))) {
 				check = SecurityUtil.verifyPassword(body.get("password").toString(), user.getPassword());
 			}
 		}
-
 		if (check) {
-			System.out.println(userRepository.findSessionByName(user.getName()).getSessionId());
 			String newSessionId = SecurityUtil.generateSessionId();
 			System.out.println(newSessionId);
 			user.setSessionId(newSessionId);
 			userRepository.save(user);
-			msg.setMessage(user.getRole().toString());
-			msg.setSession(newSessionId);
-			return msg;
+			m.setMessage(user.getRole().toString());
+			m.setSession(newSessionId);
+			return m;
 		} else {
-			msg.setError("Failure");
-			return msg;
+			m.setError("Failure");
+			return m;
 		}
 	}
 
@@ -103,54 +100,70 @@ public class MainController {
 		return userRepository.findAll();
 	}
 
-	// test, works. Syntax: /demo/search?name=searchname
-	/*
-	 * @GetMapping(path="/search") public @ResponseBody Iterable<User>
-	 * getAUser(@RequestParam String name) { return userRepository.findByName(name);
-	 * }
-	 */
-	// testing non-list
-	@GetMapping(path = "/search")
-	public @ResponseBody User getAUser(@RequestParam String name) {
-		return userRepository.findByName(name);
-	}
-
 	@PostMapping(path = "/searchuser")
-	public @ResponseBody String searchUser(@RequestBody User myUser) {
-		boolean check = false;
-		User user = userRepository.findByName(myUser.getName());
-		if (user != null) {
-			check = user.getStatus().equals("active");
-		}
-
-		if (check) {
-			return "Success";
+	public @ResponseBody Object searchUser(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getError() != null) {
+			return m;
 		} else {
-			return "Failure";
+			boolean check = false;
+			User user = userRepository.findByName(body.get("inputuser").toString());
+			if (user != null) {
+				check = user.getStatus().equals("active");
+			}
+			if (check) {
+				m.setMessage("Success");
+				return m;
+			} else {
+				m.setError("Failure");
+				return m;
+			}
 		}
 	}
 
-	@GetMapping(path = "/updateusername")
-	public @ResponseBody String updateAUserName(@RequestParam String oldName, @RequestParam String newName) {
-		User u = (userRepository.findByName(oldName));
-		u.setName(newName);
-		userRepository.save(u);
-		return "Updated";
+	@PostMapping(path = "/updateusername")
+	public @ResponseBody Object updateAUserName(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getError() != null) {
+			return m;
+		} else {
+			User u = userRepository.findByName(body.get("sessionuser").toString());
+			u.setName(body.get("newusername").toString());
+			userRepository.save(u);
+			m.setMessage("Success");
+			return m;
+		}
 	}
 
-	@GetMapping(path = "/deleteuser")
-	public @ResponseBody String deleteAUser(@RequestParam String name) {
-		User u = (userRepository.findByName(name));
-		u.setStatus("inactive");
-		userRepository.save(u);
-		return "Updated";
+	@PostMapping(path = "/deleteuser")
+	public @ResponseBody Object deleteAUser(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getError() != null) {
+			return m;
+		} else {
+			User u = userRepository.findByName(body.get("sessionuser").toString());
+			u.setStatus("inactive");
+			userRepository.save(u);
+			m.setMessage("Updated");
+			return m;
+		}	
 	}
 
-	@GetMapping(path = "/makeadmin")
-	public @ResponseBody String makeAdmin(@RequestParam String name) {
-		User u = (userRepository.findByName(name));
-		u.setRole(1);
-		userRepository.save(u);
-		return "Updated";
+	@PostMapping(path = "/makeadmin")
+	public @ResponseBody Object makeAdmin(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {		
+			User u = userRepository.findByName(body.get("inputuser").toString());
+			u.setRole(1);
+			userRepository.save(u);
+			m.setMessage("Updated");
+			return m;
+		}
 	}
 }

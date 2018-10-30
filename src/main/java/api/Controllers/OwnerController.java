@@ -32,6 +32,9 @@ public class OwnerController {
 	@Autowired
 	private OwnerRepository ownerRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Owner> getAllOwners() {
 		return ownerRepository.findAll();
@@ -39,21 +42,26 @@ public class OwnerController {
 
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages assignOwner(@RequestBody Map<String, Object> body) {
-		boolean check = false;
 		Messages m = new Messages();
-		Integer person_id = Integer.parseInt(body.get("person_id").toString());
-		Owner existenceCheck = ownerRepository.getByPersonId(person_id);
-		if (existenceCheck == null) {
-			check = true;
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {		
+			boolean check = false;
+			Integer person_id = Integer.parseInt(body.get("person_id").toString());
+			Owner existenceCheck = ownerRepository.getByPersonId(person_id);
+			if (existenceCheck == null) {
+				check = true;
+			}
+			if (check){
+				Owner o = new Owner();
+				o.setPersonId(personRepository.getById(person_id));
+				o = ownerRepository.save(o);
+				m.setMessage("Success");
+			} else {
+				m.setError("Person already an owner");
+			}
+			return m;
 		}
-		if (check){
-			Owner o = new Owner();
-			o.setPersonId(personRepository.getById(person_id));
-			o = ownerRepository.save(o);
-			m.setMessage("Success");
-		} else {
-			m.setError("Person already an owner");
-		}
-		return m;
 	}
 }

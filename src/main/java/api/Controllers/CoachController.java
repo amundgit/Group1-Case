@@ -32,6 +32,9 @@ public class CoachController {
 	@Autowired
 	private CoachRepository coachRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Coach> getAllCoaches() {
@@ -40,21 +43,26 @@ public class CoachController {
 
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages assignCoach(@RequestBody Map<String, Object> body) {
-		boolean check = false;
 		Messages m = new Messages();
-		Integer person_id = Integer.parseInt(body.get("person_id").toString());
-		Coach existenceCheck = coachRepository.getByPersonId(person_id);
-		if (existenceCheck == null) {
-			check = true;
-		}
-		if (check){
-			Coach c = new Coach();
-			c.setPersonId(personRepository.getById(person_id));
-			c = coachRepository.save(c);
-			m.setMessage("Success");
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			m.setError("Person already a coach");
+			boolean check = false;
+			Integer person_id = Integer.parseInt(body.get("person_id").toString());
+			Coach existenceCheck = coachRepository.getByPersonId(person_id);
+			if (existenceCheck == null) {
+				check = true;
+			}
+			if (check){
+				Coach c = new Coach();
+				c.setPersonId(personRepository.getById(person_id));
+				c = coachRepository.save(c);
+				m.setMessage("Success");
+			} else {
+				m.setError("Person already a coach");
+			}
+			return m;
 		}
-		return m;
 	}
 }

@@ -29,8 +29,9 @@ public class ContactController {
 
 	@Autowired
 	private PersonRepository personRepository;
-
-
+	
+	@Autowired
+	private UserRepository userRepository;
 	/**
 	 * Get to show all contacts in the database
 	 */
@@ -48,26 +49,29 @@ public class ContactController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addContact(@RequestBody Map<String, Object> body) {
-		boolean check = false;
-		Messages msg = new Messages();
-
-		Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
-				body.get("contact_detail").toString());
-		if (contact == null) {
-			check = true;
-		}
-		if (check) {
-			Contact c = new Contact();
-			System.out.println(body.get("person_id"));
-			c.setPersonId(personRepository.getById(Integer.parseInt(body.get("person_id").toString())));
-			c.setContactType(body.get("contact_type").toString());
-			c.setContactDetail(body.get("contact_detail").toString());
-			contactRepository.save(c);
-			msg.setMessage("Success, Contact was created.");
-			return msg;
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			msg.setError("Failure, Contact was not created.");
-			return msg;
+			boolean check = false;
+			Contact contact = contactRepository.findByIDandDetails(Integer.parseInt(body.get("person_id").toString()),
+					body.get("contact_detail").toString());
+			if (contact == null) {
+				check = true;
+			}
+			if (check) {
+				Contact c = new Contact();
+				c.setPersonId(personRepository.getById(Integer.parseInt(body.get("person_id").toString())));
+				c.setContactType(body.get("contact_type").toString());
+				c.setContactDetail(body.get("contact_detail").toString());
+				contactRepository.save(c);
+				m.setMessage("Success, Contact was created.");
+				return m;
+			} else {
+				m.setError("Failure, Contact was not created.");
+				return m;
+			}
 		}
 	}
 }

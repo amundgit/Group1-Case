@@ -27,6 +27,9 @@ public class AddressController {
 	@Autowired
 	private AddressRepository addressRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Address> getAllAddresses() {
 		return addressRepository.findAll();
@@ -46,28 +49,32 @@ public class AddressController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
-		boolean check = false;
-		Messages msg = new Messages();
-		Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
-		if (address == null) {
-			check = true;
-		}
-		if (check) {
-			Address a = new Address();
-			a.setAddressLine1(body.get("address_line_1").toString());
-			a.setAddressLine2(body.get("address_line_2").toString());
-			a.setAddressLine3(body.get("address_line_3").toString());
-			a.setPostalCode(body.get("postal_code").toString());
-			a.setCity(body.get("city").toString());
-			a.setCountry(body.get("country").toString());
-			addressRepository.save(a);
-			// Return the id the new address got in the database.
-			address = addressRepository.getByAddress(a.getAddressLine1());
-			System.out.println(address.getId().toString());
-			msg.setMessage(address.getId().toString());
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
 		} else {
-			msg.setError("Failure, Address was not created.");
+			boolean check = false;
+			Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
+			if (address == null) {
+				check = true;
+			}
+			if (check) {
+				Address a = new Address();
+				a.setAddressLine1(body.get("address_line_1").toString());
+				a.setAddressLine2(body.get("address_line_2").toString());
+				a.setAddressLine3(body.get("address_line_3").toString());
+				a.setPostalCode(body.get("postal_code").toString());
+				a.setCity(body.get("city").toString());
+				a.setCountry(body.get("country").toString());
+				addressRepository.save(a);
+				// Return the id the new address got in the database.
+				address = addressRepository.getByAddress(a.getAddressLine1());
+				m.setMessage(address.getId().toString());
+			} else {
+				m.setError("Failure, Address was not created.");
+			}
+			return m;
 		}
-		return msg;
 	}
 }
