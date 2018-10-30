@@ -40,6 +40,20 @@ public class AddressController {
 		return addressRepository.getById(id);
 	}
 
+	@GetMapping(path = "/getbyname")
+	public @ResponseBody Object getId(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			String address[] = body.get("address_line_1").toString().split(",");
+			m.setMessage(addressRepository.getIdByAddress(address[0]).toString());
+			return m;
+		}
+	}
+
 	/**
 	 * This method creates a new address if it does not exist and checks based on
 	 * the first address line.
@@ -50,8 +64,9 @@ public class AddressController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAddress(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = false;

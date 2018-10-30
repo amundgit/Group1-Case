@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import java.time.LocalDate;
+
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -18,7 +20,7 @@ public class Match {
   @GenericGenerator(name = "native", strategy = "native")
   private Integer match_id;
 
-  private String match_date; //CHANGE DATATYPE LATER?
+  private LocalDate match_date;
 
   @ManyToOne(fetch = FetchType.EAGER, optional=false)
   @JoinColumn(name = "season_id", nullable = false)
@@ -46,10 +48,10 @@ public class Match {
     this.match_id = match_id;
   }
   //-----CHANGE DATATYPE LATER?-----------------
-  public String getMatchDate() {
+  public LocalDate getMatchDate() {
     return match_date;
   }
-  public void setMatchDate(String match_date) {
+  public void setMatchDate(LocalDate match_date) {
     this.match_date = match_date;
   }
   //-------------------------------------------
@@ -78,7 +80,7 @@ public class Match {
   public String getAwayTeamId(){
     return away_team.getId();
   }
-  public void setAwayTeam(Team away_team){
+  public void setAwayTeamId(Team away_team){
     this.away_team = away_team;
   }
   //-------------------------------------------
