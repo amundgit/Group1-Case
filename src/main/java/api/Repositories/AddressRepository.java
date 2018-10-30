@@ -28,7 +28,7 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 	@Query("SELECT a FROM Address a WHERE LOWER(address_line_1) = LOWER(:address)")
 	Address getByAddress(@Param("address") String address);
 
-	@Query("SELECT addres_id FROM Address a WHERE LOWER(address_line_1) = LOWER(:address_line_1)")
+	@Query("SELECT address_id FROM Address a WHERE LOWER(address_line_1) = LOWER(:address_line_1)")
 	Integer getIdByAddress(@Param("address_line_1") String address_line_1);
 
 }
