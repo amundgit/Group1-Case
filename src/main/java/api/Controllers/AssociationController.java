@@ -25,7 +25,7 @@ import java.time.*;
 @CrossOrigin
 @Controller // This means that this class is a Controller
 @RequestMapping("/associations")
-public class AssociationController {	
+public class AssociationController {
 	@Autowired
 	private AssociationRepository associationRepository;
 
@@ -41,26 +41,28 @@ public class AssociationController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
-		 	boolean check = false;
-		 	String name = body.get("name").toString(); 
-		 	String description = body.get("description").toString(); 
-		 	Association existenceCheck = associationRepository.getByName(name); 
-		 	if (existenceCheck == null) { 
-		 		check = true; 
-		 	} 
-		 	if (check) { 
-		 		Association a = new Association(); 
-		 		a.setName(name);
-		  		a.setDescription(description); 
-		  		associationRepository.save(a);
-		  		m.setMessage("Success"); 
-		  	} else {
-		  		m.setError("Error: Association exists"); }
-		  		return m;
-		 }
+			boolean check = false;
+			String name = body.get("name").toString();
+			String description = body.get("description").toString();
+			Association existenceCheck = associationRepository.getByName(name);
+			if (existenceCheck == null) {
+				check = true;
+			}
+			if (check) {
+				Association a = new Association();
+				a.setName(name);
+				a.setDescription(description);
+				associationRepository.save(a);
+				m.setMessage("Success");
+			} else {
+				m.setError("Error: Association exists");
+			}
+			return m;
+		}
 	}
 }
