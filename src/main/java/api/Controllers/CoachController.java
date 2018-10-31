@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin
 @Controller // This means that this class is a Controller
 @RequestMapping("/coaches")
 public class CoachController {

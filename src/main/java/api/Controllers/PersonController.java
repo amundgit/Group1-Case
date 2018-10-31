@@ -21,17 +21,21 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin
 @Controller // This means that this class is a Controller
 @RequestMapping("/persons")
-public class PersonController {	
+public class PersonController {
 	@Autowired
 	private PersonRepository personRepository;
 
 	@Autowired
 	private AddressRepository addressRepository;
 
+
 	@Autowired
 	private UserRepository userRepository;
+
+
 	/**
 	 * Get to show all Persons in the database
 	 */
@@ -49,9 +53,12 @@ public class PersonController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
+
+
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = false;
@@ -70,13 +77,15 @@ public class PersonController {
 				p.setLastName(body.get("last_name").toString());
 				p.setDateOfBirth(date);
 				personRepository.save(p);
-				person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(), p.getDateOfBirth());
-				m.setMessage(person.getId().toString());
+				person = personRepository.findByFirstAndLastandBirth(p.getFirstName(), p.getLastName(),
+						p.getDateOfBirth());
+				m.setMessage("Success, Person was created.");
 				return m;
 			} else {
 				m.setError("Failure, Person was not created.");
 				return m;
 			}
+
 		}
 	}
 
