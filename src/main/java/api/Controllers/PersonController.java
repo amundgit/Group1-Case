@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.time.*;
 
+@CrossOrigin
 @Controller // This means that this class is a Controller
 @RequestMapping("/persons")
 public class PersonController {
@@ -30,8 +31,10 @@ public class PersonController {
 	@Autowired
 	private AddressRepository addressRepository;
 
+
 	@Autowired
 	private UserRepository userRepository;
+
 
 	/**
 	 * Get to show all Persons in the database
@@ -50,6 +53,8 @@ public class PersonController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
+
+
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
 				userRepository);
@@ -80,6 +85,7 @@ public class PersonController {
 				m.setError("Failure, Person was not created.");
 				return m;
 			}
+
 		}
 	}
 
