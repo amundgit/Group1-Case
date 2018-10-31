@@ -40,7 +40,7 @@ public class AddressController {
 		return addressRepository.getById(id);
 	}
 
-	@GetMapping(path = "/getbyname")
+	@GetMapping(path = "/getbyaddress")
 	public @ResponseBody Object getId(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
