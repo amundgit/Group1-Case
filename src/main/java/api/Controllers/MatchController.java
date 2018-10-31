@@ -49,32 +49,43 @@ public class MatchController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addMatch(@RequestBody Map<String, Object> body) {
-		boolean check = false;
-		check = true; //just for testing: unsure how to enforce "uniqueness" sensibly
+		boolean check = true;
 		Messages msg = new Messages();
-		/*Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
-		if (address == null) {
+		Integer season_id = Integer.parseInt(body.get("season_id").toString());
+		String home_team_id = body.get("home_team_id").toString();
+		String away_team_id = body.get("away_team_id").toString();
+		String dateArr[] = body.get("match_date").toString().split("-");
+		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+		Season season = seasonRepository.getById(season_id);
+		LocalDate start = season.getStartDate();
+		LocalDate end = season.getEndDate();
+		
+		//works, check default = false
+		/*if(!(home_team_id.equals(away_team_id)) && (date.isAfter(start)) && (date.isBefore(end))){
 			check = true;
 		}*/
+		//Test with better errors, check = true
+		if(home_team_id.equals(away_team_id)){
+			check = false;
+			msg.setError("Home team and away team cannot be the same");
+		} else if(!(date.isAfter(start)) || !(date.isBefore(end))){
+			check = false;
+			msg.setError("Date of match not in season");
+		}
 		if (check) {
-			String dateArr[] = body.get("match_date").toString().split("-");
-			LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
 			Match m = new Match();
-			m.setMatchDate(date);
-			Integer season_id = Integer.parseInt(body.get("season_id").toString());
+			m.setMatchDate(date);	
 			Integer location_id = Integer.parseInt(body.get("location_id").toString());
-			String home_team_id = body.get("home_team_id").toString();
-			String away_team_id = body.get("away_team_id").toString();
-			m.setSeasonId(seasonRepository.getById(season_id));
+			m.setSeasonId(season);
 			m.setLocationId(locationRepository.getById(location_id));
 			m.setHomeTeamId(teamRepository.getByTeamId(home_team_id));
 			m.setAwayTeamId(teamRepository.getByTeamId(away_team_id));
 			matchRepository.save(m);
 			// Return the id the new address got in the database.
 			msg.setMessage(m.getId().toString());
-		} else {
+		} /*else {
 			msg.setError("Failure, match was not created.");
-		}
+		}*/
 		return msg;
 	}
 }

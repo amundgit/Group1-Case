@@ -90,6 +90,11 @@ public class Match {
   public void setStatus(String status) {
     this.status = status;
   }
+
+  //test
+  public Season getSeason(){
+    return season;
+  }
 }
 
 //SQL:
