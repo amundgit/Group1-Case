@@ -56,11 +56,11 @@ public class TeamController {
 			return m;
 		} else {		
 			boolean check = false;
-			String team_id = body.get("team_id").toString();
-			Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
-			Integer association_id = Integer.parseInt(body.get("association_id").toString());
-			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
-			Integer location_id = Integer.parseInt(body.get("location_id").toString());
+			String team_id = body.get("team_name").toString();
+			Integer owner_id = Integer.parseInt(body.get("team_owner").toString());
+			Integer association_id = Integer.parseInt(body.get("team_association").toString());
+			Integer coach_id = Integer.parseInt(body.get("team_coach").toString());
+			Integer location_id = Integer.parseInt(body.get("team_location").toString());
 			Team existenceCheck = teamRepository.getByTeamId(team_id);
 			//Actually do stuff
 			if (existenceCheck == null) {
