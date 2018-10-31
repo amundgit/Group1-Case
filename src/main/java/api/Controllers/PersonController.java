@@ -97,7 +97,7 @@ public class PersonController {
 	public @ResponseBody Object getAddress(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		boolean check = false;
-		System.out.println(body)
+		System.out.println(body);
 		System.out.println(body.get("first_name").toString());
 		System.out.println(body.get("last_name").toString());
 		System.out.println(body.get("date_of_birth").toString());
