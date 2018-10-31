@@ -24,6 +24,13 @@ public class Result{
 
 	private String status = "active";
 
+  //CONSTRUCTORS
+  public Result(){};
+
+  public Result(Match match){
+    this.match = match;
+  }
+
   //GETTERS AND SETTERS
   public Integer getId(){
     return result_id;
