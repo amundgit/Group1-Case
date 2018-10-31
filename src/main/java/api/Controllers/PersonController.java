@@ -31,10 +31,8 @@ public class PersonController {
 	@Autowired
 	private AddressRepository addressRepository;
 
-
 	@Autowired
 	private UserRepository userRepository;
-
 
 	/**
 	 * Get to show all Persons in the database
@@ -53,7 +51,6 @@ public class PersonController {
 	 */
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addPerson(@RequestBody Map<String, Object> body) {
-
 
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
@@ -87,6 +84,35 @@ public class PersonController {
 			}
 
 		}
+	}
+
+	/**
+	 * This method creates a new person if it does not exist and checks based on the
+	 * name and birth.
+	 * 
+	 * @param body
+	 * @return
+	 */
+	@PostMapping(path = "/getaddress")
+	public @ResponseBody Object getAddress(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		boolean check = false;
+		String dateArr[] = body.get("date_of_birth").toString().split("-");
+		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
+				Integer.parseInt(dateArr[2]));
+		Address address = personRepository.getAddressByPerson(body.get("first_name").toString(),
+				body.get("last_name").toString(), date);
+		System.out.println(address);
+		if (address != null) {
+			check = true;
+		}
+		if (check) {
+			return address;
+		} else {
+			m.setError("Failure, address was not retrived.");
+			return m;
+		}
+
 	}
 
 	// test
