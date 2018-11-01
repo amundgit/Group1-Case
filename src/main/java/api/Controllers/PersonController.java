@@ -97,6 +97,11 @@ public class PersonController {
 	public @ResponseBody Object getAddress(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		boolean check = false;
+		System.out.println(body);
+		System.out.println(body.get("first_name").toString());
+		System.out.println(body.get("last_name").toString());
+		System.out.println(body.get("date_of_birth").toString());
+
 		String dateArr[] = body.get("date_of_birth").toString().split("-");
 		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
 				Integer.parseInt(dateArr[2]));
