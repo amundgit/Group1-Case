@@ -37,7 +37,6 @@ public class AssociationController {
 		return associationRepository.findAll();
 	}
 
-	// TEST - return other value?
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
@@ -46,21 +45,20 @@ public class AssociationController {
 		if (m.getRole() != 1) {
 			return m;
 		} else {
-			boolean check = false;
+			boolean check = true;
 			String name = body.get("name").toString();
 			String description = body.get("description").toString();
 			Association existenceCheck = associationRepository.getByName(name);
-			if (existenceCheck == null) {
-				check = true;
+			if (existenceCheck != null) {
+				check = false;
+				m.setMessage(existenceCheck.getId().toString());
 			}
 			if (check) {
 				Association a = new Association();
 				a.setName(name);
 				a.setDescription(description);
 				associationRepository.save(a);
-				m.setMessage("Success");
-			} else {
-				m.setError("Error: Association exists");
+				m.setMessage(a.getId().toString());
 			}
 			return m;
 		}

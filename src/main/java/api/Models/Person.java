@@ -36,13 +36,6 @@ public class Person {
 		this.person_id = person_id;
 	}
 
-	/*
-	 * public Integer getAddressId() { return address_id; }
-	 * 
-	 * public void setAddressId(Integer address_id) { this.address_id = address_id;
-	 * }
-	 */
-
 	public Integer getAddressId() {
 		return address.getId();
 	}
