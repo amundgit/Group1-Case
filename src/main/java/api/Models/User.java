@@ -9,37 +9,38 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
-    private Integer id;
+	private Integer id;
 
-    private String name;
+	private String name;
 
-    private String password;
+	private String password;
 
-    private Integer role = 1;
+	private Integer role = 2;
 
-    private String sessionId;
+	private String sessionId;
 
-    private String status = "active";
+	private String status = "active";
 
-    public User() {}
+	public User() {
+	}
 
-    public User(String name, String sessionId) {
-        this.name = name;
-        this.sessionId = sessionId;
-    }
+	public User(String name, String sessionId) {
+		this.name = name;
+		this.sessionId = sessionId;
+	}
 
-    public String getSessionId(){
-    	return sessionId;
-    }
+	public String getSessionId() {
+		return sessionId;
+	}
 
-    public void setSessionId(String sessionId){
-    	this.sessionId = sessionId;
-    }
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
 
-    public Integer getRole() {
+	public Integer getRole() {
 		return role;
 	}
 
