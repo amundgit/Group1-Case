@@ -55,6 +55,7 @@ public class TeamController {
 		if(m.getRole() != 1) {
 			return m;
 		} else {		
+			System.out.println("FIRST");
 			boolean check = false;
 			String team_id = body.get("team_name").toString();
 			Integer owner_id = Integer.parseInt(body.get("team_owner").toString());
@@ -62,11 +63,14 @@ public class TeamController {
 			Integer coach_id = Integer.parseInt(body.get("team_coach").toString());
 			Integer location_id = Integer.parseInt(body.get("team_location").toString());
 			Team existenceCheck = teamRepository.getByTeamId(team_id);
+			System.out.println("SECOND");
 			//Actually do stuff
 			if (existenceCheck == null) {
+				System.out.println("THIRD");
 				check = true;
 			}
 			if (check) {
+				System.out.println("FOURTH");
 				Team t = new Team(team_id);
 				t.setOwnerId(ownerRepository.getById(owner_id));
 				t.setAssociationId(associationRepository.getById(association_id));
@@ -75,6 +79,7 @@ public class TeamController {
 				teamRepository.save(t);
 				m.setMessage("Success");
 			} else {
+				System.out.println("FIFTH");
 				m.setError("Error: Team exists");
 			}
 			return m;
