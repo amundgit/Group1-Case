@@ -30,4 +30,47 @@ public class Match_goalController {
 
 	@Autowired
 	private PlayerRepository playerRepository;
+
+	@Autowired
+	private Match_goalRepository match_goalRepository;
+
+	@Autowired
+	private Goal_typeRepository goal_typeRepository;
+
+	@GetMapping(path = "/getall")
+	public @ResponseBody Iterable<Match_goal> getAllMatchGoals() {
+		return match_goalRepository.findAll();
+	}
+
+	/**
+	 * This method creates a new matchposition
+	 * 
+	 * @param newMatchPosition
+	 * @return
+	 */
+	@PostMapping(path = "/add")
+	public @ResponseBody Object addMatchGoal(@RequestBody Map<String, Object> body) {
+		//boolean check = true;
+		Messages msg = new Messages();
+		Integer player_id = Integer.parseInt(body.get("player_id").toString());
+		Integer match_id = Integer.parseInt(body.get("match_id").toString());
+		String goal_type = body.get("goal_type").toString();
+		String description = body.get("description").toString();
+		/*Match_position existenceCheck = match_positionRepository.getByPlayerAndMatch(player_id, match_id);
+		//cant't think of useful checks
+		if(existenceCheck != null){
+			check = false;
+			msg.setError("Failure, match was not created.");
+		}*/
+		//if (check) {
+		Match_goal mg = new Match_goal();
+		mg.setDescription(description);
+		mg.setGoalTypeId(goal_typeRepository.getByType(goal_type));
+		mg.setPlayerId(playerRepository.getById(player_id));
+		mg.setMatchId(matchRepository.getById(match_id));
+		match_goalRepository.save(mg);
+		msg.setMessage(mg.getId().toString());
+		//}
+		return msg;
+	}
 }
