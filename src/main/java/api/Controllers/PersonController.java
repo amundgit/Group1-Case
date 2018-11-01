@@ -117,6 +117,47 @@ public class PersonController {
 			m.setError("Failure, address was not retrived.");
 			return m;
 		}
+	}
+
+	/**
+	 * This method creates a new person if it does not exist and checks based on the
+	 * name and birth.
+	 * 
+	 * @param body
+	 * @return
+	 */
+	@PostMapping(path = "/update")
+	public @ResponseBody Object getbyid(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = false;
+			System.out.println(body);
+			System.out.println(body.get("id").toString());
+			String dateArr[] = body.get("date_of_birth").toString().split("-");
+			LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
+					Integer.parseInt(dateArr[2]));
+			Person person = personRepository.getById(Integer.parseInt(body.get("id").toString()));
+			System.out.println(person);
+			if (person != null) {
+				check = true;
+			}
+			if (check) {
+				person.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+				person.setFirstName(body.get("first_name").toString());
+				person.setLastName(body.get("last_name").toString());
+				person.setDateOfBirth(date);
+				personRepository.save(person);
+				m.setMessage("Success, Person was updated.");
+				return m;
+			} else {
+				m.setError("Error, person not found.");
+				return m;
+			}
+		}
 
 	}
 

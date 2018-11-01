@@ -88,7 +88,7 @@ public class AddressController {
 				address = addressRepository.getByAddress(a.getAddressLine1());
 				m.setMessage(address.getId().toString());
 			} else {
-				m.setError("Failure, Address was not created.");
+				m.setMessage(address.getId().toString());
 			}
 			return m;
 		}
