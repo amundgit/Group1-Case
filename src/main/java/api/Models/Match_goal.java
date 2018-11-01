@@ -76,6 +76,11 @@ public class Match_goal{
   public void setStatus(String status) {
     this.status = status;
   }
+
+  //test
+  public Goal_type getGoalType(){
+    return goal_type;
+  }
 }
 
 //SQL:
