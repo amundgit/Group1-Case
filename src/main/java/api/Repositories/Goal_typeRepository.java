@@ -16,4 +16,6 @@ public interface Goal_typeRepository extends CrudRepository<Goal_type, Integer> 
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
+	@Query("SELECT g FROM Goal_type g WHERE type = :type AND status = \'active\'")
+	Goal_type getByType(@Param("type")String type);
 }
