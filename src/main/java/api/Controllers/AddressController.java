@@ -70,7 +70,7 @@ public class AddressController {
 		if (m.getRole() != 1) {
 			return m;
 		} else {
-			boolean check = false;
+			boolean check = true;
 			String address_line_1 = body.get("address_line_1").toString();
 			String address_line_2 = body.get("address_line_2").toString();
 			String address_line_3 = body.get("address_line_3").toString();
@@ -78,8 +78,8 @@ public class AddressController {
 			String city = body.get("city").toString();
 			String country = body.get("country").toString();
 			Address address = addressRepository.getByCompleteAddress(address_line_1, address_line_2, address_line_3, postal_code, city, country);
-			if (address == null) {
-				check = true;
+			if (address != null) {
+				check = false;
 				m.setMessage(address.getId().toString());
 			}
 			if (check) {
