@@ -56,9 +56,11 @@ public class TeamController {
 			return m;
 		} else {		
 			System.out.println("FIRST");
+
 			boolean check = false;
 			String team_id = body.get("team_name").toString();
 			Integer owner_id = Integer.parseInt(body.get("team_owner").toString());
+			System.out.println("OWNER ID!!!!!: "+owner_id);
 			Integer association_id = Integer.parseInt(body.get("team_association").toString());
 			Integer coach_id = Integer.parseInt(body.get("team_coach").toString());
 			Integer location_id = Integer.parseInt(body.get("team_location").toString());
