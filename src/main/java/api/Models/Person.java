@@ -74,5 +74,8 @@ public class Person {
 	public void setDateOfBirth(LocalDate date_of_birth) {
 		this.date_of_birth = date_of_birth;
 	}
-
+	//test
+	public Address getAddress(){
+		return address;
+	}
 }

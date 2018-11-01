@@ -71,24 +71,28 @@ public class AddressController {
 			return m;
 		} else {
 			boolean check = false;
-			Address address = addressRepository.getByAddress(body.get("address_line_1").toString());
+			String address_line_1 = body.get("address_line_1").toString();
+			String address_line_2 = body.get("address_line_2").toString();
+			String address_line_3 = body.get("address_line_3").toString();
+			String postal_code = body.get("postal_code").toString();
+			String city = body.get("city").toString();
+			String country = body.get("country").toString();
+			Address address = addressRepository.getByCompleteAddress(address_line_1, address_line_2, address_line_3, postal_code, city, country);
 			if (address == null) {
 				check = true;
+				m.setMessage(address.getId().toString());
 			}
 			if (check) {
 				Address a = new Address();
-				a.setAddressLine1(body.get("address_line_1").toString());
-				a.setAddressLine2(body.get("address_line_2").toString());
-				a.setAddressLine3(body.get("address_line_3").toString());
-				a.setPostalCode(body.get("postal_code").toString());
-				a.setCity(body.get("city").toString());
-				a.setCountry(body.get("country").toString());
-				addressRepository.save(a);
+				a.setAddressLine1(address_line_1);
+				a.setAddressLine2(address_line_2);
+				a.setAddressLine3(address_line_3);
+				a.setPostalCode(postal_code);
+				a.setCity(city);
+				a.setCountry(country);
+				a = addressRepository.save(a);
 				// Return the id the new address got in the database.
-				address = addressRepository.getByAddress(a.getAddressLine1());
-				m.setMessage(address.getId().toString());
-			} else {
-				m.setMessage(address.getId().toString());
+				m.setMessage(a.getId().toString());
 			}
 			return m;
 		}
