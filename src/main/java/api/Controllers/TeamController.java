@@ -51,37 +51,31 @@ public class TeamController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
-		} else {		
-			System.out.println("FIRST");
-
+		} else {
 			boolean check = false;
 			String team_id = body.get("team_name").toString();
 			Integer owner_id = Integer.parseInt(body.get("team_owner").toString());
-			System.out.println("OWNER ID!!!!!: "+owner_id);
 			Integer association_id = Integer.parseInt(body.get("team_association").toString());
 			Integer coach_id = Integer.parseInt(body.get("team_coach").toString());
 			Integer location_id = Integer.parseInt(body.get("team_location").toString());
 			Team existenceCheck = teamRepository.getByTeamId(team_id);
-			System.out.println("SECOND");
-			//Actually do stuff
+			// Actually do stuff
 			if (existenceCheck == null) {
-				System.out.println("THIRD");
 				check = true;
 			}
 			if (check) {
-				System.out.println("FOURTH");
 				Team t = new Team(team_id);
 				t.setOwnerId(ownerRepository.getById(owner_id));
 				t.setAssociationId(associationRepository.getById(association_id));
 				t.setCoachId(coachRepository.getById(coach_id));
 				t.setLocationId(locationRepository.getById(location_id));
 				teamRepository.save(t);
-				m.setMessage("Success");
+				m.setMessage(t.getId().toString());
 			} else {
-				System.out.println("FIFTH");
 				m.setError("Error: Team exists");
 			}
 			return m;

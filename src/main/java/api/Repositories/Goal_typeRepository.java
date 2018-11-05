@@ -18,4 +18,7 @@ public interface Goal_typeRepository extends CrudRepository<Goal_type, Integer> 
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 	@Query("SELECT g FROM Goal_type g WHERE type = :type AND status = \'active\'")
 	Goal_type getByType(@Param("type")String type);
+
+	@Query("SELECT g FROM Goal_type g WHERE goal_type_id = :goal_type_id AND status = \'active\'")
+	Goal_type getById(@Param("goal_type_id")Integer goal_type_id);
 }

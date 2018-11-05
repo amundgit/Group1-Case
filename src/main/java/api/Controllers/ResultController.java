@@ -44,14 +44,14 @@ public class ResultController {
 		Messages m = new Messages();
 		String sessionid = body.get("sessionid").toString();
 		String sessionuser = body.get("sessionuser").toString();
-		m = SecurityUtil.verifySession(sessionid, sessionuser,userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(sessionid, sessionuser, userRepository);
+		if (m.getRole() != 1) {
 			return m;
-		} else {		
+		} else {
 			boolean check = false;
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
 			Result existenceCheck = resultRepository.getById(match_id);
-			//Actually do stuff
+			// Actually do stuff
 			if (existenceCheck == null) {
 				check = true;
 			}

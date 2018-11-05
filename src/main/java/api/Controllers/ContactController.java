@@ -75,4 +75,52 @@ public class ContactController {
 			}
 		}
 	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Object updateContact(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer contact_id = Integer.parseInt(body.get("contact_id").toString());
+			Contact contact = contactRepository.findByContactId(contact_id);
+			if (contact == null) {
+				check = false;
+				m.setError("Error: Invalid contact id");
+			}
+			if (check) {
+				contact.setPersonId(personRepository.getById(Integer.parseInt(body.get("person_id").toString())));
+				contact.setContactType(body.get("contact_type").toString());
+				contact.setContactDetail(body.get("contact_detail").toString());
+				contactRepository.save(contact);
+				m.setMessage(contact.getId().toString());
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deleteContact(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer contact_id = Integer.parseInt(body.get("contact_id").toString());
+			Contact contact = contactRepository.findByContactId(contact_id);
+			if (contact == null) {
+				check = false;
+				m.setError("Error: Invalid contact id");
+			}
+			if (check) {
+				contact.setStatus("inactive");
+				contactRepository.save(contact);
+				m.setMessage(contact.getId().toString());
+			}
+			return m;
+		}
+	}
 }

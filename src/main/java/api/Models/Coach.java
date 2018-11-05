@@ -44,6 +44,9 @@ public class Coach{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public Person getPerson(){
+    	return person;
+  	}
 }
 
 //SQL:
