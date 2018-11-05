@@ -47,7 +47,6 @@ public class AssociationController {
 		} else {
 			boolean check = true;
 			String name = body.get("name").toString();
-			String description = body.get("description").toString();
 			Association existenceCheck = associationRepository.getByName(name);
 			if (existenceCheck != null) {
 				check = false;
@@ -55,10 +54,62 @@ public class AssociationController {
 			}
 			if (check) {
 				Association a = new Association();
+				String description = body.get("description").toString();
 				a.setName(name);
 				a.setDescription(description);
 				associationRepository.save(a);
 				m.setMessage(a.getId().toString());
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Object updateAssociation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer association_id = Integer.parseInt(body.get("association_id").toString());
+			Association association = associationRepository.getById(association_id);
+			if (association == null) {
+				check = false;
+				m.setError("Error: Non-existent association id");
+			}
+			if (check) {
+				String description = body.get("description").toString();
+				String name = body.get("name").toString();
+				association.setName(name);
+				association.setDescription(description);
+				associationRepository.save(association);
+				m.setMessage(association.getId().toString());
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deleteAssociation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer association_id = Integer.parseInt(body.get("association_id").toString());
+			Association association = associationRepository.getById(association_id);
+			if (association == null) {
+				check = false;
+				m.setError("Error: Non-existent association id");
+			}
+			if (check) {
+				association.setStatus("inactive");
+				associationRepository.save(association);
+				m.setMessage(association.getId().toString());
 			}
 			return m;
 		}

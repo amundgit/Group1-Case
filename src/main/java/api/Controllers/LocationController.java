@@ -59,6 +59,7 @@ public class LocationController {
 			Location location = locationRepository.getByName(body.get("name").toString());
 			if (location == null) {
 				check = true;
+				m.setError(location.getId().toString());
 			}
 			if (check) {
 				Location l = new Location();
@@ -66,12 +67,57 @@ public class LocationController {
 				l.setName(body.get("name").toString());
 				l.setDescription(body.get("description").toString());
 				locationRepository.save(l);
-				m.setMessage("Success, Location was created.");
-				return m;
-			} else {
-				m.setError("Failure, Location was not created.");
-				return m;
+				m.setMessage(l.getId().toString());
 			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Object updateLocation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer location_id = Integer.parseInt(body.get("location_id").toString());
+			Location location = locationRepository.getById(location_id);
+			if (location == null) {
+				check = false;
+				m.setError("Error: Invalid ID");
+			}
+			if (check) {
+				location.setAddressId(addressRepository.getById(Integer.parseInt(body.get("address_id").toString())));
+				location.setName(body.get("name").toString());
+				location.setDescription(body.get("description").toString());
+				locationRepository.save(location);
+				m.setMessage(location.getId().toString());
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deleteLocation(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer location_id = Integer.parseInt(body.get("location_id").toString());
+			Location location = locationRepository.getById(location_id);
+			if (location == null) {
+				check = false;
+				m.setError("Error: Invalid ID");
+			}
+			if (check) {
+				location.setStatus("inactive");
+				locationRepository.save(location);
+				m.setMessage(location.getId().toString());
+			}
+			return m;
 		}
 	}
 }

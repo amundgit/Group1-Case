@@ -25,4 +25,7 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     @Query("SELECT c FROM Contact c WHERE (c.person.person_id) = (:person_id) AND LOWER(contact_detail) = LOWER(:contact_detail)")
     Contact findByIDandDetails(@Param("person_id") Integer person_id, @Param("contact_detail") String contact_detail);
 
+    @Query("SELECT c FROM Contact c WHERE c.contact_id = :contact_id")
+    Contact findByContactId(@Param("contact_id") Integer contact_id);
+
 }

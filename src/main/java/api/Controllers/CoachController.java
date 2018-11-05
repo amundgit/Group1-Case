@@ -66,4 +66,51 @@ public class CoachController {
 			return m;
 		}
 	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Messages updateCoach(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
+			Coach coach = coachRepository.getById(coach_id);
+			if (coach == null) {
+				check = false;
+				m.setError("Error: Invalid coach ID");
+			}
+			if (check){
+				Integer person_id = Integer.parseInt(body.get("person_id").toString());
+				coach.setPersonId(personRepository.getById(person_id));
+				coach = coachRepository.save(coach);
+				m.setMessage("Success");
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Messages deleteCoach(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
+		if(m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
+			Coach coach = coachRepository.getById(coach_id);
+			if (coach == null) {
+				check = false;
+				m.setError("Error: Invalid coach ID");
+			}
+			if (check){
+				coach.setStatus("inactive");
+				coach = coachRepository.save(coach);
+				m.setMessage("Success");
+			}
+			return m;
+		}
+	}
 }

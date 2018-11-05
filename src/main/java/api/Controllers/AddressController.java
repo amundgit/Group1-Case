@@ -97,4 +97,65 @@ public class AddressController {
 			return m;
 		}
 	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Object updateAddress(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer address_id = Integer.parseInt(body.get("address_id").toString());
+			Address address = addressRepository.getById(address_id);
+			if (address == null) {
+				check = false;
+				m.setError("Error: Non-existent address id");
+			}
+			if (check) {
+				String address_line_1 = body.get("address_line_1").toString();
+				String address_line_2 = body.get("address_line_2").toString();
+				String address_line_3 = body.get("address_line_3").toString();
+				String postal_code = body.get("postal_code").toString();
+				String city = body.get("city").toString();
+				String country = body.get("country").toString();
+				address.setAddressLine1(address_line_1);
+				address.setAddressLine2(address_line_2);
+				address.setAddressLine3(address_line_3);
+				address.setPostalCode(postal_code);
+				address.setCity(city);
+				address.setCountry(country);
+				address = addressRepository.save(address);
+				// Return the id the new address got in the database.
+				m.setMessage(address.getId().toString());
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deleteAddress(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer address_id = Integer.parseInt(body.get("address_id").toString());
+			Address address = addressRepository.getById(address_id);
+			if (address == null) {
+				check = false;
+				m.setError("Error: Non-existent address id");
+			}
+			if (check) {
+				address.setStatus("inactive");
+				address = addressRepository.save(address);
+				// Return the id the new address got in the database.
+				m.setMessage(address.getId().toString());
+			}
+			return m;
+		}
+	}
 }
