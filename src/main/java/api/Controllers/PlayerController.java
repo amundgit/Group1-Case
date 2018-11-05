@@ -67,7 +67,7 @@ public class PlayerController {
 				p.setPersonId(personRepository.getById(person_id));
 				p.setTeamId(teamRepository.getByTeamId(team_id));
 				playerRepository.save(p);
-				m.setMessage("Success");
+				m.setMessage("Created");
 			} else {
 				existenceCheck.setNumber(number);
 				existenceCheck.setNormalPosition(normal_position);
