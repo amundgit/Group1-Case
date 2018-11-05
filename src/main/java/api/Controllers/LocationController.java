@@ -59,9 +59,9 @@ public class LocationController {
 		} else {
 			boolean check = false;
 			Location location = locationRepository.getByName(body.get("name").toString());
-			if (location != null) {
+			if (location == null) {
 				check = true;
-				m.setError(location.getId().toString());
+				m.setError("Error: Location already exist");
 			}
 			if (check) {
 				Location l = new Location();
