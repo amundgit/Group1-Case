@@ -69,7 +69,7 @@ public class LocationController {
 				l.setName(body.get("name").toString());
 				l.setDescription(body.get("description").toString());
 				locationRepository.save(l);
-				m.setMessage(l.getId().toString());
+				m.setMessage("Success, Location was created");
 			}
 			return m;
 		}
