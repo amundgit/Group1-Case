@@ -55,7 +55,9 @@ public class ResultController {
 			boolean check = true;
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
 			String team_id = body.get("team_id").toString();
-			/*Result existenceCheck = resultRepository.getByMatchId(match_id);
+			//WORKS, but is unnecessary. Exclusion makes this add or update as necessary
+			ResultId result_id = new ResultId(teamRepository.getByTeamId(team_id),matchRepository.getById(match_id));
+			/*Result existenceCheck = resultRepository.getById(result_id);
 			// Actually do stuff
 			if (existenceCheck != null) {
 				check = false;
@@ -64,7 +66,7 @@ public class ResultController {
 				String score = body.get("score").toString();
 				String result = body.get("result").toString();
 				Result r = new Result();
-				r.setId(new ResultId(teamRepository.getByTeamId(team_id),matchRepository.getById(match_id)));
+				r.setId(result_id);
 				r.setScore(score);
 				r.setResult(result);
 				resultRepository.save(r);

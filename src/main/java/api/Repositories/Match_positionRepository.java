@@ -18,8 +18,5 @@ public interface Match_positionRepository extends CrudRepository<Match_position,
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 	@Query("SELECT m FROM Match_position m WHERE position_id = :position_id AND status = \'active\'")
-	Match_position getById(@Param("position_id")Integer position_id);
-
-	/*@Query("SELECT m FROM Match_position m WHERE m.player_id = :player_id AND m.match_id = :match_id AND status = \'active\'")
-	Match_position getByPlayerAndMatch(@Param("player_id")Integer player_id, @Param("match_id")Integer match_id);*/
+	Match_position getById(@Param("position_id")Match_positionId position_id);
 }

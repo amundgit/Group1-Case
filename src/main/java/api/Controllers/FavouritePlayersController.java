@@ -120,7 +120,7 @@ public class FavouritePlayersController {
 			if (check) {
 				favouriteplayer.setStatus("inactive");
 				favouritePlayersRepository.save(favouriteplayer);
-				m.setMessage(favouriteplayer.getId().toString());
+				m.setMessage("Successfully deleted");
 			}
 			return m;
 		}

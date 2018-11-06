@@ -77,7 +77,7 @@ public class FavouriteTeamsController {
 		}
 	}
 
-	/*@PostMapping(path = "/update")
+	@PostMapping(path = "/update")
 	public @ResponseBody Messages updateFavouriteTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
@@ -86,18 +86,18 @@ public class FavouriteTeamsController {
 		} else {
 			boolean check = true;
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouritePlayers favouriteplayer = favouritePlayersRepository.getById(favourite_id);
-			if (favouriteplayer == null) {
+			FavouriteTeams favouriteteam = favouriteTeamsRepository.getById(favourite_id);
+			if (favouriteteam == null) {
 				check = false;
 				m.setError("Error: Invalid favourite id");
 			}
 			if (check) {
 				Integer user_id = Integer.parseInt(body.get("user_id").toString());
-				Integer player_id = Integer.parseInt(body.get("player_id").toString());
-				favouriteplayer.setUserId(userRepository.getById(user_id));
-				favouriteplayer.setPlayerId(playerRepository.getById(player_id));
-				favouritePlayersRepository.save(favouriteplayer);
-				m.setMessage(favouriteplayer.getId().toString());
+				String team_id = body.get("team_id").toString();
+				favouriteteam.setUserId(userRepository.getById(user_id));
+				favouriteteam.setTeamId(teamRepository.getByTeamId(team_id));
+				favouriteTeamsRepository.save(favouriteteam);
+				m.setMessage(favouriteteam.getId().toString());
 			}
 			return m;
 		}
@@ -112,17 +112,17 @@ public class FavouriteTeamsController {
 		} else {
 			boolean check = true;
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouritePlayers favouriteplayer = favouritePlayersRepository.getById(favourite_id);
-			if (favouriteplayer == null) {
+			FavouriteTeams favouriteteam = favouriteTeamsRepository.getById(favourite_id);
+			if (favouriteteam == null) {
 				check = false;
 				m.setError("Error: Invalid favourite id");
 			}
 			if (check) {
-				favouriteplayer.setStatus("inactive");
-				favouritePlayersRepository.save(favouriteplayer);
-				m.setMessage(favouriteplayer.getId().toString());
+				favouriteteam.setStatus("inactive");
+				favouriteTeamsRepository.save(favouriteteam);
+				m.setMessage("Successfully deleted");
 			}
 			return m;
 		}
-	}*/
+	}
 }
