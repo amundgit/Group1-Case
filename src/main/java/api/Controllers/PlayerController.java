@@ -42,7 +42,7 @@ public class PlayerController {
 		return playerRepository.findAll();
 	}
 
-	@GetMapping(path = "/getbyteam/{team_id}")
+	@GetMapping(path = "/getbyteam/")
 	public @ResponseBody Iterable<Player> getAllPlayersInTeam(@RequestParam("team_id") String team_id) {
 		return playerRepository.getByTeam(team_id);
 	}
