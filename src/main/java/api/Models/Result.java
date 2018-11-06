@@ -8,15 +8,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;*/
 import javax.persistence.*;//backup
 
+import api.CompositeIds.ResultId;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Result{
-	//Foreign key as primary key
-  @Id
+	@EmbeddedId
+  private ResultId result_id;
+
+  //Foreign key as primary key
+  /*@Id
   private Integer result_id;
 
   @OneToOne
   @MapsId
-  private Match match;
+  private Match match;*/
 
   private String score;
 
@@ -27,24 +32,24 @@ public class Result{
   //CONSTRUCTORS
   public Result(){};
 
-  public Result(Match match){
+  /*public Result(Match match){
     this.match = match;
-  }
+  }*/
 
   //GETTERS AND SETTERS
-  public Integer getId(){
+  public ResultId getId(){
     return result_id;
   }
-  public void setId(Integer result_id){
+  public void setId(ResultId result_id){
     this.result_id = result_id;
   }
   //FOREIGN KEY
-  public Match getMatch(){
+  /*public Match getMatch(){
     return match;
   }
   public void setMatch(Match match){
     this.match = match;
-  }
+  }*/
 
   public String getScore(){
     return score;

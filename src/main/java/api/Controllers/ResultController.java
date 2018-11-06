@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import api.Repositories.*;
 import api.Models.*;
 import api.Pojos.*;
+import api.CompositeIds.ResultId;
 
 //More imports
 import api.*;
@@ -34,6 +35,9 @@ public class ResultController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	TeamRepository teamRepository;
+
 	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Result> getAllResults() {
 		return resultRepository.findAll();
@@ -48,17 +52,19 @@ public class ResultController {
 		if (m.getRole() != 1) {
 			return m;
 		} else {
-			boolean check = false;
+			boolean check = true;
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
-			Result existenceCheck = resultRepository.getById(match_id);
+			String team_id = body.get("team_id").toString();
+			/*Result existenceCheck = resultRepository.getByMatchId(match_id);
 			// Actually do stuff
-			if (existenceCheck == null) {
-				check = true;
-			}
+			if (existenceCheck != null) {
+				check = false;
+			}*/
 			if (check) {
 				String score = body.get("score").toString();
 				String result = body.get("result").toString();
-				Result r = new Result(matchRepository.getById(match_id));
+				Result r = new Result();
+				r.setId(new ResultId(teamRepository.getByTeamId(team_id),matchRepository.getById(match_id)));
 				r.setScore(score);
 				r.setResult(result);
 				resultRepository.save(r);

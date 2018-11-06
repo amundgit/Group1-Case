@@ -16,6 +16,6 @@ public interface ResultRepository extends CrudRepository<Result, Integer> {
 
 	@Query("SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:name) AND LOWER(u.password) = LOWER(:password)")
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
-	@Query("SELECT r FROM Result r WHERE result_id = :result_id AND status = \'active\'")
-	Result getById(@Param("result_id")Integer result_id);
+	//@Query("SELECT r FROM Result r WHERE result_id.match_id = :match_id AND status = \'active\'")
+	//Result getByMatchId(@Param("match_id")Integer match_id);
 }
