@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import api.Models.Player;
+import api.Models.*;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 	@Query("SELECT p FROM Player p WHERE player_id = :player_id AND status = \'active\'")
 	Player getById(@Param("player_id") Integer player_id);
 
-	@Query("SELECT p FROM Player p WHERE team_id = :team_id AND status = \'active\'")
-	List<Player> getByTeam(@Param("team_id") String team_id);
+	@Query("SELECT person FROM Player p WHERE team_id = :team_id AND status = \'active\'")
+	List<Person> getByTeam(@Param("team_id") String team_id);
 
 }
