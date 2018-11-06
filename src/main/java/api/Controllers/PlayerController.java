@@ -45,8 +45,9 @@ public class PlayerController {
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages addPlayer(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = false;
@@ -55,7 +56,7 @@ public class PlayerController {
 			Integer person_id = Integer.parseInt(body.get("person_id").toString());
 			String team_id = body.get("team_id").toString();
 			Player existenceCheck = playerRepository.getByPersonId(person_id);
-			//Actually do stuff
+			// Actually do stuff
 			if (existenceCheck == null) {
 				check = true;
 			}
@@ -66,9 +67,13 @@ public class PlayerController {
 				p.setPersonId(personRepository.getById(person_id));
 				p.setTeamId(teamRepository.getByTeamId(team_id));
 				playerRepository.save(p);
-				m.setMessage("Success");
+				m.setMessage("Created");
 			} else {
-				m.setError("Error: Person already a player");
+				existenceCheck.setNumber(number);
+				existenceCheck.setNormalPosition(normal_position);
+				existenceCheck.setTeamId(teamRepository.getByTeamId(team_id));
+				playerRepository.save(existenceCheck);
+				m.setMessage("Updated");
 			}
 			return m;
 		}

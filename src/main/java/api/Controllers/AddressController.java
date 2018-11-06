@@ -41,7 +41,7 @@ public class AddressController {
 		return addressRepository.getById(id);
 	}
 
-	@GetMapping(path = "/getbyaddress")
+	@PostMapping(path = "/getbyaddress")
 	public @ResponseBody Object getId(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
@@ -77,7 +77,8 @@ public class AddressController {
 			String postal_code = body.get("postal_code").toString();
 			String city = body.get("city").toString();
 			String country = body.get("country").toString();
-			Address address = addressRepository.getByCompleteAddress(address_line_1, address_line_2, address_line_3, postal_code, city, country);
+			Address address = addressRepository.getByCompleteAddress(address_line_1, address_line_2, address_line_3,
+					postal_code, city, country);
 			if (address != null) {
 				check = false;
 				m.setMessage(address.getId().toString());

@@ -51,10 +51,11 @@ public class TeamController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
-		} else {		
+		} else {
 			boolean check = false;
 			String team_id = body.get("team_name").toString();
 			Integer owner_id = Integer.parseInt(body.get("team_owner").toString());
@@ -62,7 +63,7 @@ public class TeamController {
 			Integer coach_id = Integer.parseInt(body.get("team_coach").toString());
 			Integer location_id = Integer.parseInt(body.get("team_location").toString());
 			Team existenceCheck = teamRepository.getByTeamId(team_id);
-			//Actually do stuff
+			// Actually do stuff
 			if (existenceCheck == null) {
 				check = true;
 			}
@@ -73,7 +74,7 @@ public class TeamController {
 				t.setCoachId(coachRepository.getById(coach_id));
 				t.setLocationId(locationRepository.getById(location_id));
 				teamRepository.save(t);
-				m.setMessage("Success");
+				m.setMessage(t.getId().toString());
 			} else {
 				m.setError("Error: Team exists");
 			}

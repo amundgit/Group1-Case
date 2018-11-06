@@ -33,6 +33,7 @@ public class LocationController {
 
 	@Autowired
 	private UserRepository userRepository;
+
 	/**
 	 * Get to show all locations in the database
 	 */
@@ -51,15 +52,16 @@ public class LocationController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addLocation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = true;
 			Location location = locationRepository.getByName(body.get("name").toString());
 			if (location != null) {
 				check = false;
-				m.setError(location.getId().toString());
+				m.setError("Error: Location already exist");
 			}
 			if (check) {
 				Location l = new Location();
@@ -67,7 +69,7 @@ public class LocationController {
 				l.setName(body.get("name").toString());
 				l.setDescription(body.get("description").toString());
 				locationRepository.save(l);
-				m.setMessage(l.getId().toString());
+				m.setMessage("Success, Location was created");
 			}
 			return m;
 		}
@@ -76,8 +78,9 @@ public class LocationController {
 	@PostMapping(path = "/update")
 	public @ResponseBody Object updateLocation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = true;
@@ -101,8 +104,9 @@ public class LocationController {
 	@PostMapping(path = "/delete")
 	public @ResponseBody Object deleteLocation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = true;
