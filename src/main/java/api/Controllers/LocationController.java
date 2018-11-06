@@ -55,10 +55,10 @@ public class LocationController {
 		if(m.getRole() != 1) {
 			return m;
 		} else {
-			boolean check = false;
+			boolean check = true;
 			Location location = locationRepository.getByName(body.get("name").toString());
-			if (location == null) {
-				check = true;
+			if (location != null) {
+				check = false;
 				m.setError(location.getId().toString());
 			}
 			if (check) {

@@ -15,8 +15,11 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-	@Query("SELECT u FROM User u WHERE name = :name")
+	@Query("SELECT u FROM User u WHERE name = :name AND status = \'active\'")
 	User findByName(@Param("name") String name);
+
+	@Query("SELECT u FROM User u WHERE id = :user_id")
+	User getById(@Param("user_id") Integer user_id);
 
 	// Get userid, username and sessionid by username.
 	@Query("select new api.Pojos.SessionInfo(u.id, u.name, u.sessionId) from User u where u.name = ?1")

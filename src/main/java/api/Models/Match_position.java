@@ -10,32 +10,23 @@ import javax.persistence.*;//backup
 
 import org.hibernate.annotations.GenericGenerator;
 
+import api.CompositeIds.Match_positionId;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Match_position{
-	@Id
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-  @GenericGenerator(name = "native", strategy = "native")
-  private Integer position_id;
+	
+  @EmbeddedId
+  private Match_positionId position_id;
 
   private String position;
-
-  //FOREIGN KEYS------------------------------------
-  @ManyToOne(fetch = FetchType.EAGER, optional=false)
-  @JoinColumn(name = "player_id", nullable = false)
-  private Player player;
-
-  @ManyToOne(fetch = FetchType.EAGER, optional=false)
-  @JoinColumn(name = "match_id", nullable = false)
-  private Match match;
-  //-------------------------------------------------
 
 	private String status = "active";
 
   //GETTERS AND SETTERS
-  public Integer getId() {
+  public Match_positionId getId() {
     return position_id;
   }
-  public void setId(Integer position_id) {
+  public void setId(Match_positionId position_id) {
     this.position_id = position_id;
   }
 
@@ -45,20 +36,7 @@ public class Match_position{
   public void setPosition(String position){
     this.position = position;
   }
-  //FOREIGN KEYS------------------------------------
-  public Integer getPlayerId(){
-    return player.getId();
-  }
-  public void setPlayerId(Player player){
-    this.player = player;
-  }
-  public Integer getMatchId(){
-    return match.getId();
-  }
-  public void setMatchId(Match match){
-    this.match = match;
-  }
-  //-------------------------------------------------
+
   public String getStatus() {
     return status;
   }

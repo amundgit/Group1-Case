@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import api.Repositories.*;
 import api.Models.*;
 import api.Pojos.*;
+import api.CompositeIds.Match_positionId;
 
 //More imports
 import api.*;
@@ -59,19 +60,19 @@ public class Match_positionController {
 			boolean check = true;
 			Integer player_id = Integer.parseInt(body.get("player_id").toString());
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
-			Match_position existenceCheck = match_positionRepository.getByPlayerAndMatch(player_id, match_id);
+			/*Match_position existenceCheck = match_positionRepository.getByPlayerAndMatch(player_id, match_id);
 			//works, check default = false
 			if(existenceCheck != null){
 				check = false;
 				msg.setMessage(existenceCheck.getId().toString());
-			}
+			}*/
 			if (check) {
 				Match_position mp = new Match_position();
+				mp.setId(new Match_positionId(playerRepository.getById(player_id),matchRepository.getById(match_id)));
 				String position = body.get("position").toString();	
-				
 				mp.setPosition(position);
-				mp.setPlayerId(playerRepository.getById(player_id));
-				mp.setMatchId(matchRepository.getById(match_id));
+				//mp.setPlayerId(playerRepository.getById(player_id));
+				//mp.setMatchId(matchRepository.getById(match_id));
 				match_positionRepository.save(mp);
 				msg.setMessage(mp.getId().toString());
 			}
@@ -79,7 +80,7 @@ public class Match_positionController {
 		}
 	}
 
-	@PostMapping(path = "/update")
+	/*@PostMapping(path = "/update")
 	public @ResponseBody Object updateMatchPosition(@RequestBody Map<String, Object> body) {
 		Messages msg = new Messages();
 		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
@@ -132,5 +133,5 @@ public class Match_positionController {
 			}
 			return msg;
 		}
-	}
+	}*/
 }

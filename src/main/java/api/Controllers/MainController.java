@@ -173,4 +173,24 @@ public class MainController {
 			return m;
 		}
 	}
+
+	//debug only
+	@PostMapping(path = "/addadmin")
+	public @ResponseBody Object addNewAdmin(@RequestBody Map<String, Object> body) {
+		if (userRepository.findByName(body.get("name").toString()) != null) {
+			Messages m = new Messages();
+			m.setError("Username already exists");
+			return m;
+		} else {
+			String hashedpassword = SecurityUtil.hashPassword(body.get("password").toString());
+			String hashedSessionId = SecurityUtil.generateSessionId();
+			User user = new User();
+			user.setRole(1);
+			user.setName(body.get("name").toString());
+			user.setPassword(hashedpassword);
+			user.setSessionId(hashedSessionId);
+			userRepository.save(user);
+			return userRepository.findSessionByName(user.getName());
+		}
+	}
 }

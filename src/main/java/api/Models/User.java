@@ -22,6 +22,8 @@ public class User {
 
 	private String sessionId;
 
+	private String language = "ENG";
+
 	private String status = "active";
 
 	public User() {
@@ -70,6 +72,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public String getStatus() {
