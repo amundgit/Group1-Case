@@ -60,15 +60,16 @@ public class Match_positionController {
 			boolean check = true;
 			Integer player_id = Integer.parseInt(body.get("player_id").toString());
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
-			/*Match_position existenceCheck = match_positionRepository.getByPlayerAndMatch(player_id, match_id);
-			//works, check default = false
+			Match_positionId position_id = new Match_positionId(playerRepository.getById(player_id),matchRepository.getById(match_id));
+			/*Match_position existenceCheck = match_positionRepository.getById(position_id);
+			//works, unnecessary. Exclusion makes this add and update
 			if(existenceCheck != null){
 				check = false;
-				msg.setMessage(existenceCheck.getId().toString());
+				msg.setMessage("Already exists");
 			}*/
 			if (check) {
 				Match_position mp = new Match_position();
-				mp.setId(new Match_positionId(playerRepository.getById(player_id),matchRepository.getById(match_id)));
+				mp.setId(position_id);
 				String position = body.get("position").toString();	
 				mp.setPosition(position);
 				//mp.setPlayerId(playerRepository.getById(player_id));

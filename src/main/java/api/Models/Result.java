@@ -15,14 +15,6 @@ public class Result{
 	@EmbeddedId
   private ResultId result_id;
 
-  //Foreign key as primary key
-  /*@Id
-  private Integer result_id;
-
-  @OneToOne
-  @MapsId
-  private Match match;*/
-
   private String score;
 
   private String result;
@@ -32,10 +24,6 @@ public class Result{
   //CONSTRUCTORS
   public Result(){};
 
-  /*public Result(Match match){
-    this.match = match;
-  }*/
-
   //GETTERS AND SETTERS
   public ResultId getId(){
     return result_id;
@@ -43,13 +31,6 @@ public class Result{
   public void setId(ResultId result_id){
     this.result_id = result_id;
   }
-  //FOREIGN KEY
-  /*public Match getMatch(){
-    return match;
-  }
-  public void setMatch(Match match){
-    this.match = match;
-  }*/
 
   public String getScore(){
     return score;
