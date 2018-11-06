@@ -42,6 +42,11 @@ public class PlayerController {
 		return playerRepository.findAll();
 	}
 
+	@GetMapping(path = "/getbyteam/{team_id}")
+	public @ResponseBody Iterable<Player> getAllPlayersInTeam(@RequestParam("team_id") String team_id) {
+		return playerRepository.getByTeam(team_id);
+	}
+
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages addPlayer(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
