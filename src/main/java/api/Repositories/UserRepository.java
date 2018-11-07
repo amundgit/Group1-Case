@@ -21,7 +21,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query("SELECT id FROM User u WHERE name = :name AND status = \'active\'")
 	Integer findIdByName(@Param("name") String name);
 
-	@Query("SELECT u FROM User u WHERE id = :user_id")
+	@Query("SELECT u FROM User u WHERE id = :user_id AND status = \'active\'")
 	User getById(@Param("user_id") Integer user_id);
 
 	// Get userid, username and sessionid by username.
@@ -29,7 +29,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	SessionInfo findSessionByName(String name);
 
 	// Get userrole by userid.
-	@Query("select new api.Pojos.UserRoleInfo(u.role) from User u where u.id = ?1")
+	@Query("select new api.Pojos.UserRoleInfo(u.role) from User u where u.id = ?1  AND status = \'active\'")
 	UserRoleInfo findRoleByUserid(int userid);
 
 	// Get sessionid and role by username.

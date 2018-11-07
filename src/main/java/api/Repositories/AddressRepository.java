@@ -16,13 +16,13 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 	 * Kinda mal? User findByName(String name); //test
 	 */
 
-	@Query("SELECT a FROM Address a WHERE address_id = :id")
+	@Query("SELECT a FROM Address a WHERE address_id = :id AND status = \'active\'")
 	Address getById(@Param("id") Integer id);
 
-	@Query("SELECT a FROM Address a WHERE LOWER(address_line_1) = LOWER(:address)")
+	@Query("SELECT a FROM Address a WHERE LOWER(address_line_1) = LOWER(:address) AND status = \'active\'")
 	Address getByAddress(@Param("address") String address);
 
-	@Query("SELECT address_id FROM Address a WHERE LOWER(address_line_1) = LOWER(:address_line_1)")
+	@Query("SELECT address_id FROM Address a WHERE LOWER(address_line_1) = LOWER(:address_line_1) AND status = \'active\'")
 	Integer getIdByAddress(@Param("address_line_1") String address_line_1);
 
 	@Query("SELECT a FROM Address a WHERE LOWER(address_line_1) = LOWER(:address_line_1) AND LOWER(address_line_2) = LOWER(:address_line_2) AND LOWER(address_line_3) = LOWER(:address_line_3) AND LOWER(postal_code) = LOWER(:postal_code) AND LOWER(city) = LOWER(:city) AND LOWER(country) = LOWER(:country) AND status = \'active\'")
