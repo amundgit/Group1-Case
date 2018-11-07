@@ -68,6 +68,7 @@ public class Match_goalController {
 			Integer player_id = Integer.parseInt(body.get("player_id").toString());
 			Integer match_id = Integer.parseInt(body.get("match_id").toString());
 			String goal_type = body.get("goal_type").toString();
+			System.out.println(goal_type);
 			String description = body.get("description").toString();
 			/*
 			 * Match_position existenceCheck =
