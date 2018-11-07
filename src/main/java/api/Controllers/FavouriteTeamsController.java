@@ -42,11 +42,12 @@ public class FavouriteTeamsController {
 	@PostMapping(path = "/getallbyuser")
 	public @ResponseBody Iterable<FavouriteTeams> getFavouriteTeamsByUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getRole() != 1) {
 			return null;
 		} else {
-			Integer user_id = Integer.parseInt(body.get("user_id").toString());
+			Integer user_id = userRepository.findIdByName(sessionuser);
 			return favouriteTeamsRepository.getAllByUser(user_id);
 		}
 	}
@@ -54,12 +55,13 @@ public class FavouriteTeamsController {
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addFavouriteTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
 		if(m.getRole() != 1) {
 			return m;
 		} else {
 			boolean check = true;
-			Integer user_id = Integer.parseInt(body.get("user_id").toString());
+			Integer user_id = userRepository.findIdByName(sessionuser);
 			String team_id = body.get("team_id").toString();
 			FavouriteTeams existenceCheck = favouriteTeamsRepository.getByUserAndTeam(user_id,team_id);
 			if (existenceCheck != null) {

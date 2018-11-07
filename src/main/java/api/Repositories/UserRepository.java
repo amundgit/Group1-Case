@@ -18,6 +18,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query("SELECT u FROM User u WHERE name = :name AND status = \'active\'")
 	User findByName(@Param("name") String name);
 
+	@Query("SELECT id FROM User u WHERE name = :name AND status = \'active\'")
+	Integer findIdByName(@Param("name") String name);
+
 	@Query("SELECT u FROM User u WHERE id = :user_id")
 	User getById(@Param("user_id") Integer user_id);
 
