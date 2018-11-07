@@ -43,6 +43,18 @@ public class ResultController {
 		return resultRepository.findAll();
 	}
 
+	@GetMapping(path = "/anongetall")
+	public @ResponseBody Iterable<String> anonGetAllResults() {
+		List<String> returnList = new ArrayList<>();
+		Iterable<Result> resultList = resultRepository.findAll();
+		for(Result r : resultList){
+			String tempString = r.getId().getTeamId() + " ," + r.getResult();
+			returnList.add(tempString);
+		}
+		return returnList;
+	}
+
+
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addResult(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
