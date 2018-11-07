@@ -32,7 +32,8 @@ public class MainController {
 	@PostMapping(path = "/checkusertype")
 	public @ResponseBody Object checkUserType(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(), userRepository);
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
 		return m;
 	}
 
@@ -74,8 +75,8 @@ public class MainController {
 	}
 
 	/*
-	 * This method is used at login, to determine the user and what type of role
-	 * it has.
+	 * This method is used at login, to determine the user and what type of role it
+	 * has.
 	 */
 	@PostMapping(path = "/getuser")
 	public @ResponseBody Object getUser(@RequestBody Map<String, Object> body) {
@@ -110,8 +111,9 @@ public class MainController {
 	@PostMapping(path = "/searchuser")
 	public @ResponseBody Object searchUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getError() != null) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
 			return m;
 		} else {
 			boolean check = false;
@@ -132,8 +134,9 @@ public class MainController {
 	@PostMapping(path = "/updateusername")
 	public @ResponseBody Object updateAUserName(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getError() != null) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
 			return m;
 		} else {
 			User u = userRepository.findByName(body.get("sessionuser").toString());
@@ -147,25 +150,32 @@ public class MainController {
 	@PostMapping(path = "/deleteuser")
 	public @ResponseBody Object deleteAUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getError() != null) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
 		} else {
 			User u = userRepository.findByName(body.get("sessionuser").toString());
-			u.setStatus("inactive");
-			userRepository.save(u);
-			m.setMessage("Updated");
-			return m;
-		}	
+			if (u.getRole() == 1) {
+				m.setError("User is an admin and can not be deleted");
+				return m;
+			} else {
+				u.setStatus("inactive");
+				userRepository.save(u);
+				m.setMessage("Deleted");
+				return m;
+			}
+		}
 	}
 
 	@PostMapping(path = "/makeadmin")
 	public @ResponseBody Object makeAdmin(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
-		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
 			return m;
-		} else {		
+		} else {
 			User u = userRepository.findByName(body.get("inputuser").toString());
 			u.setRole(1);
 			userRepository.save(u);
@@ -174,7 +184,7 @@ public class MainController {
 		}
 	}
 
-	//debug only
+	// debug only
 	@PostMapping(path = "/addadmin")
 	public @ResponseBody Object addNewAdmin(@RequestBody Map<String, Object> body) {
 		if (userRepository.findByName(body.get("name").toString()) != null) {
