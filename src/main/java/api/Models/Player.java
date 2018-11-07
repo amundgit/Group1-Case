@@ -83,6 +83,9 @@ public class Player {
     this.status = status;
   }
 
+  public String getName(){
+    return person.getFirstName() + " " + person.getLastName();
+  }
   public Person getPerson() {
     return person;
   }
