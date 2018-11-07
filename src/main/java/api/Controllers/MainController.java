@@ -155,7 +155,7 @@ public class MainController {
 		if (m.getRole() != 1) {
 			return m;
 		} else {
-			User u = userRepository.findByName(body.get("sessionuser").toString());
+			User u = userRepository.findByName(body.get("user").toString());
 			if (u.getRole() == 1) {
 				m.setError("User is an admin and can not be deleted");
 				return m;
