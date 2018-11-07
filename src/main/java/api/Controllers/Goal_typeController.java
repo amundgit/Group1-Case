@@ -97,7 +97,7 @@ public class Goal_typeController {
 			boolean check = true;
 			Integer goal_type_id = Integer.parseInt(body.get("goal_type_id").toString());
 			Goal_type goaltype = goal_typeRepository.getById(goal_type_id);
-			if(goaltype != null){
+			if(goaltype == null){
 				check = false;
 				msg.setError("Error: Invalid id");
 			}
