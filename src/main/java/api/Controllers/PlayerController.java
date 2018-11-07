@@ -42,6 +42,23 @@ public class PlayerController {
 		return playerRepository.findAll();
 	}
 
+	@GetMapping(path = "/anongetall")
+	public @ResponseBody Iterable<String> anonGetAllPlayers() {
+		List<String> returnList = new ArrayList<>();
+		Iterable<Player> playerList = playerRepository.findAll();
+		/*int size = playerList.size();
+		for(int i=0; i<size; i++){
+			Player tempPlayer = playerList.get(i);
+			String tempString = "Name: " + tempPlayer.getName() + ", team: " + tempPlayer.getTeamId();
+			returnList.add(tempString);
+		}*/
+		for(Player p : playerList){
+			String tempString = p.getName() + ", " + p.getTeamId();
+			returnList.add(tempString);
+		}
+		return returnList;
+	}
+
 	@GetMapping(path = "/getbyteam/")
 	public @ResponseBody Iterable<Player> getAllPlayersInTeam(@RequestParam("team_id") String team_id) {
 		return playerRepository.getByTeam(team_id);
