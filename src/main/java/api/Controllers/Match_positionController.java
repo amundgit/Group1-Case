@@ -81,35 +81,41 @@ public class Match_positionController {
 		}
 	}
 
-	/*@PostMapping(path = "/update")
-	public @ResponseBody Object updateMatchPosition(@RequestBody Map<String, Object> body) {
+	@PostMapping(path = "/adddefaultpositions")
+	public @ResponseBody Object addDefaultPositions(@RequestBody Map<String, Object> body) {
 		Messages msg = new Messages();
-		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
-				userRepository);
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(), userRepository);
 		if (msg.getRole() != 1) {
 			return msg;
 		} else {
-			boolean check = true;
-			Integer position_id = Integer.parseInt(body.get("position_id").toString());
-			Match_position matchposition = match_positionRepository.getById(position_id);
-			//works, check default = false
-			if(matchposition == null){
-				check = false;
-				msg.setError("Error: Invalid position id");
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			String home_team_id = body.get("home_team_id").toString();
+			String away_team_id = body.get("away_team_id").toString();
+			List<Player> homeTeam = playerRepository.getByTeam(home_team_id);
+			List<Player> awayTeam = playerRepository.getByTeam(away_team_id);
+
+			for(Player p : homeTeam){
+				Match_positionId position_id = new Match_positionId(p,matchRepository.getById(match_id));	
+				Match_position mp = new Match_position();
+				mp.setId(position_id);
+				String position = p.getNormalPosition();	
+				mp.setPosition(position);
+				match_positionRepository.save(mp);
 			}
-			if (check) {
-				String position = body.get("position").toString();	
-				Integer player_id = Integer.parseInt(body.get("player_id").toString());
-				Integer match_id = Integer.parseInt(body.get("match_id").toString());
-				matchposition.setPosition(position);
-				matchposition.setPlayerId(playerRepository.getById(player_id));
-				matchposition.setMatchId(matchRepository.getById(match_id));
-				match_positionRepository.save(matchposition);
-				msg.setMessage(matchposition.getId().toString());
+			for(Player p : awayTeam){
+				Match_positionId position_id = new Match_positionId(p,matchRepository.getById(match_id));	
+				Match_position mp = new Match_position();
+				mp.setId(position_id);
+				String position = p.getNormalPosition();	
+				mp.setPosition(position);
+				match_positionRepository.save(mp);
 			}
+			msg.setMessage("Default positions set");
 			return msg;
 		}
 	}
+
+	/*
 
 	@PostMapping(path = "/delete")
 	public @ResponseBody Object deleteMatchPosition(@RequestBody Map<String, Object> body) {
