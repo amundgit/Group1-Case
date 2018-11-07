@@ -25,6 +25,9 @@ public interface FavouritePlayersRepository extends CrudRepository<FavouritePlay
 	@Query("SELECT f FROM FavouritePlayers f WHERE user_id = :user_id AND player_id = :player_id AND status = \'active\'")
 	FavouritePlayers getByUserAndPlayer(@Param("user_id")Integer user_id, @Param("player_id")Integer player_id);
 
+	@Query("SELECT f FROM FavouritePlayers f WHERE user_id = :user_id AND favourite_id = :favourite_id AND status = \'active\'")
+	FavouritePlayers getByUserAndId(@Param("user_id")Integer user_id, @Param("favourite_id")Integer favourite_id);
+
 	@Query("SELECT f FROM FavouritePlayers f WHERE user_id = :user_id AND status = \'active\'")
 	List<FavouritePlayers> getAllByUser(@Param("user_id")Integer user_id);
 }

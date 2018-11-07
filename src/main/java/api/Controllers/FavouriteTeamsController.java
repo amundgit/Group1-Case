@@ -44,7 +44,7 @@ public class FavouriteTeamsController {
 		Messages m = new Messages();
 		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return null;
 		} else {
 			Integer user_id = userRepository.findIdByName(sessionuser);
@@ -57,7 +57,7 @@ public class FavouriteTeamsController {
 		Messages m = new Messages();
 		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
@@ -82,19 +82,20 @@ public class FavouriteTeamsController {
 	@PostMapping(path = "/update")
 	public @ResponseBody Messages updateFavouriteTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
+			Integer user_id = userRepository.findIdByName(sessionuser);
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouriteTeams favouriteteam = favouriteTeamsRepository.getById(favourite_id);
+			FavouriteTeams favouriteteam = favouriteTeamsRepository.getByUserAndId(user_id, favourite_id);
 			if (favouriteteam == null) {
 				check = false;
-				m.setError("Error: Invalid favourite id");
+				m.setError("Error: Invalid favourite id for this user");
 			}
 			if (check) {
-				Integer user_id = Integer.parseInt(body.get("user_id").toString());
 				String team_id = body.get("team_id").toString();
 				favouriteteam.setUserId(userRepository.getById(user_id));
 				favouriteteam.setTeamId(teamRepository.getByTeamId(team_id));
@@ -108,16 +109,18 @@ public class FavouriteTeamsController {
 	@PostMapping(path = "/delete")
 	public @ResponseBody Messages deleteFavouriteTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
+			Integer user_id = userRepository.findIdByName(sessionuser);
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouriteTeams favouriteteam = favouriteTeamsRepository.getById(favourite_id);
+			FavouriteTeams favouriteteam = favouriteTeamsRepository.getByUserAndId(user_id, favourite_id);
 			if (favouriteteam == null) {
 				check = false;
-				m.setError("Error: Invalid favourite id");
+				m.setError("Error: Invalid favourite id for this user");
 			}
 			if (check) {
 				favouriteteam.setStatus("inactive");

@@ -44,7 +44,7 @@ public class FavouritePlayersController {
 		Messages m = new Messages();
 		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return null;
 		} else {
 			Integer user_id = userRepository.findIdByName(sessionuser);
@@ -57,7 +57,7 @@ public class FavouritePlayersController {
 		Messages m = new Messages();
 		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
@@ -82,19 +82,20 @@ public class FavouritePlayersController {
 	@PostMapping(path = "/update")
 	public @ResponseBody Messages updateFavouritePlayer(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouritePlayers favouriteplayer = favouritePlayersRepository.getById(favourite_id);
+			Integer user_id = userRepository.findIdByName(sessionuser);
+			FavouritePlayers favouriteplayer = favouritePlayersRepository.getByUserAndId(user_id, favourite_id);
 			if (favouriteplayer == null) {
 				check = false;
-				m.setError("Error: Invalid favourite id");
+				m.setError("Error: Invalid favourite id for this user");
 			}
 			if (check) {
-				Integer user_id = Integer.parseInt(body.get("user_id").toString());
 				Integer player_id = Integer.parseInt(body.get("player_id").toString());
 				favouriteplayer.setUserId(userRepository.getById(user_id));
 				favouriteplayer.setPlayerId(playerRepository.getById(player_id));
@@ -108,16 +109,18 @@ public class FavouritePlayersController {
 	@PostMapping(path = "/delete")
 	public @ResponseBody Messages deleteFavouritePlayer(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
+		String sessionuser = body.get("sessionuser").toString();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),userRepository);
-		if(m.getRole() != 1) {
+		if(m.getError() != null) {
 			return m;
 		} else {
 			boolean check = true;
+			Integer user_id = userRepository.findIdByName(sessionuser);
 			Integer favourite_id = Integer.parseInt(body.get("favourite_id").toString());
-			FavouritePlayers favouriteplayer = favouritePlayersRepository.getById(favourite_id);
+			FavouritePlayers favouriteplayer = favouritePlayersRepository.getByUserAndId(user_id, favourite_id);
 			if (favouriteplayer == null) {
 				check = false;
-				m.setError("Error: Invalid favourite id");
+				m.setError("Error: Invalid favourite id for this user");
 			}
 			if (check) {
 				favouriteplayer.setStatus("inactive");
