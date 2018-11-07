@@ -139,11 +139,18 @@ public class MainController {
 		if (m.getError() != null) {
 			return m;
 		} else {
-			User u = userRepository.findByName(body.get("sessionuser").toString());
-			u.setName(body.get("newusername").toString());
-			userRepository.save(u);
-			m.setMessage("Success");
-			return m;
+			User u = userRepository.findByName(body.get("newusername").toString());
+			if (u == null) {
+				u = userRepository.findByName(body.get("sessionuser").toString());
+				u.setName(body.get("newusername").toString());
+				userRepository.save(u);
+				m.setMessage(body.get("newusername").toString());
+				return m;
+			} else {
+				m.setError("Username already exists.");
+				return m;
+			}
+
 		}
 	}
 
