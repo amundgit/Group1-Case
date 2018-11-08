@@ -160,6 +160,29 @@ public class MainController {
 		}
 	}
 
+	@PostMapping(path = "/updatepassword")
+	public @ResponseBody Object updateAPassword(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
+			return m;
+		} else {
+			User u = userRepository.findByName(body.get("sessionuser").toString());
+			if (u != null) {
+				String hashedpassword = SecurityUtil.hashPassword(body.get("password").toString());
+				u.setPassword(hashedpassword);
+				userRepository.save(u);
+				m.setMessage(u.getName());
+				return m;
+			} else {
+				m.setError("Username dosent exist.");
+				return m;
+			}
+
+		}
+	}
+
 	@PostMapping(path = "/deleteuser")
 	public @ResponseBody Object deleteAUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
@@ -169,10 +192,7 @@ public class MainController {
 			return m;
 		} else {
 			User u = userRepository.findByName(body.get("user").toString());
-			System.out.println(body);
-			System.out.println(u.getName());
-			System.out.println(u);
-			System.out.println(u.getRole());
+			System.out.println(body.get("user").toString());
 			if (u.getRole() == 1) {
 				m.setError("User is an admin and can not be deleted");
 				return m;
