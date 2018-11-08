@@ -20,6 +20,11 @@ public interface Match_positionRepository extends CrudRepository<Match_position,
 	@Query("SELECT m FROM Match_position m WHERE position_id = :position_id AND status = \'active\'")
 	Match_position getById(@Param("position_id")Match_positionId position_id);
 
+
+	//FUNKER
+	@Query("SELECT m FROM Match_position m WHERE player_id = :player_id AND status = \'active\'")
+	List<Match_position> getByPlayerId(@Param("player_id")Integer player_id);
+
 	@Query("SELECT m FROM Match_position m WHERE status = \'active\'")
 	List<Match_position> getAllActive();
 }
