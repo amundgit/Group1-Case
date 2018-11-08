@@ -173,7 +173,7 @@ public class MainController {
 				String hashedpassword = SecurityUtil.hashPassword(body.get("password").toString());
 				u.setPassword(hashedpassword);
 				userRepository.save(u);
-				m.setMessage("Password updated");
+				m.setMessage(u.getName());
 				return m;
 			} else {
 				m.setError("Username dosent exist.");
