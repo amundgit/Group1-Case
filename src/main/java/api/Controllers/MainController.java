@@ -160,6 +160,29 @@ public class MainController {
 		}
 	}
 
+	@PostMapping(path = "/updatepassword")
+	public @ResponseBody Object updateAPassword(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
+			return m;
+		} else {
+			User u = userRepository.findByName(body.get("sessionuser").toString());
+			if (u != null) {
+				String hashedpassword = SecurityUtil.hashPassword(body.get("password").toString());
+				u.setPassword(hashedpassword);
+				userRepository.save(u);
+				m.setMessage("Password updated");
+				return m;
+			} else {
+				m.setError("Username dosent exist.");
+				return m;
+			}
+
+		}
+	}
+
 	@PostMapping(path = "/deleteuser")
 	public @ResponseBody Object deleteAUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
