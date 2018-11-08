@@ -45,7 +45,7 @@ public class PersonController {
 	@GetMapping(path = "/getallactive")
 	public @ResponseBody Iterable<Person> getAllActivePersons() {
 		return personRepository.getAllActive();
-	}	
+	}
 
 	/**
 	 * This method creates a new person if it does not exist and checks based on the
