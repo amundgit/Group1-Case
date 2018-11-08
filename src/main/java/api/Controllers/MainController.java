@@ -169,10 +169,7 @@ public class MainController {
 			return m;
 		} else {
 			User u = userRepository.findByName(body.get("user").toString());
-			System.out.println(body);
-			System.out.println(u.getName());
-			System.out.println(u);
-			System.out.println(u.getRole());
+			System.out.println(body.get("user").toString());
 			if (u.getRole() == 1) {
 				m.setError("User is an admin and can not be deleted");
 				return m;
