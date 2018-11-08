@@ -26,4 +26,7 @@ public interface LocationRepository extends CrudRepository<Location, Integer> {
 
     @Query("SELECT a FROM Location a WHERE location_id = :location_id AND status = \'active\'")
     Location getById(@Param("location_id") Integer location_id);
+
+    @Query("SELECT a FROM Location a WHERE status = \'active\'")
+    List<Location> getAllActive();
 }

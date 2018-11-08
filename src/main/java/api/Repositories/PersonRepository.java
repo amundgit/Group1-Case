@@ -32,4 +32,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	Person findByFirstAndLastandBirth(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") LocalDate date_of_birth);
 
+	@Query("SELECT p FROM Person p WHERE status = \'active\'")
+	List<Person> getAllActive();
+
 }

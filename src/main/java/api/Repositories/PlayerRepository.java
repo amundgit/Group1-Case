@@ -26,4 +26,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 	@Query("SELECT p FROM Player p WHERE team_id = :team_id AND status = \'active\'")
 	List<Player> getByTeam(@Param("team_id") String team_id);
 
+	@Query("SELECT p FROM Player p WHERE status = \'active\'")
+	List<Player> getAllActive();
 }

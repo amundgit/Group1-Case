@@ -42,16 +42,15 @@ public class PlayerController {
 		return playerRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Player> getAllActivePlayers() {
+		return playerRepository.getAllActive();
+	}
+
 	@GetMapping(path = "/anongetall")
 	public @ResponseBody Iterable<String> anonGetAllPlayers() {
 		List<String> returnList = new ArrayList<>();
-		Iterable<Player> playerList = playerRepository.findAll();
-		/*int size = playerList.size();
-		for(int i=0; i<size; i++){
-			Player tempPlayer = playerList.get(i);
-			String tempString = "Name: " + tempPlayer.getName() + ", team: " + tempPlayer.getTeamId();
-			returnList.add(tempString);
-		}*/
+		Iterable<Player> playerList = playerRepository.getAllActive();
 		for(Player p : playerList){
 			String tempString = p.getName() + ", " + p.getTeamId();
 			returnList.add(tempString);
@@ -96,6 +95,31 @@ public class PlayerController {
 				existenceCheck.setTeamId(teamRepository.getByTeamId(team_id));
 				playerRepository.save(existenceCheck);
 				m.setMessage("Updated");
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Messages deletePlayer(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer player_id = Integer.parseInt(body.get("player_id").toString());
+			Player p = playerRepository.getById(player_id);
+			// Actually do stuff
+			if (p == null) {
+				check = false;
+				m.setMessage("Invalid player id");
+			}
+			if (check) {
+				p.setStatus("inactive");
+				playerRepository.save(p);
+				m.setMessage("Deleted");
 			}
 			return m;
 		}

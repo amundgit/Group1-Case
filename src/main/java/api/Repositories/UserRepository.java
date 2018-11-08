@@ -35,4 +35,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	// Get sessionid and role by username.
 	@Query("select new api.Pojos.SessionVerifyInfo(u.sessionId, u.role) from User u where u.name = ?1 AND status = \'active\'")
 	SessionVerifyInfo findSessionVerifyByUsername(String name);
+
+	@Query("SELECT u FROM User u WHERE status = \'active\'")
+	List<User> getAllActive();
 }

@@ -39,6 +39,11 @@ public class FavouriteTeamsController {
 		return favouriteTeamsRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<FavouriteTeams> getAllActiveFavouriteTeams() {
+		return favouriteTeamsRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/getallbyuser")
 	public @ResponseBody Iterable<FavouriteTeams> getFavouriteTeamsByUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();

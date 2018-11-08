@@ -41,6 +41,11 @@ public class ContactController {
 		return contactRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Contact> getAllActiveContacts() {
+		return contactRepository.getAllActive();
+	}
+
 	/**
 	 * This method creates a new contact if it does not exist and checks based on
 	 * the contact_Details.

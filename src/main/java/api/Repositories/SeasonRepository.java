@@ -21,4 +21,7 @@ public interface SeasonRepository extends CrudRepository<Season, Integer> {
 
 	@Query("SELECT s FROM Season s WHERE season_id = :season_id AND status = \'active\'")
 	Season getById(@Param("season_id") Integer season_id);
+
+	@Query("SELECT s FROM Season s WHERE status = \'active\'")
+	List<Season> getAllActive();
 }

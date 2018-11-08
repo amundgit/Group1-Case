@@ -22,4 +22,12 @@ public interface AssociationRepository extends CrudRepository<Association, Integ
 
 	@Query("SELECT a FROM Association a WHERE LOWER(a.name) = LOWER(:name) AND a.status = \'active\'")
 	Association getByName(@Param("name")String name);
+
+	@Query("SELECT a FROM Association a WHERE status = \'active\'")
+	List<Association> getAllActive();
 }
+
+/*
+@Query("SELECT a FROM Address a WHERE status = \'active\'")
+	List<Address> getAllActive();
+*/

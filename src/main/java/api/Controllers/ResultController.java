@@ -43,10 +43,15 @@ public class ResultController {
 		return resultRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Result> getAllActiveResults() {
+		return resultRepository.getAllActive();
+	}
+
 	@GetMapping(path = "/anongetall")
 	public @ResponseBody Iterable<String> anonGetAllResults() {
 		List<String> returnList = new ArrayList<>();
-		Iterable<Result> resultList = resultRepository.findAll();
+		Iterable<Result> resultList = resultRepository.getAllActive();
 		for(Result r : resultList){
 			String tempString = r.getId().getTeamId() + " ," + r.getResult();
 			returnList.add(tempString);
@@ -85,6 +90,34 @@ public class ResultController {
 				m.setMessage("Success");
 			} else {
 				m.setError("Error: Result exists");
+			}
+			return m;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Messages deleteResult(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		String sessionid = body.get("sessionid").toString();
+		String sessionuser = body.get("sessionuser").toString();
+		m = SecurityUtil.verifySession(sessionid, sessionuser, userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = true;
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			String team_id = body.get("team_id").toString();
+			ResultId result_id = new ResultId(teamRepository.getByTeamId(team_id),matchRepository.getById(match_id));
+			Result r= resultRepository.getById(result_id);
+			// Actually do stuff
+			if (r == null) {
+				check = false;
+				m.setError("Error: Invalid combination");
+			}
+			if (check) {
+				r.setStatus("inactive");
+				resultRepository.save(r);
+				m.setMessage("Success");
 			}
 			return m;
 		}

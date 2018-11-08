@@ -43,6 +43,11 @@ public class Match_positionController {
 		return match_positionRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Match_position> getAllActiveMatchPositions() {
+		return match_positionRepository.getAllActive();
+	}
+
 	/**
 	 * This method creates a new matchposition
 	 * 
@@ -115,8 +120,6 @@ public class Match_positionController {
 		}
 	}
 
-	/*
-
 	@PostMapping(path = "/delete")
 	public @ResponseBody Object deleteMatchPosition(@RequestBody Map<String, Object> body) {
 		Messages msg = new Messages();
@@ -126,19 +129,20 @@ public class Match_positionController {
 			return msg;
 		} else {
 			boolean check = true;
-			Integer position_id = Integer.parseInt(body.get("position_id").toString());
-			Match_position matchposition = match_positionRepository.getById(position_id);
-			//works, check default = false
-			if(matchposition == null){
+			Integer player_id = Integer.parseInt(body.get("player_id").toString());
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			Match_positionId position_id = new Match_positionId(playerRepository.getById(player_id),matchRepository.getById(match_id));
+			Match_position mp = match_positionRepository.getById(position_id);
+			if(mp == null){
 				check = false;
-				msg.setError("Error: Invalid position id");
+				msg.setMessage("Invalid combination");
 			}
-			if (check) {
-				matchposition.setStatus("inactive");
-				match_positionRepository.save(matchposition);
-				msg.setMessage(matchposition.getId().toString());
+			if (check) {	
+				mp.setStatus("inactive");
+				match_positionRepository.save(mp);
+				msg.setMessage("Successfully deleted");
 			}
 			return msg;
 		}
-	}*/
+	}
 }

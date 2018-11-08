@@ -37,6 +37,11 @@ public class AssociationController {
 		return associationRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Association> getAllActiveAssociations() {
+		return associationRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addAssociation(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();

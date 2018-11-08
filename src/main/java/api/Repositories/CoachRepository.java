@@ -21,4 +21,12 @@ public interface CoachRepository extends CrudRepository<Coach, Integer> {
 
 	@Query("SELECT c FROM Coach c WHERE coach_id = :coach_id AND status = \'active\'")
 	Coach getById(@Param("coach_id")Integer coach_id);
+
+	@Query("SELECT c FROM Coach c WHERE status = \'active\'")
+	List<Coach> getAllActive();
 }
+
+/*
+@Query("SELECT a FROM Address a WHERE status = \'active\'")
+	List<Address> getAllActive();
+*/

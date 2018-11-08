@@ -28,4 +28,7 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     @Query("SELECT c FROM Contact c WHERE c.contact_id = :contact_id AND status = \'active\'")
     Contact findByContactId(@Param("contact_id") Integer contact_id);
 
+    @Query("SELECT c FROM Contact c WHERE status = \'active\'")
+    List<Contact> getAllActive();
+
 }

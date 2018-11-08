@@ -21,4 +21,7 @@ public interface Goal_typeRepository extends CrudRepository<Goal_type, Integer> 
 
 	@Query("SELECT g FROM Goal_type g WHERE goal_type_id = :goal_type_id AND status = \'active\'")
 	Goal_type getById(@Param("goal_type_id")Integer goal_type_id);
+
+	@Query("SELECT g FROM Goal_type g WHERE status = \'active\'")
+	List<Goal_type> getAllActive();
 }

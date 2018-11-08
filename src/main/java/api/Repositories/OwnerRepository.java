@@ -21,4 +21,7 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
 
 	@Query("SELECT o FROM Owner o WHERE owner_id = :owner_id AND status = \'active\'")
 	Owner getById(@Param("owner_id")Integer owner_id);
+
+	@Query("SELECT o FROM Owner o WHERE status = \'active\'")
+	List<Owner> getAllActive();
 }

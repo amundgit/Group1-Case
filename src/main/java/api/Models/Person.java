@@ -28,6 +28,8 @@ public class Person {
 
 	private LocalDate date_of_birth; // datatype just for testing
 
+	private String status = "active";
+
 	public Integer getId() {
 		return person_id;
 	}
@@ -67,6 +69,15 @@ public class Person {
 	public void setDateOfBirth(LocalDate date_of_birth) {
 		this.date_of_birth = date_of_birth;
 	}
+
+	public String getStatus(){
+		return status;
+	}
+
+	public void setStatus(String status){
+		this.status = status;
+	}
+
 	//test
 	public Address getAddress(){
 		return address;

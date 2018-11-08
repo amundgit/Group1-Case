@@ -36,6 +36,11 @@ public class AddressController {
 		return addressRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Address> getAllActiveAddresses() {
+		return addressRepository.getAllActive();
+	}
+
 	@GetMapping(path = "/getbyid")
 	public @ResponseBody Address getAddressById(@RequestParam Integer id) {
 		return addressRepository.getById(id);

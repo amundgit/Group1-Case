@@ -42,6 +42,11 @@ public class PersonController {
 		return personRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Person> getAllActivePersons() {
+		return personRepository.getAllActive();
+	}	
+
 	/**
 	 * This method creates a new person if it does not exist and checks based on the
 	 * name and birth.
@@ -152,6 +157,32 @@ public class PersonController {
 				person.setDateOfBirth(date);
 				personRepository.save(person);
 				m.setMessage("Success, Person was updated.");
+				return m;
+			} else {
+				m.setError("Error, person not found.");
+				return m;
+			}
+		}
+
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deletePerson(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			boolean check = false;
+			Person person = personRepository.getById(Integer.parseInt(body.get("id").toString()));
+			if (person != null) {
+				check = true;
+			}
+			if (check) {
+				person.setStatus("inactive");
+				personRepository.save(person);
+				m.setMessage("Success, Person was deleted.");
 				return m;
 			} else {
 				m.setError("Error, person not found.");

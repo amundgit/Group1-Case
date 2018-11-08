@@ -45,6 +45,11 @@ public class Match_goalController {
 		return match_goalRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Match_goal> getAllActiveMatchGoals() {
+		return match_goalRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/getbygoaltype/")
 	public @ResponseBody Goal_type getType(@RequestBody String type) {
 		return goal_typeRepository.getByType(type);

@@ -45,6 +45,11 @@ public class MatchController {
 		return matchRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Match> getAllActiveMatches() {
+		return matchRepository.getAllActive();
+	}
+
 	/**
 	 * This method creates a new match
 	 * 
@@ -95,6 +100,75 @@ public class MatchController {
 			} /*else {
 				msg.setError("Failure, match was not created.");
 			}*/
+			return msg;
+		}
+	}
+
+	@PostMapping(path = "/update")
+	public @ResponseBody Object updateMatch(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getRole() != 1) {
+			return msg;
+		} else {
+			boolean check = true;
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			Integer season_id = Integer.parseInt(body.get("season_id").toString());
+			String home_team_id = body.get("home_team_id").toString();
+			String away_team_id = body.get("away_team_id").toString();
+			String dateArr[] = body.get("match_date").toString().split("-");
+			LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+			Season season = seasonRepository.getById(season_id);
+			LocalDate start = season.getStartDate();
+			LocalDate end = season.getEndDate();
+			Match m = matchRepository.getById(match_id);			
+			if(home_team_id.equals(away_team_id)){
+				check = false;
+				msg.setError("Home team and away team cannot be the same");
+			} else if(!(date.isAfter(start)) || !(date.isBefore(end))){
+				check = false;
+				msg.setError("Date of match not in season");
+			} else if(m == null){
+				check = false;
+				msg.setError("Invalid match id");
+			}
+			if (check) {
+				m.setMatchDate(date);	
+				Integer location_id = Integer.parseInt(body.get("location_id").toString());
+				m.setSeasonId(season);
+				m.setLocationId(locationRepository.getById(location_id));
+				m.setHomeTeamId(teamRepository.getByTeamId(home_team_id));
+				m.setAwayTeamId(teamRepository.getByTeamId(away_team_id));
+				matchRepository.save(m);
+				// Return the id the new address got in the database.
+				msg.setMessage(m.getId().toString());
+			}
+			return msg;
+		}
+	}
+
+	@PostMapping(path = "/delete")
+	public @ResponseBody Object deleteMatch(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getRole() != 1) {
+			return msg;
+		} else {
+			boolean check = true;
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			Match m = matchRepository.getById(match_id);
+			if(m == null){
+				check = false;
+				msg.setError("Invalid match id");
+			}
+			if (check) {
+				m.setStatus("inactive");
+				matchRepository.save(m);
+				// Return the id the new address got in the database.
+				msg.setMessage("Succesfully deleted");
+			}
 			return msg;
 		}
 	}

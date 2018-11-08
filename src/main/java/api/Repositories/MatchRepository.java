@@ -18,4 +18,7 @@ public interface MatchRepository extends CrudRepository<Match, Integer> {
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 	@Query("SELECT m FROM Match m WHERE match_id = :match_id AND status = \'active\'")
 	Match getById(@Param("match_id")Integer match_id);
+
+	@Query("SELECT m FROM Match m WHERE status = \'active\'")
+	List<Match> getAllActive();
 }

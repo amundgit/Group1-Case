@@ -42,6 +42,11 @@ public class LocationController {
 		return locationRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Location> getAllActiveLocations() {
+		return locationRepository.getAllActive();
+	}
+
 	/**
 	 * This method creates a new location if it does not exist and checks based on
 	 * the name.

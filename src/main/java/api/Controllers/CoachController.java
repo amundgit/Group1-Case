@@ -42,6 +42,11 @@ public class CoachController {
 		return coachRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Coach> getAllActiveCoaches() {
+		return coachRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages assignCoach(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();

@@ -29,4 +29,12 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 	Address getByCompleteAddress(@Param("address_line_1") String address_line_1, @Param("address_line_2") String address_line_2, @Param("address_line_3") String address_line_3,
 		@Param("postal_code") String postal_code, @Param("city") String city, @Param("country") String country);
 
+	@Query("SELECT a FROM Address a WHERE status = \'active\'")
+	List<Address> getAllActive();
+
 }
+
+/*
+@Query("SELECT g FROM Goal_type g WHERE status = \'active\'")
+	List<Goal_type> getAllActive();
+*/

@@ -19,4 +19,7 @@ public interface ResultRepository extends CrudRepository<Result, ResultId> {
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 	@Query("SELECT r FROM Result r WHERE result_id = :result_id AND status = \'active\'")
 	Result getById(@Param("result_id")ResultId result_id);
+
+	@Query("SELECT r FROM Result r WHERE status = \'active\'")
+	List<Result> getAllActive();
 }

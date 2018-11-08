@@ -14,4 +14,7 @@ public interface TeamRepository extends CrudRepository<Team, String> {
 
 	@Query("SELECT t FROM Team t WHERE LOWER(t.team_id) = LOWER(:team_id) AND t.status = \'active\'")
 	Team getByTeamId(@Param("team_id")String team_id);
+
+	@Query("SELECT t FROM Team t WHERE status = \'active\'")
+	List<Team> getAllActive();
 }

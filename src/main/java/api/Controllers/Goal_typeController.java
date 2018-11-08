@@ -36,6 +36,11 @@ public class Goal_typeController {
 		return goal_typeRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactive")
+	public @ResponseBody Iterable<Goal_type> getAllActiveGoalTypes() {
+		return goal_typeRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/add")
 	public @ResponseBody Object addGoalType(@RequestBody Map<String, Object> body) {
 		Messages msg = new Messages();

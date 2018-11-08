@@ -108,6 +108,12 @@ public class MainController {
 		return userRepository.findAll();
 	}
 
+	@GetMapping(path = "/getallactiveusers")
+	public @ResponseBody Iterable<User> getAllActiveUsers() {
+		// This returns a JSON or XML with the users
+		return userRepository.getAllActive();
+	}
+
 	@PostMapping(path = "/searchuser")
 	public @ResponseBody Object searchUser(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();

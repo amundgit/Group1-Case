@@ -19,4 +19,7 @@ public interface Match_positionRepository extends CrudRepository<Match_position,
 	User verifyUser(@Param("name")String name, @Param("password")String password);*/
 	@Query("SELECT m FROM Match_position m WHERE position_id = :position_id AND status = \'active\'")
 	Match_position getById(@Param("position_id")Match_positionId position_id);
+
+	@Query("SELECT m FROM Match_position m WHERE status = \'active\'")
+	List<Match_position> getAllActive();
 }
