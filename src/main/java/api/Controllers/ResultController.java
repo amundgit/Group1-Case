@@ -53,10 +53,36 @@ public class ResultController {
 		List<String> returnList = new ArrayList<>();
 		Iterable<Result> resultList = resultRepository.getAllActive();
 		for(Result r : resultList){
-			String tempString = r.getId().getTeamId() + " ," + r.getResult();
+			String tempString = r.getId().getMatchId() + ", " + r.getId().getTeamId() + ", " + r.getResult();
 			returnList.add(tempString);
 		}
 		return returnList;
+	}
+
+	@PostMapping(path = "/getallresultsforteam")
+	public @ResponseBody Iterable<Result> getAllResultsForTeam(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			String team_id = body.get("team_id").toString();
+			return resultRepository.getByTeamId(team_id);
+		}
+	}
+
+	@PostMapping(path = "/getallresultsformatch")
+	public @ResponseBody Iterable<Result> getAllResultsForMatch(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			return resultRepository.getByMatchId(match_id);
+		}
 	}
 
 

@@ -20,6 +20,12 @@ public interface ResultRepository extends CrudRepository<Result, ResultId> {
 	@Query("SELECT r FROM Result r WHERE result_id = :result_id AND status = \'active\'")
 	Result getById(@Param("result_id")ResultId result_id);
 
+	@Query("SELECT r FROM Result r WHERE team_id = :team_id AND status = \'active\'")
+	List<Result> getByTeamId(@Param("team_id")String team_id);
+
+	@Query("SELECT r FROM Result r WHERE match_id = :match_id AND status = \'active\'")
+	List<Result> getByMatchId(@Param("match_id")Integer match_id);
+
 	@Query("SELECT r FROM Result r WHERE status = \'active\'")
 	List<Result> getAllActive();
 }

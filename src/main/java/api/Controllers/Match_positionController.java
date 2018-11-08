@@ -48,9 +48,30 @@ public class Match_positionController {
 		return match_positionRepository.getAllActive();
 	}
 
-	@GetMapping(path = "/testplayer")
-	public @ResponseBody Iterable<Match_position> getAllMatchPositionsForPlayer(@RequestParam Integer player_id) {
-		return match_positionRepository.getByPlayerId(player_id);
+	@PostMapping(path = "/getallmatchpositionsforplayer")
+	public @ResponseBody Iterable<Match_position> getAllMatchPositionsForPlayer(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			Integer player_id = Integer.parseInt(body.get("player_id").toString());
+			return match_positionRepository.getByPlayerId(player_id);
+		}
+	}
+
+	@PostMapping(path = "/getallmatchpositionsformatch")
+	public @ResponseBody Iterable<Match_position> getAllMatchPositionsForMatch(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			return match_positionRepository.getByMatchId(match_id);
+		}
 	}
 
 	/**
