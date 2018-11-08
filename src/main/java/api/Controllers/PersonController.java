@@ -37,12 +37,12 @@ public class PersonController {
 	/**
 	 * Get to show all Persons in the database
 	 */
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Person> getAllPersons() {
 		return personRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Person> getAllActivePersons() {
 		return personRepository.getAllActive();
 	}
@@ -174,28 +174,9 @@ public class PersonController {
 			if (person == null) {
 				m.setError("Error, person not found.");
 				return m;
-			}
-			
-			else {
+			} else {
 				return person;
 			}
 		}
-	}
-
-	// test
-	@GetMapping(path = "/searchbyfirst")
-	public @ResponseBody Iterable<Person> getAPersonByFirstName(@RequestParam String name) {
-		return personRepository.findByFirstName(name);
-	}
-
-	@GetMapping(path = "/searchbylast")
-	public @ResponseBody Iterable<Person> getAPersonByLastName(@RequestParam String name) {
-		return personRepository.findByLastName(name);
-	}
-
-	@GetMapping(path = "/oldsearch")
-	public @ResponseBody Person getAPersonByFirstAndLast(@RequestParam String firstName, @RequestParam String lastName,
-			@RequestParam LocalDate bday) {
-		return personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
 	}
 }

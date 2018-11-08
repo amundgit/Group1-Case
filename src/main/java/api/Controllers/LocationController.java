@@ -37,12 +37,12 @@ public class LocationController {
 	/**
 	 * Get to show all locations in the database
 	 */
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Location> getAllLocations() {
 		return locationRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Location> getAllActiveLocations() {
 		return locationRepository.getAllActive();
 	}

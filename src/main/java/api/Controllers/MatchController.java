@@ -40,12 +40,12 @@ public class MatchController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Match> getAllMatches() {
 		return matchRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Match> getAllActiveMatches() {
 		return matchRepository.getAllActive();
 	}

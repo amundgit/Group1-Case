@@ -34,12 +34,12 @@ public class FavouritePlayersController {
 	@Autowired
 	private FavouritePlayersRepository favouritePlayersRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<FavouritePlayers> getAllFavouritePlayers() {
 		return favouritePlayersRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<FavouritePlayers> getAllActiveFavouritePlayers() {
 		return favouritePlayersRepository.getAllActive();
 	}

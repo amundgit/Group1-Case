@@ -31,12 +31,12 @@ public class AddressController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Address> getAllAddresses() {
 		return addressRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Address> getAllActiveAddresses() {
 		return addressRepository.getAllActive();
 	}
@@ -145,7 +145,7 @@ public class AddressController {
 				address.setStatus("inactive");
 				address = addressRepository.save(address);
 				// Return the id the new address got in the database.
-				m.setMessage(address.getId().toString());
+				m.setMessage("Successfully deleted");
 			}
 			return m;
 		}

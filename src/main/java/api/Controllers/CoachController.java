@@ -37,12 +37,12 @@ public class CoachController {
 	private UserRepository userRepository;
 
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Coach> getAllCoaches() {
 		return coachRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Coach> getAllActiveCoaches() {
 		return coachRepository.getAllActive();
 	}
@@ -113,7 +113,7 @@ public class CoachController {
 			if (check){
 				coach.setStatus("inactive");
 				coach = coachRepository.save(coach);
-				m.setMessage("Success");
+				m.setMessage("Successfully deleted");
 			}
 			return m;
 		}

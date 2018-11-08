@@ -32,12 +32,12 @@ public class AssociationController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Association> getAllAssociations() {
 		return associationRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Association> getAllActiveAssociations() {
 		return associationRepository.getAllActive();
 	}
@@ -114,7 +114,7 @@ public class AssociationController {
 			if (check) {
 				association.setStatus("inactive");
 				associationRepository.save(association);
-				m.setMessage(association.getId().toString());
+				m.setMessage("Successfully deleted");
 			}
 			return m;
 		}

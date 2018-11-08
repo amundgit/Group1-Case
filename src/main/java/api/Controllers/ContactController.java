@@ -36,12 +36,12 @@ public class ContactController {
 	/**
 	 * Get to show all contacts in the database
 	 */
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Contact> getAllContacts() {
 		return contactRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Contact> getAllActiveContacts() {
 		return contactRepository.getAllActive();
 	}
@@ -123,7 +123,7 @@ public class ContactController {
 			if (check) {
 				contact.setStatus("inactive");
 				contactRepository.save(contact);
-				m.setMessage(contact.getId().toString());
+				m.setMessage("Succesfully deleted");
 			}
 			return m;
 		}

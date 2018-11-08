@@ -31,12 +31,12 @@ public class Goal_typeController {
 	@Autowired
 	UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Goal_type> getAllGoalTypes() {
 		return goal_typeRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Goal_type> getAllActiveGoalTypes() {
 		return goal_typeRepository.getAllActive();
 	}

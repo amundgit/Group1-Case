@@ -102,13 +102,13 @@ public class MainController {
 		}
 	}
 
-	@GetMapping(path = "/getallusers")
+	@GetMapping(path = "/devgetallusers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// This returns a JSON or XML with the users
 		return userRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactiveusers")
+	@GetMapping(path = "/getallusers")
 	public @ResponseBody Iterable<User> getAllActiveUsers() {
 		// This returns a JSON or XML with the users
 		return userRepository.getAllActive();

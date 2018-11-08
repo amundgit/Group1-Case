@@ -43,12 +43,12 @@ public class TeamController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Team> getAllTeams() {
 		return teamRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Team> getAllActiveTeams() {
 		return teamRepository.getAllActive();
 	}

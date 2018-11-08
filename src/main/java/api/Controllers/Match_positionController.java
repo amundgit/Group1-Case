@@ -38,12 +38,12 @@ public class Match_positionController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Match_position> getAllMatchPositions() {
 		return match_positionRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Match_position> getAllActiveMatchPositions() {
 		return match_positionRepository.getAllActive();
 	}

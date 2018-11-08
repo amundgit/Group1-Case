@@ -36,12 +36,12 @@ public class OwnerController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Owner> getAllOwners() {
 		return ownerRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Owner> getAllActiveOwners() {
 		return ownerRepository.getAllActive();
 	}

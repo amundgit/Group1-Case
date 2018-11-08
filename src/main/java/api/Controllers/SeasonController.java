@@ -31,12 +31,12 @@ public class SeasonController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(path = "/getall")
+	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Season> getAllSeasons() {
 		return seasonRepository.findAll();
 	}
 
-	@GetMapping(path = "/getallactive")
+	@GetMapping(path = "/getall")
 	public @ResponseBody Iterable<Season> getAllActiveSeasons() {
 		return seasonRepository.getAllActive();
 	}
