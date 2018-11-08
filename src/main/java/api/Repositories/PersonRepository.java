@@ -18,21 +18,21 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query("SELECT p FROM Person p WHERE person_id = :id AND status = \'active\'")
 	Person getById(@Param("id") Integer id);
 
-	@Query("SELECT address FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth) AND status = \'active\'")
+	@Query("SELECT address FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth) AND p.status = \'active\'")
 	Address getAddressByPerson(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") LocalDate date_of_birth);
 
-	@Query("SELECT p FROM Person p WHERE LOWER(p.first_name) = LOWER(:first_name) AND status = \'active\'")
+	@Query("SELECT p FROM Person p WHERE LOWER(p.first_name) = LOWER(:first_name) AND p.status = \'active\'")
 	List<Person> findByFirstName(@Param("first_name") String first_name);
 
-	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND status = \'active\'")
+	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND p.status = \'active\'")
 	List<Person> findByLastName(@Param("last_name") String last_name);
 
 	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth) AND p.status = \'active\'")
 	Person findByFirstAndLastandBirth(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") LocalDate date_of_birth);
 
-	@Query("SELECT p FROM Person p WHERE status = \'active\'")
+	@Query("SELECT p FROM Person p WHERE p.status = \'active\'")
 	List<Person> getAllActive();
 
 }
