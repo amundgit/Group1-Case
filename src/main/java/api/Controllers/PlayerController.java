@@ -65,9 +65,6 @@ public class PlayerController {
 
 	@PostMapping(path = "/assign")
 	public @ResponseBody Messages addPlayer(@RequestBody Map<String, Object> body) {
-		System.out.println(body);
-		System.out.println(body.get("person_id").toString());
-
 		Messages m = new Messages();
 		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
 				userRepository);
