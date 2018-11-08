@@ -28,7 +28,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND status = \'active\'")
 	List<Person> findByLastName(@Param("last_name") String last_name);
 
-	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth) AND status = \'active\'")
+	@Query("SELECT p FROM Person p WHERE LOWER(p.last_name) = LOWER(:last_name) AND LOWER(p.first_name) = LOWER(:first_name) AND LOWER(p.date_of_birth) = LOWER(:date_of_birth) AND p.status = \'active\'")
 	Person findByFirstAndLastandBirth(@Param("first_name") String first_name, @Param("last_name") String last_name,
 			@Param("date_of_birth") LocalDate date_of_birth);
 
