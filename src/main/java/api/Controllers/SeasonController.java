@@ -66,7 +66,7 @@ public class SeasonController {
 				s.setName(name);
 				s.setDescription(description);
 				seasonRepository.save(s);
-				m.setMessage("Success");
+				m.setMessage("Success: Season was created");
 			} else {
 				m.setError("Error: Season by that name already exists");
 			}
@@ -100,7 +100,7 @@ public class SeasonController {
 				s.setName(name);
 				s.setDescription(description);
 				seasonRepository.save(s);
-				m.setMessage("Success");
+				m.setMessage("Success: Season was updated");
 			}
 			return m;
 		}

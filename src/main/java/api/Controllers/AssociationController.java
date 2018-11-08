@@ -63,7 +63,7 @@ public class AssociationController {
 				a.setName(name);
 				a.setDescription(description);
 				associationRepository.save(a);
-				m.setMessage(a.getId().toString());
+				m.setMessage("Success: Assosiation was created.");
 			}
 			return m;
 		}
