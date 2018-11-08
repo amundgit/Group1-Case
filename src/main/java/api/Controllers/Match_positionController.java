@@ -48,6 +48,11 @@ public class Match_positionController {
 		return match_positionRepository.getAllActive();
 	}
 
+	@GetMapping(path = "/testplayer")
+	public @ResponseBody Iterable<Match_position> getAllMatchPositionsForPlayer(@RequestParam Integer player_id) {
+		return match_positionRepository.getByPlayerId(player_id);
+	}
+
 	/**
 	 * This method creates a new matchposition
 	 * 

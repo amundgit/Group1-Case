@@ -53,6 +53,32 @@ public class TeamController {
 		return teamRepository.getAllActive();
 	}
 
+	@PostMapping(path = "/getteamsbyowner")
+	public @ResponseBody Iterable<Team> getTeamsByOwner(@RequestBody Map<String, Object> body){
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
+			return null;
+		} else {
+			Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
+			return teamRepository.getTeamsByOwner(owner_id);
+		}
+	}
+
+	@PostMapping(path = "/getteamsbycoach")
+	public @ResponseBody Iterable<Team> getTeamsByCoach(@RequestBody Map<String, Object> body){
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
+			return null;
+		} else {
+			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
+			return teamRepository.getTeamsByCoach(coach_id);
+		}
+	} 
+
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
