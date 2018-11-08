@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-	@Query("SELECT u FROM User u WHERE name = :name AND status = \'active\'")
+	@Query("SELECT u FROM User u WHERE u.name = :name AND u.status = \'active\'")
 	User findByName(@Param("name") String name);
 
 	@Query("SELECT id FROM User u WHERE name = :name AND status = \'active\'")
