@@ -51,7 +51,7 @@ public class PlayerController {
 	public @ResponseBody Iterable<String> anonGetAllPlayers() {
 		List<String> returnList = new ArrayList<>();
 		Iterable<Player> playerList = playerRepository.getAllActive();
-		for(Player p : playerList){
+		for (Player p : playerList) {
 			String tempString = p.getName() + ", " + p.getTeamId();
 			returnList.add(tempString);
 		}
