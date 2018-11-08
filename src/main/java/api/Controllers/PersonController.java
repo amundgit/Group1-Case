@@ -98,39 +98,6 @@ public class PersonController {
 	 * @param body
 	 * @return
 	 */
-	@PostMapping(path = "/getaddress")
-	public @ResponseBody Object getAddress(@RequestBody Map<String, Object> body) {
-		Messages m = new Messages();
-		boolean check = false;
-		System.out.println(body);
-		System.out.println(body.get("first_name").toString());
-		System.out.println(body.get("last_name").toString());
-		System.out.println(body.get("date_of_birth").toString());
-
-		String dateArr[] = body.get("date_of_birth").toString().split("-");
-		LocalDate date = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]),
-				Integer.parseInt(dateArr[2]));
-		Address address = personRepository.getAddressByPerson(body.get("first_name").toString(),
-				body.get("last_name").toString(), date);
-		System.out.println(address);
-		if (address != null) {
-			check = true;
-		}
-		if (check) {
-			return address;
-		} else {
-			m.setError("Failure, address was not retrived.");
-			return m;
-		}
-	}
-
-	/**
-	 * This method creates a new person if it does not exist and checks based on the
-	 * name and birth.
-	 * 
-	 * @param body
-	 * @return
-	 */
 	@PostMapping(path = "/update")
 	public @ResponseBody Object getbyid(@RequestBody Map<String, Object> body) {
 		Messages m = new Messages();
@@ -189,7 +156,30 @@ public class PersonController {
 				return m;
 			}
 		}
+	}
 
+	@PostMapping(path = "/search")
+	public @ResponseBody Object getAPerson(@RequestBody Map<String, Object> body) {
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getRole() != 1) {
+			return m;
+		} else {
+			String firstName = body.get("first_name").toString();
+			String lastName = body.get("last_name").toString();
+			String dateArr[] = body.get("date_of_birth").toString().split("-");
+			LocalDate bday = LocalDate.of(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+			Person person = personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
+			if (person == null) {
+				m.setError("Error, person not found.");
+				return m;
+			}
+			
+			else {
+				return person;
+			}
+		}
 	}
 
 	// test
@@ -203,7 +193,7 @@ public class PersonController {
 		return personRepository.findByLastName(name);
 	}
 
-	@GetMapping(path = "/search")
+	@GetMapping(path = "/oldsearch")
 	public @ResponseBody Person getAPersonByFirstAndLast(@RequestParam String firstName, @RequestParam String lastName,
 			@RequestParam LocalDate bday) {
 		return personRepository.findByFirstAndLastandBirth(firstName, lastName, bday);
