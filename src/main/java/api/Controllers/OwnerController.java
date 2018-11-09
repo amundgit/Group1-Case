@@ -36,6 +36,9 @@ public class OwnerController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private TeamRepository teamRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Owner> getAllOwners() {
 		return ownerRepository.findAll();
@@ -105,9 +108,13 @@ public class OwnerController {
 			boolean check = true;
 			Integer owner_id = Integer.parseInt(body.get("owner_id").toString());
 			Owner o = ownerRepository.getById(owner_id);
+			List<Team> ownerTeams = teamRepository.getTeamsByOwner(owner_id);
 			if (o == null) {
 				check = false;
 				m.setError("Invalid owner id");
+			} else if(ownerTeams.size() != 0){
+				check = false;
+				m.setError("Error: Team(s) assigned to this owner, reassign or delete them before deleting the owner");
 			}
 			if (check){
 				o.setStatus("inactive");

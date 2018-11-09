@@ -43,6 +43,15 @@ public class TeamController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private MatchRepository matchRepository;
+
+	@Autowired
+	private FavouriteTeamsRepository favouriteTeamsRepository;
+
+	@Autowired
+	private PlayerRepository playerRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Team> getAllTeams() {
 		return teamRepository.findAll();
@@ -77,7 +86,20 @@ public class TeamController {
 			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
 			return teamRepository.getTeamsByCoach(coach_id);
 		}
-	} 
+	}
+
+	@PostMapping(path = "/getteamsbyassociation")
+	public @ResponseBody Iterable<Team> getTeamsByAssociation(@RequestBody Map<String, Object> body){
+		Messages m = new Messages();
+		m = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (m.getError() != null) {
+			return null;
+		} else {
+			Integer association_id = Integer.parseInt(body.get("association_id").toString());
+			return teamRepository.getTeamsByAssociationId(association_id);
+		}
+	}
 
 	@PostMapping(path = "/add")
 	public @ResponseBody Messages addTeam(@RequestBody Map<String, Object> body) {
@@ -155,14 +177,27 @@ public class TeamController {
 			return m;
 		} else {
 			boolean check = true;
-			String team_id = body.get("team_name").toString();
+			String team_id = body.get("team_id").toString();
 			Team t = teamRepository.getByTeamId(team_id);
+			List<FavouriteTeams> teamFavourites = favouriteTeamsRepository.getByTeamId(team_id);
+			List<Match> teamMatches = matchRepository.getByTeamId(team_id);
+			List<Player> teamPlayers = playerRepository.getByTeam(team_id);
 			// Actually do stuff
 			if (t == null) {
 				check = false;
 				m.setError("Error: Invalid team name");
+			} else if (teamPlayers.size() != 0){
+				check = false;
+				m.setError("Error: Player(s) assigned to this team, reassign or delete them before deleting the team");
+			} else if (teamMatches.size() != 0){
+				check = false;
+				m.setError("Error: Match(es) assigned to this team, reassign or delete them before deleting the team");
 			}
 			if (check) {
+				for(FavouriteTeams f : teamFavourites){
+					f.setStatus("inactive");
+					favouriteTeamsRepository.save(f);
+				}
 				t.setStatus("inactive");
 				teamRepository.save(t);
 				m.setMessage("Successfully deleted");

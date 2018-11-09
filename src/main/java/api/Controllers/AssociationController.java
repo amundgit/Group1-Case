@@ -32,6 +32,9 @@ public class AssociationController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private TeamRepository teamRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Association> getAllAssociations() {
 		return associationRepository.findAll();
@@ -107,9 +110,13 @@ public class AssociationController {
 			boolean check = true;
 			Integer association_id = Integer.parseInt(body.get("association_id").toString());
 			Association association = associationRepository.getById(association_id);
+			List<Team> associationTeams = teamRepository.getTeamsByAssociationId(association_id);
 			if (association == null) {
 				check = false;
 				m.setError("Error: Non-existent association id");
+			} else if(associationTeams.size() != 0){
+				check = false;
+				m.setError("Error: Team(s) assigned to this association, reassign or delete them before deleting the association");
 			}
 			if (check) {
 				association.setStatus("inactive");

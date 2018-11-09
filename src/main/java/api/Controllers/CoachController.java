@@ -36,6 +36,9 @@ public class CoachController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private TeamRepository teamRepository;
+
 
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Coach> getAllCoaches() {
@@ -106,9 +109,13 @@ public class CoachController {
 			boolean check = true;
 			Integer coach_id = Integer.parseInt(body.get("coach_id").toString());
 			Coach coach = coachRepository.getById(coach_id);
+			List<Team> coachTeams = teamRepository.getTeamsByCoach(coach_id);
 			if (coach == null) {
 				check = false;
 				m.setError("Error: Invalid coach ID");
+			} else if(coachTeams.size() != 0){
+				check = false;
+				m.setError("Error: Team(s) assigned to this coach, reassign or delete them before deleting the coach");
 			}
 			if (check){
 				coach.setStatus("inactive");

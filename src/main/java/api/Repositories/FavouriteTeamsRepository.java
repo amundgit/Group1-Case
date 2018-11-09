@@ -31,6 +31,9 @@ public interface FavouriteTeamsRepository extends CrudRepository<FavouriteTeams,
 	@Query("SELECT f FROM FavouriteTeams f WHERE user_id = :user_id AND status = \'active\'")
 	List<FavouriteTeams> getAllByUser(@Param("user_id")Integer user_id);
 
+	@Query("SELECT f FROM FavouriteTeams f WHERE team_id = :team_id AND status = \'active\'")
+	List<FavouriteTeams> getByTeamId(@Param("team_id")String team_id);
+
 	@Query("SELECT f FROM FavouriteTeams f WHERE status = \'active\'")
 	List<FavouriteTeams> getAllActive();
 }
