@@ -31,6 +31,9 @@ public class SeasonController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private MatchRepository matchRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Season> getAllSeasons() {
 		return seasonRepository.findAll();
@@ -116,9 +119,13 @@ public class SeasonController {
 			boolean check = true;
 			Integer season_id = Integer.parseInt(body.get("season_id").toString());
 			Season s = seasonRepository.getById(season_id);
+			List<Match> seasonMatches = matchRepository.getBySeasonId(season_id);
 			if (s == null) {
 				check = false;
 				m.setError("Error: Invalid season id");
+			} else if (seasonMatches.size() != 0){
+				check = false;
+				m.setError("Error: Matches assigned to this season, reassign or delete them before deleting season");
 			}
 			if (check) {
 				s.setStatus("inactive");

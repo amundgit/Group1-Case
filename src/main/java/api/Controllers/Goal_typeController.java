@@ -31,6 +31,9 @@ public class Goal_typeController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	Match_goalRepository match_goalRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Goal_type> getAllGoalTypes() {
 		return goal_typeRepository.findAll();
@@ -102,15 +105,19 @@ public class Goal_typeController {
 			boolean check = true;
 			Integer goal_type_id = Integer.parseInt(body.get("goal_type_id").toString());
 			Goal_type goaltype = goal_typeRepository.getById(goal_type_id);
+			List<Match_goal> typeUses = match_goalRepository.getByGoalTypeId(goal_type_id);
 			if(goaltype == null){
 				check = false;
 				msg.setError("Error: Invalid id");
+			} else if (typeUses.size() != 0){
+				check = false;
+				msg.setError("Error: Matchgoals assigned to this type, reassign or delete them before deleting this goaltype");
 			}
 			if (check) {
 				goaltype.setStatus("inactive");
 				goal_typeRepository.save(goaltype);
 				// Return the id the new address got in the database.
-				msg.setMessage(goaltype.getId().toString());
+				msg.setMessage("Successfully deleted");
 			}
 			return msg;
 		}
