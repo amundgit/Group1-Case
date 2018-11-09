@@ -81,6 +81,14 @@ public class Match_goal{
   public Goal_type getGoalType(){
     return goal_type;
   }
+
+  public String getTeam(){
+    return player.getTeamId();
+  }
+
+  public String getPlayerName(){
+    return player.getName();
+  }
 }
 
 //SQL:
