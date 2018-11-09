@@ -83,6 +83,20 @@ public class Team{
   public void setStatus(String status){
     this.status = status;
   }
+
+  public String getOwnerName(){
+    Person person = owner.getPerson();
+    return person.getFirstName() + " " + person.getLastName();
+  }
+
+  public String getCoachName(){
+    Person person = coach.getPerson();
+    return person.getFirstName() + " " + person.getLastName();
+  }
+
+  public String getLocationName(){
+    return location.getName();
+  }
 }
 
 //SQL:
