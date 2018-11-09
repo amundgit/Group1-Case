@@ -50,6 +50,19 @@ public class Match_goalController {
 		return match_goalRepository.getAllActive();
 	}
 
+	@PostMapping(path = "/getgoalsbymatch")
+	public @ResponseBody Iterable<Match_goal> getGoalsByMatch(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			Integer match_id = Integer.parseInt(body.get("match_id").toString());
+			return match_goalRepository.getByMatchId(match_id);
+		}
+	}
+
 	@PostMapping(path = "/getbygoaltype/")
 	public @ResponseBody Goal_type getType(@RequestBody String type) {
 		return goal_typeRepository.getByType(type);
