@@ -34,6 +34,12 @@ public class LocationController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private TeamRepository teamRepository;
+
+	@Autowired
+	private MatchRepository matchRepository;
+
 	/**
 	 * Get to show all locations in the database
 	 */
@@ -117,9 +123,17 @@ public class LocationController {
 			boolean check = true;
 			Integer location_id = Integer.parseInt(body.get("location_id").toString());
 			Location location = locationRepository.getById(location_id);
+			List<Match> locationMatches = matchRepository.getByLocationId(location_id);
+			List<Team> locationTeams = teamRepository.getTeamsByLocationId(location_id);
 			if (location == null) {
 				check = false;
 				m.setError("Error: Invalid ID");
+			} else if(locationMatches.size() != 0){
+				check = false;
+				m.setError("Error: Matches assigned to this location, reassign or delete before deleting this location");
+			} else if(locationTeams.size() != 0){
+				check = false;
+				m.setError("Error: Teams assigned to this location, reassign or delete before deleting this location");
 			}
 			if (check) {
 				location.setStatus("inactive");

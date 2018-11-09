@@ -95,6 +95,10 @@ public class Match {
   public Season getSeason(){
     return season;
   }
+
+  public Location getLocation(){
+    return location;
+  }
 }
 
 //SQL:
