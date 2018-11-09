@@ -31,6 +31,12 @@ public class AddressController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private LocationRepository locationRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Address> getAllAddresses() {
 		return addressRepository.findAll();
@@ -137,9 +143,18 @@ public class AddressController {
 			boolean check = true;
 			Integer address_id = Integer.parseInt(body.get("address_id").toString());
 			Address address = addressRepository.getById(address_id);
+			List<Person> addressPersons = personRepository.getByAddressId(address_id);
+			List<Location> addressLocations = locationRepository.getByAddressId(address_id);
+			//if any of these have length -> check = false, m.SetError("Something is using this, reassign it before deletion")
 			if (address == null) {
 				check = false;
 				m.setError("Error: Non-existent address id");
+			} else if (addressPersons.size() != 0){
+				check = false;
+				m.setError("Error: Some person is assigned to this address. Reassign them before deletion");
+			} else if (addressLocations.size() != 0){
+				check = false;
+				m.setError("Error: Some location is assigned to this address. Reassign them before deletion");
 			}
 			if (check) {
 				address.setStatus("inactive");

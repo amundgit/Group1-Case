@@ -37,6 +37,15 @@ public class PlayerController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private Match_goalRepository match_goalRepository;
+
+	@Autowired
+	private Match_positionRepository match_positionRepository;
+
+	@Autowired
+	private FavouritePlayersRepository favouritePlayersRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Player> getAllPlayers() {
 		return playerRepository.findAll();
@@ -117,6 +126,22 @@ public class PlayerController {
 				m.setMessage("Invalid player id");
 			}
 			if (check) {
+				List<Match_goal> playerGoals = match_goalRepository.getByPlayerId(player_id);
+				List<Match_position> playerPositions = match_positionRepository.getByPlayerId(player_id);
+				List<FavouritePlayers> playerFavourites = favouritePlayersRepository.getByPlayerId(player_id);
+
+				for(Match_goal mg : playerGoals){
+					mg.setStatus("inactive");
+					match_goalRepository.save(mg);
+				}
+				for(Match_position mp : playerPositions){
+					mp.setStatus("inactive");
+					match_positionRepository.save(mp);
+				}
+				for(FavouritePlayers fp : playerFavourites){
+					fp.setStatus("inactive");
+					favouritePlayersRepository.save(fp);
+				}
 				p.setStatus("inactive");
 				playerRepository.save(p);
 				m.setMessage("Deleted");

@@ -31,4 +31,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query("SELECT p FROM Person p WHERE p.status = \'active\'")
 	List<Person> getAllActive();
 
+	@Query("SELECT p FROM Person p WHERE address_id = :address_id AND status = \'active\'")
+	List<Person> getByAddressId(@Param("address_id") Integer address_id);
+
 }

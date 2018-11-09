@@ -34,6 +34,18 @@ public class PersonController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private CoachRepository coachRepository;
+
+	@Autowired
+	private ContactRepository contactRepository;
+
+	@Autowired
+	private OwnerRepository ownerRepository;
+
+	@Autowired
+	private PlayerRepository playerRepository;
+
 	/**
 	 * Get to show all Persons in the database
 	 */
@@ -141,20 +153,36 @@ public class PersonController {
 		if (m.getRole() != 1) {
 			return m;
 		} else {
-			boolean check = false;
-			Person person = personRepository.getById(Integer.parseInt(body.get("id").toString()));
-			if (person != null) {
-				check = true;
+			boolean check = true;
+			Integer person_id = Integer.parseInt(body.get("id").toString());
+			Person person = personRepository.getById(person_id);
+			Coach personCoach = coachRepository.getByPersonId(person_id);
+			List<Contact> personContacts = contactRepository.findByID(person_id);
+			Owner personOwner = ownerRepository.getByPersonId(person_id);
+			Player personPlayer = playerRepository.getByPersonId(person_id);
+			if (person == null) {
+				check = false;
+				m.setError("Error: Person not found.");
+			} else if (personCoach != null){
+				check = false;
+				m.setError("Error: Person assigned as coach, reassign or delete before deleting person");
+			} else if (personOwner != null){
+				check = false;
+				m.setError("Error: Person assigned as owner, reassign or delete before deleting person");
+			} else if (personPlayer != null){
+				check = false;
+				m.setError("Error: Person assigned as player, reassign or delete before deleting person");
 			}
 			if (check) {
+				for(Contact c : personContacts){
+					c.setStatus("inactive");
+					contactRepository.save(c);
+				}
 				person.setStatus("inactive");
 				personRepository.save(person);
 				m.setMessage("Success, Person was deleted.");
-				return m;
-			} else {
-				m.setError("Error, person not found.");
-				return m;
 			}
+			return m;
 		}
 	}
 

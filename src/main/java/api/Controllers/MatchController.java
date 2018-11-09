@@ -40,6 +40,15 @@ public class MatchController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private Match_goalRepository match_goalRepository;
+
+	@Autowired
+	private Match_positionRepository match_positionRepository;
+
+	@Autowired
+	private ResultRepository resultRepository;
+
 	@GetMapping(path = "/devgetall")
 	public @ResponseBody Iterable<Match> getAllMatches() {
 		return matchRepository.findAll();
@@ -164,6 +173,21 @@ public class MatchController {
 				msg.setError("Invalid match id");
 			}
 			if (check) {
+				List<Match_goal> matchGoals = match_goalRepository.getByMatchId(match_id);
+				List<Match_position> matchPositions = match_positionRepository.getByMatchId(match_id);
+				List<Result> matchResults = resultRepository.getByMatchId(match_id);
+				for(Match_goal mg : matchGoals){
+					mg.setStatus("inactive");
+					match_goalRepository.save(mg);
+				}
+				for(Match_position mp : matchPositions){
+					mp.setStatus("inactive");
+					match_positionRepository.save(mp);
+				}
+				for(Result r : matchResults){
+					r.setStatus("inactive");
+					resultRepository.save(r);
+				}
 				m.setStatus("inactive");
 				matchRepository.save(m);
 				// Return the id the new address got in the database.
