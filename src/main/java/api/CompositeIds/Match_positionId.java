@@ -40,6 +40,14 @@ public class Match_positionId implements Serializable {
     	this.match = match;
   	}
 
+  	public String getPlayerName(){
+  		return player.getName();
+  	}
+
+  	public String getPlayerTeam(){
+  		return player.getTeamId();
+  	}
+
 	//OVERRIDES
 	@Override
 	public boolean equals(Object o){
