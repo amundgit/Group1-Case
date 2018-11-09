@@ -21,6 +21,12 @@ public interface TeamRepository extends CrudRepository<Team, String> {
 	@Query("SELECT t FROM Team t WHERE coach_id = :coach_id AND status = \'active\'")
 	List<Team> getTeamsByCoach(@Param("coach_id")Integer coach_id);
 
+	@Query("SELECT t FROM Team t WHERE association_id = :association_id AND status = \'active\'")
+	List<Team> getTeamsByAssociationId(@Param("association_id")Integer association_id);
+
+	@Query("SELECT t FROM Team t WHERE location_id = :location_id AND status = \'active\'")
+	List<Team> getTeamsByLocationId(@Param("location_id")Integer location_id);
+
 	@Query("SELECT t FROM Team t WHERE status = \'active\'")
 	List<Team> getAllActive();
 }

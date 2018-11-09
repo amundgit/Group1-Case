@@ -59,6 +59,19 @@ public class MatchController {
 		return matchRepository.getAllActive();
 	}
 
+	@PostMapping(path = "/getbyseason")
+	public @ResponseBody Iterable<Match> getMatchesBySeason(@RequestBody Map<String, Object> body) {
+		Messages msg = new Messages();
+		msg = SecurityUtil.verifySession(body.get("sessionid").toString(), body.get("sessionuser").toString(),
+				userRepository);
+		if (msg.getError() != null) {
+			return null;
+		} else {
+			Integer season_id = Integer.parseInt(body.get("season_id").toString());
+			return matchRepository.getBySeasonId(season_id);
+		}
+	}
+
 	/**
 	 * This method creates a new match
 	 * 

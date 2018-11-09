@@ -19,6 +19,15 @@ public interface MatchRepository extends CrudRepository<Match, Integer> {
 	@Query("SELECT m FROM Match m WHERE match_id = :match_id AND status = \'active\'")
 	Match getById(@Param("match_id")Integer match_id);
 
+	@Query("SELECT m FROM Match m WHERE location_id = :location_id AND status = \'active\'")
+	List<Match> getByLocationId(@Param("location_id")Integer location_id);
+
+	@Query("SELECT m FROM Match m WHERE team_id = :team_id AND status = \'active\'")
+	List<Match> getByTeamId(@Param("team_id")String team_id);
+
+	@Query("SELECT m FROM Match m WHERE season_id = :season_id AND status = \'active\'")
+	List<Match> getBySeasonId(@Param("season_id")Integer season_id);
+
 	@Query("SELECT m FROM Match m WHERE status = \'active\'")
 	List<Match> getAllActive();
 }
